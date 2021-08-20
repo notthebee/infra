@@ -9,4 +9,3 @@ extra_packages:
   - tmux
   - mosh
   - lm-sensors
-  - ctop
