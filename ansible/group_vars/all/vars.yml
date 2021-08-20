@@ -9,7 +9,7 @@ guid: 1000
 
 shell: /usr/bin/fish
 
-docker_data: /opt/docker/data
+docker_dir: /opt/docker/data
 
 dotfiles_repo: https://github.com/notthebee/dotfiles
 

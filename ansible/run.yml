@@ -16,5 +16,7 @@
 
     - role: docker
 
+    - role: bitwarden
+
     # SSH security (at the end because it breaks SSH connection)
     - role: geerlingguy.security

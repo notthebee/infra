@@ -1,4 +1,18 @@
 ---
+- name: Install required system packages
+  apt: 
+    name: "{{ item }}" 
+    state: latest 
+    update_cache: yes
+  with_items: 
+    - 'apt-transport-https'
+    - 'ca-certificates'
+    - 'curl'
+    - 'software-properties-common'
+    - 'python3-pip'
+    - 'virtualenv'
+    - 'python3-setuptools'
+
 - name: Add Docker GPG apt Key
   apt_key:
     url: https://download.docker.com/linux/ubuntu/gpg
@@ -8,6 +22,11 @@
   apt_repository:
     repo: deb https://download.docker.com/linux/ubuntu bionic stable
     state: present
+
+- name: Install Docker Module for Python
+  pip:
+    name: docker
+
 
 - name: Update apt and install docker-ce
   apt: 
@@ -20,3 +39,8 @@
     name: docker 
     state: started 
     enabled: yes
+
+- name: Create the docker data directory
+  file:
+    path: "{{ docker_dir }}"
+    state: directory

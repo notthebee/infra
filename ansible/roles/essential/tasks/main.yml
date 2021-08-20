@@ -7,26 +7,12 @@
     - docker
     - sudo
 
- 
-
 - name: Install aptitude using apt
   apt: 
     name: aptitude 
     state: latest 
     update_cache: yes 
     force_apt_get: yes
-
-- name: Install required system packages
-  apt: 
-    name: "{{ item }}" 
-    state: latest 
-    update_cache: yes
-  with_items: 
-    - 'apt-transport-https'
-    - 'ca-certificates'
-    - 'curl'
-    - 'software-properties-common'
-
 
 # Set up the shell environment and install essential packages
 - name: Suppress login messages
