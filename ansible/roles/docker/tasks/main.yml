@@ -10,7 +10,13 @@
     state: present
 
 - name: Update apt and install docker-ce
-  apt: update_cache=yes name=docker-ce state=latest
+  apt: 
+    update_cache: yes 
+    name: docker-ce 
+    state: latest
 
 - name: Make sure Docker is running and enabled
-  service: name=docker state=started enabled=yes
+  service: 
+    name: docker 
+    state: started 
+    enabled: yes
