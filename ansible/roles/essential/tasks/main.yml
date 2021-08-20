@@ -1,0 +1,64 @@
+---
+- name: Create all the necessary groups
+  group:
+    name: "{{ item }}"
+    state: present
+  with_items: 
+    - docker
+    - sudo
+
+ 
+
+- name: Install aptitude using apt
+  apt: 
+    name: aptitude 
+    state: latest 
+    update_cache: yes 
+    force_apt_get: yes
+
+- name: Install required system packages
+  apt: 
+    name: "{{ item }}" 
+    state: latest 
+    update_cache: yes
+  with_items: 
+    - 'apt-transport-https'
+    - 'ca-certificates'
+    - 'curl'
+    - 'software-properties-common'
+
+
+# Set up the shell environment and install essential packages
+- name: Suppress login messages
+  file:
+    name: /home/{{ username }}/.hushlogin
+    state: touch
+
+- name: Install extra packages
+  apt: 
+    name: "{{ item }}" 
+    state: latest 
+    update_cache: yes
+  with_items: "{{ extra_packages }}"
+  
+- name: Clone the dotfiles repo
+  git:
+    repo: "{{ dotfiles_repo }}"
+    dest: /home/{{ username }}/dotfiles
+    force: yes
+    recursive: no
+
+- name: Stow the dotfiles
+  shell: cd /home/{{ username }}/dotfiles && stow */
+
+- name: Set the default shell
+  user: 
+    name: "{{ username }}"
+    shell: "{{ shell }}"
+
+- name: Set the correct ownership for the user's home folder
+  file:
+    path: /home/{{ username }}
+    owner: "{{ username }}"
+    group: "{{ username }}"
+    recurse: yes

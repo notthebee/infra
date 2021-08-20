@@ -1,0 +1,5 @@
+---
+roles:
+  - name: geerlingguy.docker
+  - name: geerlingguy.ntp
+  - name: geerlingguy.security

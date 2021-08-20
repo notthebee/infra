@@ -1,0 +1,18 @@
+---
+- hosts: all
+
+  pre_tasks:
+    - import_tasks: tasks/user.yml
+
+    - import_tasks: tasks/ssh.yml
+  
+- hosts: all
+  become: yes
+  become_method: sudo
+  vars:
+    ansible_user: "{{ username }}"
+
+  roles:
+    - role: essential
+
+    - role: docker

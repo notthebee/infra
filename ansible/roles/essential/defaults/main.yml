@@ -1,0 +1,12 @@
+---
+extra_packages:
+  - fish
+  - htop
+  - stow
+  - git
+  - neofetch
+  - neovim
+  - tmux
+  - mosh
+  - lm-sensors
+  - ctop

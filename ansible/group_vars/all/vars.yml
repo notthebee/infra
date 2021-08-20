@@ -1,0 +1,22 @@
+# General variables
+timezone: Europe/Amsterdam
+
+username: notthebee
+
+email: moe@notthebe.ee
+
+guid: 1000
+
+shell: /usr/bin/fish
+
+docker_data: /opt/docker/data
+
+dotfiles_repo: https://github.com/notthebee/dotfiles
+
+# SSH (geerlingguy.security)
+
+security_ssh_port: 69
+
+security_sudoers_passwordless: [ "{{ username }}" ]
+
+security_autoupdate_reboot: "true"
