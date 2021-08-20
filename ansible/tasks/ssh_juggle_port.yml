@@ -1,0 +1,54 @@
+---
+# This task list is intended to be imported by playbooks, before any
+# other tasks are performed.  It lets us determine whether the configured SSH
+# port is available, and lets us fall back to the default port if necessary.
+#
+# The use case here is when a role in the playbook is configured to change the
+# sshd port, but the first time the role is executed the host is still
+# listening on the default port.  With this check in place, we can fall back
+# to the default port on the first run, and then on subsequent runs use the
+# configured port.
+#
+# Be advised that running this task list in a `gather_facts: false` state as
+# required means simple failures can go unexplained.  For example, if python2
+# is not available, the `wait_for_connection` calls will just time out without
+# explanation.
+#
+# Execute these tasks as the first thing in a playbook like so:
+# - hosts: some-host-group
+#   gather_facts: false
+#   tasks:
+#     - import_tasks: _sshd_port_juggling.yml
+
+- name: SSH Port Juggle | Set the ansible_port to the {{ security_ssh_port }} and the user to {{ username }}
+  set_fact:
+    ansible_port: "{{ security_ssh_port }}"
+    ansible_user: "{{ username }}"
+
+- name: SSH Port Juggle | Try connecting via SSH
+  wait_for_connection:
+    timeout: 5
+  ignore_errors: true
+  register: _ssh_port_result
+
+- name: SSH Port Juggle | Set the ansible_port to the fallback default port and the user to root
+  set_fact:
+    ansible_port: "22"
+    ansible_user: "root"
+  when:
+    - _ssh_port_result is failed
+
+- name: SSH Port Juggle | Try connecting again
+  wait_for_connection:
+    timeout: 5
+  ignore_errors: true
+  register: _ssh_port_default_result
+  when:
+    - _ssh_port_result is failed
+
+- name: SSH Port Juggle | Fail
+  fail: msg="Neither the configured ansible_port {{ ansible_port }} nor the fallback port {{ _default_ssh_port }} were reachable"
+  when:
+    - _ssh_port_result is failed
+    - _ssh_port_default_result is defined
+    - _ssh_port_default_result is failed

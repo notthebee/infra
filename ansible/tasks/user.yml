@@ -1,5 +1,6 @@
 ---
 - name: Create a login user
+  become: yes
   user:
     name: "{{ username }}"
     password: "{{ password | password_hash('sha512') }}"
@@ -8,9 +9,16 @@
     state: present
 
 - name: Allow 'sudo' group to have passwordless sudo
+  become: yes
   lineinfile:
     path: /etc/sudoers
     state: present
     regexp: '^%sudo'
     line: '%sudo ALL=(ALL) NOPASSWD: ALL'
     validate: '/usr/sbin/visudo -cf %s'
+
+- name: Copy the public SSH key 
+  authorized_key:
+    user: "{{ username }}"
+    state: present
+    key: "{{ public_ssh_key }}"
