@@ -33,6 +33,8 @@
   file:
     name: /home/{{ username }}/.hushlogin
     state: touch
+    modification_time: preserve
+    access_time: preserve
 
 - name: Install extra packages
   apt: 
@@ -41,7 +43,7 @@
     update_cache: yes
   with_items: "{{ extra_packages }}"
   
-- name: Clone the dotfiles repo
+- name: Clone the latest dotfiles repo
   git:
     repo: "{{ dotfiles_repo }}"
     dest: /home/{{ username }}/dotfiles
@@ -49,7 +51,9 @@
     recursive: no
 
 - name: Stow the dotfiles
-  shell: cd /home/{{ username }}/dotfiles && stow */
+  shell: cd /home/{{ username }}/dotfiles && stow -v */
+  register: stow_result
+  changed_when: stow_result.stdout != ""
 
 - name: Set the default shell
   user: 
@@ -62,3 +66,7 @@
     owner: "{{ username }}"
     group: "{{ username }}"
     recurse: yes
+
+- name: Set the hostname
+  hostname:
+    name: "{{ inventory_hostname }}"
