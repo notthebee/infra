@@ -1,0 +1,5 @@
+secret.yml
+ansible/files/*
+ansible/group_vars/fragile
+ansible/hosts
+.DS_Store
