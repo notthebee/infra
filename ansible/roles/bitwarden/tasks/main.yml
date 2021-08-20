@@ -1,5 +1,5 @@
 ---
-- name: Make sure the bitwarden container is created and running
+- name: Make sure the Vaultwarden container is created and running
   docker_container:
     name: 'bitwarden'
     image: vaultwarden/server
