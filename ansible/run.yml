@@ -57,6 +57,11 @@
         - swag
         - containers
 
+    - role: wireguard
+      tags: 
+        - wireguard
+        - containers
+
     # SSH security (at the end because it breaks SSH connection)
     - role: geerlingguy.security
       tags: 
