@@ -86,3 +86,8 @@
     - role: geerlingguy.security
       tags: 
         - security
+
+    # NTP
+    - role: geerlingguy.ntp
+      tags: 
+        - ntp

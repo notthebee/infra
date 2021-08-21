@@ -10,18 +10,20 @@
     path: "files/docker_persistent_data/{{ container_name }}/"
   register: persistent_data_local
 
-- name: Sync the persistent docker data TO the server if it exists locally but not remotely
+- name: Sync the persistent docker data TO the server if it exists locally but not remotely, or if the local data is newer than remote data
   synchronize:
     mode: push
+    delete: yes
     src: "files/docker_persistent_data/{{ container_name }}/"
     dest: "{{ docker_dir }}/{{ container_name }}/"
-  when: persistent_data.stat.exists == false and persistent_data_local.stat.exists == true
+  when: (persistent_data.stat.exists == false and persistent_data_local.stat.exists == true) or persistent_data_local.stat.mtime > persistent_data.stat.mtime
 
 # Will eventually be enabled when the testing is done
 #
 # - name: Sync the persistent docker data FROM the server (if it already exists)
 #   synchronize:
 #     mode: pull
+#      delete: yes
 #     src: "{{ docker_dir }}/{{ container_name }}/"
 #     dest: "files/docker_persistent_data/{{ container_name }}/"
-#   when: persistent_data.stat.exists == true
+#   when: (persistent_data.stat.exists == true and persistent_data_local.stat.exists == false) or persistent_data_local.stat.mtime < persistent_data.stat.mtime

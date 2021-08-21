@@ -1,6 +1,8 @@
 # General variables
 timezone: Europe/Amsterdam
 
+ntp_timezone: "{{ timezone }}"
+
 username: notthebee
 
 email: moe@notthebe.ee
