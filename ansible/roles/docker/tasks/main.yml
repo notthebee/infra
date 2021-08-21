@@ -13,6 +13,17 @@
     - 'virtualenv'
     - 'python3-setuptools'
 
+- name: Ensure group docker exists
+  group:
+    name: docker
+    state: present
+
+- name: Add user "{{ username }}" to group docker
+  user:
+    name: '{{ username }}'
+    groups: docker
+    append: yes
+
 - name: Add Docker GPG apt Key
   apt_key:
     url: https://download.docker.com/linux/ubuntu/gpg
@@ -26,7 +37,6 @@
 - name: Install Docker Module for Python
   pip:
     name: docker
-
 
 - name: Update apt and install docker-ce
   apt: 

@@ -1,19 +1,4 @@
 ---
-- name: Create all the necessary groups
-  group:
-    name: "{{ item }}"
-    state: present
-  with_items: 
-    - docker
-    - sudo
-
-- name: Install aptitude using apt
-  apt: 
-    name: aptitude 
-    state: latest 
-    update_cache: yes 
-    force_apt_get: yes
-
 # Set up the shell environment and install essential packages
 - name: Suppress login messages
   file:
