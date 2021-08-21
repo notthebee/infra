@@ -1,0 +1,21 @@
+---
+- import_tasks: tasks/persistent_data.yml
+    
+- name: Make sure the Sonarr container is created and running
+  docker_container:
+    name: "{{ container_name }}"
+    image: "ghcr.io/linuxserver/sonarr"
+    pull: yes
+    state: 'started'
+    env:
+      "PUID": "{{ guid }}"
+      "PGID": "{{ guid }}"
+      "TZ": "{{ timezone }}"
+    ports:
+      - "0.0.0.0:8989:8989"
+    volumes:
+      - "/etc/localtime:/etc/localtime"
+      - "{{ docker_dir }}/{{ container_name }}:/config"
+      - "{{ mergerfs_root }}/Media/TV:/tv"
+      - "{{ mergerfs_root }}/Downloads:/downloads"
+    restart_policy: unless-stopped

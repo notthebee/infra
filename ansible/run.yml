@@ -52,6 +52,26 @@
         - nextcloud
         - containers
 
+    - role: jackett
+      tags: 
+        - jackett
+        - containers
+
+    - role: sonarr
+      tags: 
+        - sonarr
+        - containers
+
+    - role: radarr
+      tags: 
+        - radarr
+        - containers
+
+    - role: plex
+      tags: 
+        - plex
+        - containers
+
     - role: swag
       tags: 
         - swag

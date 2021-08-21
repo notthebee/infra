@@ -1,0 +1,21 @@
+---
+- import_tasks: tasks/persistent_data.yml
+    
+- name: Make sure the Radarr container is created and running
+  docker_container:
+    name: "{{ container_name }}"
+    image: "ghcr.io/linuxserver/radarr"
+    pull: yes
+    state: 'started'
+    env:
+      "PUID": "{{ guid }}"
+      "PGID": "{{ guid }}"
+      "TZ": "{{ timezone }}"
+    ports:
+      - "0.0.0.0:7878:7878"
+    volumes:
+      - "/etc/localtime:/etc/localtime:ro"
+      - "{{ docker_dir }}/{{ container_name }}:/config"
+      - "{{ mergerfs_root }}/Media/Movies:/movies"
+      - "{{ mergerfs_root }}/Downloads:/downloads"
+    restart_policy: unless-stopped
