@@ -4,6 +4,7 @@
 
   pre_tasks:
     - import_tasks: tasks/ssh_juggle_port.yml
+      tags: 'port'
 
     - import_tasks: tasks/user.yml
 
@@ -13,10 +14,20 @@
 
   roles:
     - role: essential
+      tags: 'essential'
 
     - role: docker
+      tags: 'docker'
 
     - role: bitwarden
+      tags: 'bitwarden'
+    
+    - role: deluge
+      tags: 'deluge'
+    
+    - role: homer
+      tags: 'homer'
 
     # SSH security (at the end because it breaks SSH connection)
     - role: geerlingguy.security
+      tags: 'security'

@@ -1,8 +1,10 @@
 ---
+- import_tasks: tasks/persistent_data.yml
+    
 - name: Make sure the Vaultwarden container is created and running
   docker_container:
     name: 'bitwarden'
-    image: vaultwarden/server
+    image: "vaultwarden/server"
     pull: true
     state: 'started'
     env:
@@ -10,5 +12,5 @@
       INVITATIONS_ALLOWED: "false"
       SIGNUPS_ALLOWED: "false"
     volumes:
-      - "{{ docker_dir }}/bitwarden:/data"
+      - "{{ docker_dir }}/{{ container_name }}:/data"
     restart_policy: unless-stopped

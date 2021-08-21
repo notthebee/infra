@@ -47,7 +47,7 @@
     - _ssh_port_result is failed
 
 - name: SSH Port Juggle | Fail
-  fail: msg="Neither the configured ansible_port {{ ansible_port }} nor the fallback port {{ _default_ssh_port }} were reachable"
+  fail: msg="Neither the configured ansible_port {{ ansible_port }} nor the fallback port 22 were reachable"
   when:
     - _ssh_port_result is failed
     - _ssh_port_default_result is defined

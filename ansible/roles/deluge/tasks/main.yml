@@ -1,0 +1,38 @@
+---
+- import_tasks: tasks/persistent_data.yml
+    
+- name: Make sure the Deluge container is created and running
+  docker_container:
+    name: "{{ container_name }}"
+    image: "binhex/arch-delugevpn:latest"
+    pull: yes
+    privileged: yes
+    sysctls:
+      "net.ipv4.conf.all.src_valid_mark": "1"
+    capabilities: 
+      - net_admin
+    state: 'started'
+    env:
+      "VPN_ENABLED": "yes"
+      "VPN_PROV": custom
+      "VPN_CLIENT": "wireguard"
+      "ENABLE_PRIVOXY": "yes"
+      "LAN_NETWORK": "{{ lan_network }}"
+      "NAME_SERVERS": "1.1.1.1, 1.0.0.1"
+      "DELUGE_DAEMON_LOG_LEVEL": "info"
+      "DELUGE_WEB_LOG_LEVEL": "info"
+      "DEBUG": "true"
+      "UMASK": "000"
+      "PUID": "{{ guid }}"
+      "PGID": "{{ guid }}"
+      "TZ": "{{ timezone }}"
+    ports:
+      - "0.0.0.0:8112:8112"
+      - "58846:58846"
+      - "0.0.0.0:8118:8118"
+    volumes:
+      - "{{ docker_dir }}/{{ container_name }}/data:/data"
+      - "{{ docker_dir }}/{{ container_name }}/config:/config"
+      - "{{ mergerfs_root }}/Downloads:/home/nobody/Downloads"
+      - "/etc/localtime:/etc/localtime:ro"
+    restart_policy: unless-stopped

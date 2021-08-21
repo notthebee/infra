@@ -5,7 +5,7 @@ username: notthebee
 
 email: moe@notthebe.ee
 
-guid: 1000
+guid: "1000"
 
 shell: /usr/bin/fish
 
