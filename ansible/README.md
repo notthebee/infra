@@ -34,6 +34,11 @@ The playbook is mostly being developed for personal use, so stuff is going to be
 * Netatalk (AFS) for Time Machine
 
 ## Usage
+Install Ansible (macOS:
+```
+brew install ansible
+```
+
 Clone the repository:
 ```
 git clone https://github.com/notthebee/infra
@@ -66,6 +71,11 @@ Add your custom inventory file to `hosts`:
 ```
 cp hosts_example hosts
 vi hosts
+```
+
+Install the dependencies:
+```
+ansible-galaxy install -r requirements.yml
 ```
 
 Finally, run the playbook:
