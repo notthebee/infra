@@ -28,7 +28,52 @@ The playbook is mostly being developed for personal use, so stuff is going to be
 * [Home Assistant](https://hub.docker.com/r/homeassistant/home-assistant) (A FOSS smart home hub)
 * [Phoscon-GW](https://hub.docker.com/r/marthoc/deconz) (A Zigbee gateway)
 
-Other features:
+## Other features:
 * MergerFS with Snapraid
 * Samba
 * Netatalk (AFS) for Time Machine
+
+## Usage
+Clone the repository:
+```
+git clone https://github.com/notthebee/infra
+```
+
+Copy the sample inventory and adjust the variables in `vars.yml`:
+```
+cd infra/ansible
+cp -r group_vars/sample group_vars/YOUR_HOSTNAME
+vi group_vars/YOUR_HOSTNAME/vars.yml
+```
+
+Create a Keychain item for your Ansible Vault password (on macOS):
+```
+security add-generic-password \
+               -a YOUR_USERNAME \
+               -s ansible-vault-password \
+               -w
+```
+
+The `pass.sh` script will extract the Ansible Vault password from your Keychain automatically each time Ansible requests it.
+
+Encrypt the `secret.yml` file and adjust the variables:
+```
+ansible-vault encrypt group_vars/YOUR_HOSTNAME/secret.yml
+ansible-vault edit group_vars/YOUR_HOSTNAME/secret.yml
+```
+
+Add your custom inventory file to `hosts`:
+```
+cp hosts_example hosts
+vi hosts
+```
+
+Finally, run the playbook:
+```
+ansible-playbook run.yml
+```
+
+For consecutive runs, if you only want to update the Docker containers, you can run the playbook like this:
+```
+ansible-playbook run.yml --tags="port,containers"
+```

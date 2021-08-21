@@ -41,7 +41,13 @@
       tags: 
         - duckdns
         - containers
-        
+
+    - role: nextcloud
+      tags: 
+        - nextcloud
+        - containers
+
+
     - role: swag
       tags: 
         - swag

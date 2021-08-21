@@ -10,9 +10,11 @@
     dest: "{{ docker_dir }}/{{ container_name }}/"
   when: persistent_data.stat.exists == false
 
-- name: Sync the persistent docker data FROM the server (if it already exists)
-  synchronize:
-    mode: pull
-    src: "{{ docker_dir }}/{{ container_name }}/"
-    dest: "files/docker_persistent_data/{{ container_name }}/"
-  when: persistent_data.stat.exists == true
+# Will eventually be enabled when the testing is done
+#
+# - name: Sync the persistent docker data FROM the server (if it already exists)
+#   synchronize:
+#     mode: pull
+#     src: "{{ docker_dir }}/{{ container_name }}/"
+#     dest: "files/docker_persistent_data/{{ container_name }}/"
+#   when: persistent_data.stat.exists == true

@@ -1,0 +1,37 @@
+---
+- import_tasks: tasks/persistent_data.yml
+
+- name: Make sure the MariaDB container is created and running
+  docker_container:
+    name: "mariadb"
+    image: "ghcr.io/linuxserver/mariadb"
+    pull: yes
+    state: 'started'
+    env:
+      "PUID": "{{ guid }}"
+      "PGID": "{{ guid }}"
+      "TZ": "{{ timezone }}"
+      "MYSQL_ROOT_PASSWORD": "{{ mysql_root_password }}"
+      "MYSQL_DATABASE": "{{ mysql_db }}"
+      "MYSQL_USER": "{{ mysql_user }}"
+      "MYSQL_PASSWORD": "{{ mysql_password }}"
+    volumes:
+      - "{{ docker_dir }}/{{ container_name }}/mariadb/config:/config"
+    ports:
+      - "3306:3306"
+    restart_policy: unless-stopped
+    
+- name: Make sure the Nextcloud container is created and running
+  docker_container:
+    name: "{{ container_name }}"
+    image: "ghcr.io/linuxserver/nextcloud"
+    pull: yes
+    state: 'started'
+    env:
+      "PUID": "{{ guid }}"
+      "PGID": "{{ guid }}"
+      "TZ": "{{ timezone }}"
+    volumes:
+      - "{{ docker_dir }}/{{ container_name }}/config:/config"
+      - "{{ mergerfs_root }}/Nextcloud:/data"
+    restart_policy: unless-stopped
