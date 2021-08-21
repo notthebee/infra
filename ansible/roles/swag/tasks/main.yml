@@ -1,0 +1,25 @@
+---
+- import_tasks: tasks/persistent_data.yml
+    
+- name: Make sure the SWAG container is created and running
+  docker_container:
+    name: "{{ container_name }}"
+    image: "ghcr.io/linuxserver/swag"
+    pull: yes
+    capabilities: 
+      - net_admin
+    state: 'started'
+    env:
+      "PUID": "{{ guid }}"
+      "PGID": "{{ guid }}"
+      "TZ": "{{ timezone }}"
+      "URL": "{{ host }}"
+      "SUBDOMAINS": "wildcard"
+      "DUCKDNSTOKEN": "{{ duckdns_token }}"
+      "VALIDATION": "duckdns"
+    ports:
+      - "443:443"
+      - "80:80"
+    volumes:
+      - "{{ docker_dir }}/{{ container_name }}/config:/config"
+    restart_policy: unless-stopped

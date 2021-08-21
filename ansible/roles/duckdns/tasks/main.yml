@@ -1,0 +1,18 @@
+---
+- import_tasks: tasks/persistent_data.yml
+    
+- name: Make sure the {{ container_name}} container is created and running
+  docker_container:
+    name: "{{ container_name }}"
+    image: "ghcr.io/linuxserver/duckdns"
+    pull: yes
+    state: 'started'
+    env:
+      "PUID": "{{ guid }}"
+      "PGID": "{{ guid }}"
+      "TZ": "{{ timezone }}"
+      "SUBDOMAINS": "{{ duckdns_domain }}"
+      "TOKEN": "{{ duckdns_token }}"
+    volumes:
+      - "{{ docker_dir }}/{{ container_name }}/config:/config"
+    restart_policy: unless-stopped

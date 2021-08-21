@@ -20,3 +20,5 @@ security_ssh_port: 69
 security_sudoers_passwordless: [ "{{ username }}" ]
 
 security_autoupdate_reboot: "true"
+
+host: "{{ duckdns_domain }}.duckdns.org"
