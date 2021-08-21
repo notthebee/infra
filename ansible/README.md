@@ -6,28 +6,27 @@ The playbook is mostly being developed for personal use, so stuff is going to be
 
 ## Services included:
 #### Media
-* [https://hub.docker.com/r/linuxserver/plex](Plex) (A media server)
-* [https://hub.docker.com/r/linuxserver/radarr](Radarr) (A movie tracker/downloader)
-* [https://hub.docker.com/r/linuxserver/jackett](Jackett) (A torrent/NZB indexer)
-* [https://hub.docker.com/r/linuxserver/sonarr](Sonarr) (A TV show tracker/downloader)
-* [https://hub.docker.com/r/binhex/arch-delugevpn](Arch-DelugeVPN) (An Arch Linux container running Deluge and an Wireguard/OpenVPN client with a kill switch)
+* [Plex](https://hub.docker.com/r/linuxserver/plex) (A media server)
+* [Radarr](https://hub.docker.com/r/linuxserver/radarr) (A movie tracker/downloader)
+* [Jackett](https://hub.docker.com/r/linuxserver/jackett) (A torrent/NZB indexer)
+* [Sonarr](https://hub.docker.com/r/linuxserver/sonarr) (A TV show tracker/downloader)
+* [Arch-DelugeVPN](https://hub.docker.com/r/binhex/arch-delugevpn) (An Arch Linux container running Deluge and an Wireguard/OpenVPN client with a kill switch)
 
 #### Services
-* [https://hub.docker.com/r/b4bz/homer](Homer) (A static home page)
-* [https://hub.docker.com/r/linuxserver/nextcloud](Nextcloud) (A self-hosted cloud platform)
-* [https://hub.docker.com/r/linuxserver/mariadb](MariaDB) (A database server for Nextcloud)
-* [https://hub.docker.com/r/vaultwarden/server](Vaultwarden) (A FOSS Bitwarden fork written in Rust)
-* [https://hub.docker.com/r/linuxserver/wireguard](Wireguard) (A VPN server)
+* [Homer](https://hub.docker.com/r/b4bz/homer) (A static home page)
+* [Nextcloud](https://hub.docker.com/r/linuxserver/nextcloud) (A self-hosted cloud platform)
+* [MariaDB](https://hub.docker.com/r/linuxserver/mariadb) (A database server for Nextcloud)
+* [Vaultwarden](https://hub.docker.com/r/vaultwarden/server) (A FOSS Bitwarden fork written in Rust)
+* [Wireguard](https://hub.docker.com/r/linuxserver/wireguard) (A VPN server)
 
 #### Misc
-* [https://hub.docker.com/r/containrrr/watchtower](Watchtower) (An automated updater for Docker images)
-* [https://hub.docker.com/r/linuxserver/duckdns/](DuckDNS) (A dynamic DNS client for DuckDNS)
-* [https://hub.docker.com/r/linuxserver/swag](SWAG) (A reverse proxy with built-in support for dynamic DNS, Certbot and fail2ban)
+* [Watchtower](https://hub.docker.com/r/containrrr/watchtower) (An automated updater for Docker images)
+* [DuckDNS](https://hub.docker.com/r/linuxserver/duckdns/) (A dynamic DNS client for DuckDNS)
+* [SWAG](https://hub.docker.com/r/linuxserver/swag) (A reverse proxy with built-in support for dynamic DNS, Certbot and fail2ban)
 
 #### Home Automation
-* [https://hub.docker.com/r/homeassistant/home-assistant](Home Assistant) (A FOSS smart home hub)
-* [https://hub.docker.com/r/marthoc/deconz](Phoscon-GW) (A Zigbee gateway)
-
+* [Home Assistant](https://hub.docker.com/r/homeassistant/home-assistant) (A FOSS smart home hub)
+* [Phoscon-GW](https://hub.docker.com/r/marthoc/deconz) (A Zigbee gateway)
 
 Other features:
 * MergerFS with Snapraid
