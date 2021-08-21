@@ -31,7 +31,7 @@ The playbook is mostly being developed for personal use, so stuff is going to be
 ## Other features:
 * MergerFS with Snapraid
 * Samba
-* Netatalk (AFS) for Time Machine
+* Netatalk (AFP) for Time Machine
 
 ## Usage
 Install Ansible (macOS):
