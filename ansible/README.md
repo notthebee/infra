@@ -34,7 +34,7 @@ The playbook is mostly being developed for personal use, so stuff is going to be
 * Netatalk (AFS) for Time Machine
 
 ## Usage
-Install Ansible (macOS:
+Install Ansible (macOS):
 ```
 brew install ansible
 ```
