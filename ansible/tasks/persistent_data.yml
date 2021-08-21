@@ -3,12 +3,19 @@
     path: "{{ docker_dir }}/{{ container_name }}/"
   register: persistent_data
 
-- name: Sync the persistent docker data TO the server (if it doesn't already exist)
+- name: Check if the persistent data folder exists on the local machine
+  become: false
+  local_action:
+    module: stat
+    path: "files/docker_persistent_data/{{ container_name }}/"
+  register: persistent_data_local
+
+- name: Sync the persistent docker data TO the server if it exists locally but not remotely
   synchronize:
     mode: push
     src: "files/docker_persistent_data/{{ container_name }}/"
     dest: "{{ docker_dir }}/{{ container_name }}/"
-  when: persistent_data.stat.exists == false
+  when: persistent_data.stat.exists == false and persistent_data_local.stat.exists == true
 
 # Will eventually be enabled when the testing is done
 #
