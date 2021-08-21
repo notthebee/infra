@@ -21,6 +21,11 @@
     - role: docker
       tags: 
         - docker
+    
+    - role: watchtower
+      tags:
+        - watchtower
+        - containers
 
     - role: bitwarden
       tags:
@@ -46,7 +51,6 @@
       tags: 
         - nextcloud
         - containers
-
 
     - role: swag
       tags: 

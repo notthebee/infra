@@ -1,0 +1,10 @@
+---
+- name: Make sure the Watchtower container is created and running
+  docker_container:
+    name: "{{ container_name }}"
+    image: "containrrr/watchtower"
+    pull: yes
+    state: 'started'
+    volumes:
+      - "/var/run/docker.sock:/var/run/docker.sock"
+    restart_policy: unless-stopped
