@@ -1,6 +1,4 @@
 ---
-- import_tasks: tasks/persistent_data.yml
-    
 - name: Make sure the Homer container is created and running
   docker_container:
     name: 'homer'
@@ -8,7 +6,7 @@
     pull: true
     state: 'started'
     ports:
-      "8080:8080"
+      - "8080:8080"
     env:
       "PUID": "{{ guid }}"
       "PGID": "{{ guid }}"

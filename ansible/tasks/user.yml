@@ -23,3 +23,14 @@
     user: "{{ username }}"
     state: present
     key: "{{ public_ssh_key }}"
+
+- name: Create additional users (no login)
+  become: yes
+  user:
+    name: "{{ item.name }}"
+    groups: "{{ item.groups }}"
+    password: "{{ item.password | password_hash('sha512') }}"
+    state: present
+    shell: /sbin/nologin
+  with_items: "{{ additional_users }}"
+  when: additional_users is defined

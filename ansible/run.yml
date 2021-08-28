@@ -1,5 +1,5 @@
 ---
-- hosts: all
+- hosts: centralia
   gather_facts: no
 
   pre_tasks:

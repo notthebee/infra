@@ -1,4 +1,5 @@
 ---
 roles:
+  - name: bertvv.samba
   - name: geerlingguy.security
   - name: geerlingguy.ntp

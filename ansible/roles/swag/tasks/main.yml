@@ -1,7 +1,4 @@
 ---
-- import_tasks: tasks/persistent_data.yml
-
-
 - name: Make sure the SWAG container is created and running
   docker_container:
     name: "{{ container_name }}"
@@ -33,4 +30,4 @@
       - swag
       - nextcloud
       - mariadb
-      - bitwarden
+      #- bitwarden

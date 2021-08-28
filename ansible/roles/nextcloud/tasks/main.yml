@@ -1,6 +1,4 @@
 ---
-- import_tasks: tasks/persistent_data.yml
-
 - name: Make sure the MariaDB container is created and running
   docker_container:
     name: "mariadb"

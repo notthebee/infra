@@ -1,4 +1,5 @@
 # General variables
+#
 timezone: Europe/Amsterdam
 
 ntp_timezone: "{{ timezone }}"
@@ -24,3 +25,5 @@ security_sudoers_passwordless: [ "{{ username }}" ]
 security_autoupdate_reboot: "true"
 
 host: "{{ duckdns_domain }}.duckdns.org"
+
+

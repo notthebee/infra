@@ -1,5 +1,6 @@
 /ansible/files/docker_persistent_data/*
 !/ansible/files/docker_persistent_data/.gitkeep
 /ansible/group_vars/fragile
+/ansible/group_vars/centralia
 /ansible/hosts
 .DS_Store

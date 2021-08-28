@@ -1,7 +1,5 @@
 ---
-- import_tasks: tasks/persistent_data.yml
-    
-- name: Make sure the Sonarr container is created and running
+- name: Make sure the {{ container_name }} container is created and running
   docker_container:
     name: "{{ container_name }}"
     image: "ghcr.io/linuxserver/sonarr"
