@@ -1,0 +1,33 @@
+---
+- name: Check if the ZigBee device exists
+  find:
+    paths:
+      - "/dev"
+    patterns:
+      - "ttyACM*"
+  register: zigbee_dev 
+
+- name: Make sure the {{ container_name }} container is created and running if there's a Zigbee device
+  docker_container:
+    name: "{{ container_name }}"
+    image: "marthoc/deconz"
+    pull: yes
+    state: 'started'
+    ports:
+      - "4043:443"
+      - "8085:80"
+    volumes:
+      - "{{ docker_dir }}/{{ container_name }}:/root/.local/share/dresden-elektronik/deCONZ"
+    devices:
+      - "{{ zigbee_dev.files[0].path }}"
+    env:
+      "TZ": "{{ timezone }}"
+      "DECONZ_WEB_PORT": "80"
+      "DECONZ_WS_PORT": "443"
+      "DEBUG_INFO": "1"
+      "DEBUG_APS": "0"
+      "DEBUG_ZCL": "0"
+      "DEBUG_ZDP": "0"
+      "DEBUG_OTAU": "0"
+    restart_policy: unless-stopped
+  when: zigbee_dev.files

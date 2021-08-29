@@ -1,5 +1,5 @@
 ---
-- hosts: centralia
+- hosts: all
   gather_facts: no
 
   pre_tasks:
@@ -8,10 +8,14 @@
         - port
 
     - import_tasks: tasks/user.yml
-
   
 - hosts: all
   become: yes
+
+  pre_tasks:
+    - name: Copy persistent data to the server
+      import_tasks: tasks/copy_persistent_data.yml
+      tags: containers
 
   roles:
     - role: essential
@@ -21,71 +25,103 @@
     - role: docker
       tags: 
         - docker
-    
-    - role: watchtower
+
+    - role: containers/watchtower
       tags:
         - watchtower
         - containers
 
-    - role: bitwarden
-      tags:
-        - bitwarden
-        - containers
-    
-    - role: deluge
-      tags: 
-        - deluge
-        - containers
-    
-    - role: homer
-      tags: 
-        - homer
-        - containers
-
-    - role: duckdns
-      tags: 
-        - duckdns
-        - containers
-
-    - role: nextcloud
-      tags: 
-        - nextcloud
-        - containers
-
-    - role: jackett
-      tags: 
-        - jackett
-        - containers
-
-    - role: sonarr
-      tags: 
-        - sonarr
-        - containers
-
-    - role: radarr
-      tags: 
-        - radarr
-        - containers
-
-    - role: plex
-      tags: 
-        - plex
-        - containers
-
-    - role: swag
+    - role: containers/swag
       tags: 
         - swag
         - containers
+      when: enable_swag | default(False)
 
-    - role: wireguard
+    - role: containers/bitwarden
+      tags:
+        - bitwarden
+        - containers
+      when: enable_bitwarden | default(False)
+    
+    - role: containers/deluge
+      tags: 
+        - deluge
+        - containers
+      when: enable_deluge | default(False)
+
+    
+    - role: containers/homer
+      tags: 
+        - homer
+        - containers
+      when: enable_homer | default(False)
+
+    - role: containers/duckdns
+      tags: 
+        - duckdns
+        - containers
+      when: enable_duckdns | default(False)
+
+    - role: containers/nextcloud
+      tags: 
+        - nextcloud
+        - containers
+      when: enable_nextcloud | default(False)
+
+    - role: containers/jackett
+      tags: 
+        - jackett
+        - containers
+      when: enable_downloaders | default(False)
+
+    - role: containers/sonarr
+      tags: 
+        - sonarr
+        - containers
+      when: enable_downloaders | default(False)
+
+    - role: containers/radarr
+      tags: 
+        - radarr
+        - containers
+      when: enable_deluge | default(False)
+
+    - role: containers/plex
+      tags: 
+        - plex
+        - containers
+      when: enable_plex | default(False)
+
+    - role: containers/wireguard
       tags: 
         - wireguard
         - containers
+      when: enable_wireguard | default(False)
+
+    - role: containers/home-assistant
+      tags: 
+        - home-assistant
+        - smarthome
+        - containers
+      when: enable_smarthome | default(False)
+
+    - role: containers/deconz
+      tags: 
+        - deconz
+        - smarthome
+        - containers
+      when: enable_smarthome | default(False)
+
 
     # SSH security (at the end because it breaks SSH connection)
     - role: geerlingguy.security
       tags: 
         - security
+          
+    # Samba
+    - role: bertvv.samba
+      tags: 
+        - samba
 
     # NTP
     - role: geerlingguy.ntp

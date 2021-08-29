@@ -7,6 +7,7 @@
     groups: 
       - sudo
     state: present
+    append: true
     update_password: on_create
 
 - name: Allow 'sudo' group to have passwordless sudo
@@ -30,7 +31,9 @@
     name: "{{ item.name }}"
     groups: "{{ item.groups }}"
     password: "{{ item.password | password_hash('sha512') }}"
+    update_password: on_create
     state: present
+    append: true
     shell: /sbin/nologin
   with_items: "{{ additional_users }}"
   when: additional_users is defined

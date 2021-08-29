@@ -1,8 +1,3 @@
-- name: Check if the persistent data folder exists on the remote machine
-  stat:
-    path: "{{ docker_dir }}"
-  register: persistent_data
-
 - name: Check if the persistent data folder exists on the local machine
   become: false
   local_action:
@@ -10,10 +5,17 @@
     path: "files/docker_persistent_data/"
   register: persistent_data_local
 
+- name: Check if the persistent data folder exists on the remote machine
+  become: false
+  stat:
+    path: "{{ docker_dir }}"
+  register: persistent_data_remote
+
+
 - name: Sync the persistent docker data to the server 
   synchronize:
     mode: push
     delete: yes
     src: "files/docker_persistent_data/"
     dest: "{{ docker_dir }}/"
-  when: persistent_data.stat.exists == false and persistent_data_local.stat.exists == true 
+  when: copy_persistent_data and (persistent_data_local.stat.exists == true and persistent_data_remote.stat.exists == false) or force_copy_persistent_data

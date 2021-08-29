@@ -1,9 +1,14 @@
 ---
+- name: Create a SWAG network, add all the containers to be reverse-proxied into it
+  docker_network:
+    name: swag_network
+
 - name: Make sure the SWAG container is created and running
   docker_container:
     name: "{{ container_name }}"
     image: "ghcr.io/linuxserver/swag"
     pull: yes
+    network_mode: swag_network
     capabilities: 
       - net_admin
     state: 'started'
@@ -21,13 +26,3 @@
     volumes:
       - "{{ docker_dir }}/{{ container_name }}/config:/config"
     restart_policy: unless-stopped
-
-
-- name: Create a SWAG network, add all the containers to be reverse-proxied into it
-  docker_network:
-    name: swag_network
-    connected:
-      - swag
-      - nextcloud
-      - mariadb
-      #- bitwarden

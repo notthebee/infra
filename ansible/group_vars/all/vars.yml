@@ -26,4 +26,30 @@ security_autoupdate_reboot: "true"
 
 host: "{{ duckdns_domain }}.duckdns.org"
 
+# Docker
+copy_persistent_data: false
 
+force_copy_persistent_data: false
+
+enable_smarthome: true
+
+enable_plex: true
+
+enable_downloaders: true
+
+enable_deluge: true
+
+enable_bitwarden: true
+
+enable_duckdns: true
+
+enable_homer: true
+
+enable_nextcloud: true
+
+enable_swag: true
+
+enable_wireguard: true
+
+# Samba
+samba_server_string: "{{ hostname }}"

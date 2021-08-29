@@ -33,3 +33,12 @@
       - "{{ docker_dir }}/{{ container_name }}/config:/config"
       - "{{ mergerfs_root }}/Nextcloud:/data"
     restart_policy: unless-stopped
+
+- name: Add {{ container_name }} to the SWAG network (reverse-proxy)
+  docker_network:
+    name: swag_network
+    connected:
+      - "{{ container_name }}"
+      - mariadb
+    appends: yes
+  when: enable_swag
