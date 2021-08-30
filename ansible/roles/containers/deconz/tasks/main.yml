@@ -30,4 +30,4 @@
       "DEBUG_ZDP": "0"
       "DEBUG_OTAU": "0"
     restart_policy: unless-stopped
-  when: zigbee_dev.files
+  when: zigbee_dev.files[0] is defined
