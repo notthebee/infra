@@ -5,6 +5,8 @@
       - "/dev"
     patterns:
       - "ttyACM*"
+    file_type:
+      any
   register: zigbee_dev 
 
 - name: Make sure the {{ container_name }} container is created and running if there's a Zigbee device
@@ -30,4 +32,4 @@
       "DEBUG_ZDP": "0"
       "DEBUG_OTAU": "0"
     restart_policy: unless-stopped
-  when: zigbee_dev.files[0] is defined
+  when: zigbee_dev.files | length > 0
