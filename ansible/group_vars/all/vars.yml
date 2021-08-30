@@ -145,11 +145,11 @@ enable_timemachine: true
 mergerfs_root: /mnt/storage
 
 disks:
-  - { name: /mnt/data1, src: /dev/disk/by-label/Data1 }
-  - { name: /mnt/data2, src: /dev/disk/by-label/Data2 }
+  - { name: /mnt/data1, src: /dev/disk/by-label/Data1, content: true }
+  - { name: /mnt/data2, src: /dev/disk/by-label/Data2, content: true }
 
 parity_disks:
-  - { name: /mnt/parity1, src: /dev/disk/by-label/Parity1 }
+  - { name: /mnt/parity1, src: /dev/disk/by-label/Parity1, content: true }
 
 snapraid_runner_gmail_pass: "{{ email_password }}"
 

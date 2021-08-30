@@ -4,27 +4,22 @@
     name: "nextcloud-mariadb"
     image: "mariadb:latest"
     pull: yes
-    command: --transaction-isolation=READ-COMMITTED --binlog-format=ROW --skip-innodb-read-only-compressed
+    command: "--transaction-isolation=READ-COMMITTED --binlog-format=ROW --skip-innodb-read-only-compressed"
     state: 'started'
     env:
-      "PUID": "999"
-      "PGID": "999"
       "TZ": "{{ timezone }}"
       "MYSQL_ROOT_PASSWORD": "{{ mysql_root_password }}"
       "MYSQL_DATABASE": "{{ mysql_db }}"
       "MYSQL_USER": "{{ mysql_user }}"
       "MYSQL_PASSWORD": "{{ mysql_password }}"
     volumes:
-      - "{{ docker_dir }}/{{ container_name }}/mariadb/config:/config"
       - "{{ docker_dir }}/{{ container_name }}/mariadb/mysql:/var/lib/mysql"
-    ports:
-      - "3306:3306"
     restart_policy: unless-stopped
     
 - name: Make sure the Nextcloud container is created and running
   docker_container:
     name: "{{ container_name }}"
-    image: "ghcr.io/linuxserver/nextcloud"
+    image: "ghcr.io/linuxserver/nextcloud:latest"
     pull: yes
     state: 'started'
     env:

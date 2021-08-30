@@ -1,0 +1,15 @@
+---
+- hosts: all
+  gather_facts: no
+
+  pre_tasks:
+    - import_tasks: tasks/ssh_juggle_port.yml
+      tags:
+        - port
+
+- hosts: all
+  become: yes
+
+  tasks:
+    - name: Copy persistent data to the local machine
+      import_tasks: tasks/backup_persistent_data.yml
