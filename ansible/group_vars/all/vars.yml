@@ -1,4 +1,6 @@
-# General variables
+#
+# Misc
+#
 timezone: Europe/Amsterdam
 
 ntp_timezone: "{{ timezone }}"
@@ -6,8 +8,6 @@ ntp_timezone: "{{ timezone }}"
 username: notthebee
 
 ssh_public_key: https://github.com/notthebee.keys
-
-email: moe@notthebe.ee
 
 guid: "1000"
 
@@ -18,7 +18,36 @@ docker_dir: /opt/docker/data
 dotfiles_repo: https://github.com/notthebee/dotfiles
 
 
+#
+# Email credentials (for SMART and Snapraid error reporting)
+#
+
+email: moe@notthebe.ee
+
+email_login: "{{ email }}"
+
+email_smtp_host: smtp.mailbox.org
+
+email_smtp_port: 465
+
+# MSMTP 
+msmtp_accounts:
+- account:   mailbox
+  host:      "{{ email_smtp_host }}"
+  port:      "{{ email_smtp_port }}"
+  auth:      "on"
+  from:      "{{ email }}"
+  user:      "{{ email }}"
+  password:  "{{ email_password}}"
+
+msmtp_default_account: "mailbox"
+
+msmtp_alias_default : "{{ email }}"
+
+
+#
 # SSH (geerlingguy.security)
+#
 security_ssh_port: 69
 
 security_sudoers_passwordless: [ "{{ username }}" ]
@@ -28,7 +57,9 @@ security_autoupdate_reboot: "true"
 host: "{{ duckdns_domain }}.duckdns.org"
 
 
+#
 # Docker
+#
 copy_persistent_data: false
 
 force_copy_persistent_data: false
@@ -54,11 +85,53 @@ enable_swag: true
 enable_wireguard: true
 
 
+#
 # Samba
+#
 samba_server_string: "{{ hostname }}"
 
+samba_users:
+  - name: "{{ username }}"
+    password: "{{ password }}"
+  - name: "{{ additional_users[0].name }}"
+    password: "{{ password2 }}"
 
+samba_shares:
+  - name: Trash
+    guest_ok: no
+    public: no
+    read_only: no
+    writable: yes
+    browseable: yes
+    path: "{{ mergerfs_root }}"
+    valid_users: "{{ username }}"
+    write_list: "{{ username }}"
+      
+  - name: Downloads
+    guest_ok: no
+    public: no
+    read_only: no
+    writable: yes
+    browseable: yes
+    path: "{{ mergerfs_root }}/Downloads"
+    valid_users: "{{ username }}, {{ additional_users[0] }}"
+    write_list: "{{ username }}, {{ additional_users[0] }}"
+ 
+  - name: Media
+    guest_ok: no
+    public: no
+    read_only: no
+    writable: yes
+    browseable: yes
+    path: "{{ mergerfs_root }}/Media"
+    valid_users: "{{ username }}, {{ additional_users[0] }}"
+    write_list: "{{ username }}, {{ additional_users[0] }}"
+
+
+
+#
 # Time Machine
+#
 timemachine_root: /mnt/timemachine
 
 timemachine_drive: /dev/disk/by-label/TimeMachine
@@ -66,8 +139,9 @@ timemachine_drive: /dev/disk/by-label/TimeMachine
 enable_timemachine: true
 
 
+#
 # Snapraid and MergerFS
-
+#
 mergerfs_root: /mnt/storage
 
 disks:
@@ -77,6 +151,30 @@ disks:
 parity_disks:
   - { name: /mnt/parity1, src: /dev/disk/by-label/Parity1 }
 
-snapraid_scrub_schedule:
-  hour: 1
-  weekday: 3
+snapraid_runner_gmail_pass: "{{ email_password }}"
+
+snapraid_runner_email_address: "{{ email }}"
+
+snapraid_runner_email_address_from: "{{ snapraid_runner_email_address }}"
+
+snapraid_runner_email_address_to: "{{ snapraid_runner_email_address }}"
+
+snapraid_runner_smtp_host: "{{ email_smtp_host }}"
+
+snapraid_runner_smtp_port: "{{ email_smtp_port }}"
+
+snapraid_runner_email_sendon: "error"
+
+snapraid_runner_use_ssl: true
+
+snapraid_content_files:
+  - disks[0].name/snapraid.content
+  - /var/snapraid.content
+
+snapraid_config_excludes:
+  - "*.unrecoverable"
+  - /lost+found/
+  - "*.!sync"
+  - /tmp/
+  - "Downloads"
+

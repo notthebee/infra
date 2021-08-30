@@ -1,6 +1,8 @@
 # notthebee/infra/ansible 
 
-An Ansible playbook that sets up an Ubuntu/Debian-based home media server/NAS with reasonable security, auto-updates and dynamic DNS.
+An Ansible playbook that sets up an Ubuntu-based home media server/NAS with reasonable security, auto-updates, e-mail notifications for S.M.A.R.T. and Snapraid errors and dynamic DNS. 
+
+It assumes a fresh Ubuntu Server 20.04 install, access to a non-root user with sudo privileges and a public SSH key. This can be configured during the installation process.
 
 The playbook is mostly being developed for personal use, so stuff is going to be constantly changing and breaking. Use at your own risk and don't expect any help in setting it up on your machine.
 
@@ -80,8 +82,9 @@ ansible-galaxy install -r requirements.yml
 
 Finally, run the playbook:
 ```
-ansible-playbook run.yml
+ansible-playbook run.yml -l your-host-here -K
 ```
+The "-K" parameter is only necessary for the first run, since the playbook configures passwordless sudo for the main login user
 
 For consecutive runs, if you only want to update the Docker containers, you can run the playbook like this:
 ```
