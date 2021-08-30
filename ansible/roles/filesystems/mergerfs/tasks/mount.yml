@@ -1,20 +1,3 @@
-- name: create /mnt points for drives
-  file:
-    dest: "{{ item.name }}"
-    state: directory
-    owner: nobody
-    group: nogroup
-    mode: "0777"
-  with_items: "{{ disks }}"
-
-- name: create /mnt point for mount_point
-  file:
-    dest: "{{ mergerfs_root }}"
-    state: directory
-    owner: nobody
-    group: nogroup
-    mode: "0777"
-
 - name: mount drives
   mount:
     name: "{{ item.name }}"

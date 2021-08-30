@@ -96,6 +96,10 @@ samba_users:
   - name: "{{ additional_users[0].name }}"
     password: "{{ password2 }}"
 
+samba_global_include: global-include.conf
+
+samba_mitigate_cve_2017_7494: false
+
 samba_shares:
   - name: Trash
     guest_ok: no
@@ -114,8 +118,8 @@ samba_shares:
     writable: yes
     browseable: yes
     path: "{{ mergerfs_root }}/Downloads"
-    valid_users: "{{ username }}, {{ additional_users[0] }}"
-    write_list: "{{ username }}, {{ additional_users[0] }}"
+    valid_users: "{{ username }}, {{ additional_users[0].name }}"
+    write_list: "{{ username }}, {{ additional_users[0].name }}"
  
   - name: Media
     guest_ok: no
@@ -124,8 +128,8 @@ samba_shares:
     writable: yes
     browseable: yes
     path: "{{ mergerfs_root }}/Media"
-    valid_users: "{{ username }}, {{ additional_users[0] }}"
-    write_list: "{{ username }}, {{ additional_users[0] }}"
+    valid_users: "{{ username }}, {{ additional_users[0].name }}"
+    write_list: "{{ username }}, {{ additional_users[0].name }}"
 
 
 

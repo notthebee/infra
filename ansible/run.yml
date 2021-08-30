@@ -34,6 +34,10 @@
       tags:
       - snapraid
 
+    - role: avahi
+      tags: 
+        - avahi
+
     - role: filesystems/timemachine
       tags:
         - timemachine

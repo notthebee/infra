@@ -6,7 +6,6 @@
     update_cache: yes
   with_items: 
     - 'netatalk'
-    - 'avahi-daemon'
     - 'hfsplus'
     - 'hfsprogs'
 

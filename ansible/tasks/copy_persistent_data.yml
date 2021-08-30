@@ -14,8 +14,8 @@
   file:
     dest: "{{ docker_dir }}"
     state: directory
-    owner: notthebee
-    group: notthebee
+    owner: "{{ username }}"
+    group: "{{ username }}"
     recurse: yes
   when: persistent_data_remote.stat.exists == false
 

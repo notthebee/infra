@@ -1,0 +1,38 @@
+---
+- name: Install required system packages
+  apt: 
+    name: "{{ item }}" 
+    state: latest 
+    update_cache: yes
+  with_items: 
+    - 'avahi-daemon'
+
+- name: Copy the main Avahi config
+  template:
+    src: avahi-daemon.conf
+    dest: /etc/avahi/avahi-daemon.conf
+    owner: root
+    group: root
+    mode: 0775
+
+- name: Copy the Samba config
+  template:
+    src: samba.service
+    dest: /etc/avahi/services/samba.service
+    owner: root
+    group: root
+    mode: 0775
+
+- name: Copy the Netatalk config
+  template:
+    src: netatalk.service
+    dest: /etc/avahi/services/netatalk.service
+    owner: root
+    group: root
+    mode: 0775
+  
+- name: Make sure the Avahi service is running and enabled
+  service: 
+    name: avahi-daemon
+    state: started 
+    enabled: yes
