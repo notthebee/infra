@@ -1,10 +1,11 @@
 # General variables
-#
 timezone: Europe/Amsterdam
 
 ntp_timezone: "{{ timezone }}"
 
 username: notthebee
+
+ssh_public_key: https://github.com/notthebee.keys
 
 email: moe@notthebe.ee
 
@@ -16,8 +17,8 @@ docker_dir: /opt/docker/data
 
 dotfiles_repo: https://github.com/notthebee/dotfiles
 
-# SSH (geerlingguy.security)
 
+# SSH (geerlingguy.security)
 security_ssh_port: 69
 
 security_sudoers_passwordless: [ "{{ username }}" ]
@@ -25,6 +26,7 @@ security_sudoers_passwordless: [ "{{ username }}" ]
 security_autoupdate_reboot: "true"
 
 host: "{{ duckdns_domain }}.duckdns.org"
+
 
 # Docker
 copy_persistent_data: false
@@ -51,5 +53,30 @@ enable_swag: true
 
 enable_wireguard: true
 
+
 # Samba
 samba_server_string: "{{ hostname }}"
+
+
+# Time Machine
+timemachine_root: /mnt/timemachine
+
+timemachine_drive: /dev/disk/by-label/TimeMachine
+
+enable_timemachine: true
+
+
+# Snapraid and MergerFS
+
+mergerfs_root: /mnt/storage
+
+disks:
+  - { name: /mnt/data1, src: /dev/disk/by-label/Data1 }
+  - { name: /mnt/data2, src: /dev/disk/by-label/Data2 }
+
+parity_disks:
+  - { name: /mnt/parity1, src: /dev/disk/by-label/Parity1 }
+
+snapraid_scrub_schedule:
+  hour: 1
+  weekday: 3

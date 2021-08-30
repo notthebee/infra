@@ -1,0 +1,12 @@
+---
+- name: Install required system packages
+  apt: 
+    name: "{{ item }}" 
+    state: latest 
+    update_cache: yes
+  with_items: 
+    - 'mergerfs'
+
+- name: mount drives
+  include: mount.yml 
+  when: disks[0] is defined

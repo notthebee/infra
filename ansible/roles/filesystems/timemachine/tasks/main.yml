@@ -1,0 +1,46 @@
+---
+- name: Install required system packages
+  apt: 
+    name: "{{ item }}" 
+    state: latest 
+    update_cache: yes
+  with_items: 
+    - 'netatalk'
+    - 'avahi-daemon'
+    - 'hfsplus'
+    - 'hfsprogs'
+
+- name: create the mount point for Time Machine
+  file:
+    dest: "{{ timemachine_root }}"
+    state: directory
+    owner: nobody
+    group: nogroup
+    mode: "0777"
+    recurse: yes
+
+- name: Mount the Time Machine drive
+  mount:
+    name: "{{ timemachine_root }}"
+    src: "{{ timemachine_drive }}"
+    fstype: hfsplus
+    opts: defaults,nofail,force
+    state: present
+
+- name: Copy the Netatalk config
+  template:
+    src: afp.conf
+    dest: /etc/netatalk
+  register: netatalk_config
+
+- name: Make sure the Netatalk service is running and enabled
+  service: 
+    name: netatalk 
+    state: started 
+    enabled: yes
+
+- name: Restart Netatalk
+  service:
+    name: netatalk
+    state: restarted
+  when: netatalk_config.changed

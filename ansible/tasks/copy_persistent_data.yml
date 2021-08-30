@@ -6,11 +6,18 @@
   register: persistent_data_local
 
 - name: Check if the persistent data folder exists on the remote machine
-  become: false
   stat:
     path: "{{ docker_dir }}"
   register: persistent_data_remote
 
+- name: Create the persistent data folder on the remote machine
+  file:
+    dest: "{{ docker_dir }}"
+    state: directory
+    owner: notthebee
+    group: notthebee
+    recurse: yes
+  when: persistent_data_remote.stat.exists == false
 
 - name: Sync the persistent docker data to the server 
   synchronize:

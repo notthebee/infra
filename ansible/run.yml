@@ -26,6 +26,19 @@
       tags: 
         - docker
 
+    - role: filesystems/mergerfs
+      tags:
+      - mergerfs
+
+    - role: filesystems/snapraid
+      tags:
+      - snapraid
+
+    - role: filesystems/timemachine
+      tags:
+        - timemachine
+      when: enable_timemachine | default(False)
+
     - role: containers/watchtower
       tags:
         - watchtower
@@ -49,7 +62,6 @@
         - containers
       when: enable_deluge | default(False)
 
-    
     - role: containers/homer
       tags: 
         - homer

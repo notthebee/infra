@@ -1,0 +1,32 @@
+- name: create /mnt points for drives
+  file:
+    dest: "{{ item.name }}"
+    state: directory
+    owner: nobody
+    group: nogroup
+    mode: "0777"
+  with_items: "{{ disks }}"
+
+- name: create /mnt point for mount_point
+  file:
+    dest: "{{ mergerfs_root }}"
+    state: directory
+    owner: nobody
+    group: nogroup
+    mode: "0777"
+
+- name: mount drives
+  mount:
+    name: "{{ item.name }}"
+    src: "{{ item.src }}"
+    fstype: xfs
+    state: mounted
+  with_items: "{{ disks }}"
+
+- name: mount mergerfs array
+  mount:
+    name: "{{ mergerfs_root }}"
+    src: /mnt/data*
+    opts: direct_io,defaults,allow_other,minfreespace=50G,fsname=mergerfs
+    fstype: fuse.mergerfs
+    state: mounted

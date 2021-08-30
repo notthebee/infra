@@ -23,7 +23,7 @@
   authorized_key:
     user: "{{ username }}"
     state: present
-    key: "{{ public_ssh_key }}"
+    key: "{{ ssh_public_key }}"
 
 - name: Create additional users (no login)
   become: yes
