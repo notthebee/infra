@@ -1,14 +1,9 @@
 #cloud-config
 autoinstall:
   version: 1
-  # use interactive-sections to avoid an automatic reboot
-  #interactive-sections:
-  #  - locale
-  # r00tme
-  identity: {hostname: fragile, password: ubuntu username: ubuntu}
+  identity: {hostname: fragile, username: notthebee, password: notthebee,}
   keyboard: {layout: us, variant: ''}
   locale: en_US.UTF-8
-  # interface name will probably be different
   network:
     network:
       version: 2
@@ -21,7 +16,6 @@ autoinstall:
     allow-pw: true
     authorized-keys: []
     install-server: true
-  # this creates an efi partition, /boot partition, and root(/) lvm volume
   storage:
     grub:
       reorder_uefi: False
@@ -38,30 +32,13 @@ autoinstall:
     - {fstype: ext4, volume: partition-sda2, preserve: false, type: format, id: format-0}
     - {device: disk-sda, size: -1, flag: linux, number: 3, preserve: false,
       grub_device: false, type: partition, id: partition-sda3}
-    - name: vg-0
-      devices: [partition-sda3]
-      preserve: false
-      type: lvm_volgroup
-      id: lvm-volgroup-vg-0
-    - {name: lv-root, volgroup: lvm-volgroup-vg-0, size: 100%, preserve: false,
-      type: lvm_partition, id: lvm-partition-lv-root}
     - {fstype: ext4, volume: lvm-partition-lv-root, preserve: false, type: format,
       id: format-1}
     - {device: format-1, path: /, type: mount, id: mount-2}
     - {device: format-0, path: /boot, type: mount, id: mount-1}
     - {device: format-2, path: /boot/efi, type: mount, id: mount-3}
-write_files:
-  # override the kernel package
-  - path: /run/kernel-meta-package
-    content: |
-      linux-virtual
-    owner: root:root
-    permissions: "0644"
-  # attempt to also use an answers file by providing a file at the default path.  It did not seem to have any effect
-  #- path: /subiquity_config/answers.yaml
-  #  content: |
-  #    InstallProgress:
-  #      reboot: no
-  #  owner: root:root
-  #  permissions: "0644"
-EOF
+  user-data:
+    users:
+      - notthebee
+      - name: notthebee
+        ssh_import_id: gh:notthebee
