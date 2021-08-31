@@ -66,14 +66,3 @@
 - name: Set the hostname
   hostname:
     name: "{{ inventory_hostname }}"
-
-- name: Install hdparm
-  apt: 
-    name: hdparm 
-    state: latest
-
-- name: Install the hdparm config file
-  template:
-    src: hdparm.conf.j2
-    dest: /etc/hdparm.conf
-    mode: 0644

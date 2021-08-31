@@ -22,6 +22,8 @@ version: focal
 # Automatically select the fastest mirror
 apt_mirror: mirror://mirrors.ubuntu.com/mirrors.txt
 
+
+
 #
 # Email credentials (for SMART and Snapraid error reporting)
 #
@@ -34,11 +36,13 @@ email_smtp_host: smtp.mailbox.org
 
 email_smtp_port: 465
 
+email_smtp_port_startls: 587
+
 # MSMTP 
 msmtp_accounts:
 - account:   mailbox
   host:      "{{ email_smtp_host }}"
-  port:      "{{ email_smtp_port }}"
+  port:      "{{ email_smtp_port_startls }}"
   auth:      "on"
   from:      "{{ email }}"
   user:      "{{ email }}"
@@ -145,6 +149,7 @@ timemachine_drive: /dev/disk/by-label/TimeMachine
 
 enable_timemachine: true
 
+
 #
 # Snapraid and MergerFS
 #
@@ -153,7 +158,6 @@ mergerfs_root: /mnt/storage
 disks:
   - { name: /mnt/data1, src: /dev/disk/by-label/Data1, content: true }
   - { name: /mnt/data2, src: /dev/disk/by-label/Data2, content: true }
-
 
 parity_disks:
   - { name: /mnt/parity1, src: /dev/disk/by-label/Parity1, content: true }
@@ -187,3 +191,8 @@ snapraid_config_excludes:
   - /tmp/
   - "Downloads"
 
+
+#
+# SMART error reporting
+#
+smartd_default_mail_recipients: [ "{{ email }}" ]

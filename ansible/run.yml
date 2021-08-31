@@ -12,23 +12,20 @@
 - hosts: all
   become: yes
 
-
-  
   pre_tasks:
     - name: Copy persistent data to the server
       import_tasks: tasks/copy_persistent_data.yml
       tags: containers
 
-    - name: print out
-      debug:
-        var: hdparm_devices
-
-
-
   roles:
     - role: essential
       tags: 
         - essential
+
+    # MSMTP (for SMART notifications)
+    - role: chriswayg.msmtp-mailer
+      tags: 
+        - msmtp
 
     - role: docker
       tags: 
@@ -45,6 +42,11 @@
     - role: filesystems/hdparm
       tags:
       - hdparm
+      
+    # SMART error checking
+    - role: stuvusit.smartd
+      tags:
+      - smartd
 
     - role: avahi
       tags: 
