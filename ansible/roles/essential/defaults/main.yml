@@ -10,4 +10,3 @@ extra_packages:
   - mosh
   - lm-sensors
   - iotop
-  - msmtp

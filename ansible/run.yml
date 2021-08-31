@@ -18,6 +18,10 @@
       tags: containers
 
   roles:
+    - role: oefenweb.dns
+      tags:
+        - dns 
+
     - role: essential
       tags: 
         - essential

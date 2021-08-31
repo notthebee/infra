@@ -3,6 +3,8 @@
 #
 timezone: Europe/Amsterdam
 
+dns_nameservers: [9.9.9.9, 149.112.112.112]
+
 ntp_timezone: "{{ timezone }}"
 
 username: notthebee
@@ -20,7 +22,7 @@ dotfiles_repo: https://github.com/notthebee/dotfiles
 version: focal
 
 # Automatically select the fastest mirror
-apt_mirror: mirror://mirrors.ubuntu.com/mirrors.txt
+apt_mirror: http://ftp.uni-mainz.de/ubuntu/
 
 
 
