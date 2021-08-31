@@ -22,7 +22,7 @@ dotfiles_repo: https://github.com/notthebee/dotfiles
 version: focal
 
 # Automatically select the fastest mirror
-apt_mirror: http://ftp.uni-mainz.de/ubuntu/
+apt_mirror: mirror://mirrors.ubuntu.com/mirrors.txt
 
 
 
