@@ -5,6 +5,8 @@ timezone: Europe/Amsterdam
 
 dns_nameservers: [9.9.9.9, 149.112.112.112]
 
+host: "{{ duckdns_domain }}.duckdns.org"
+
 ntp_timezone: "{{ timezone }}"
 
 username: notthebee
@@ -64,7 +66,10 @@ security_sudoers_passwordless: [ "{{ username }}" ]
 
 security_autoupdate_reboot: "true"
 
-host: "{{ duckdns_domain }}.duckdns.org"
+security_autoupdate_mail_to: "{{ email }}"
+
+security_autoupdate_mail_on_error: true
+
 
 
 #
