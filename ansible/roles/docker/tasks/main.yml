@@ -21,7 +21,8 @@
 - name: Add user "{{ username }}" to group docker
   user:
     name: '{{ username }}'
-    groups: docker
+    groups: 
+      - docker
     append: yes
 
 - name: Add Docker GPG apt Key

@@ -7,6 +7,20 @@
     modification_time: preserve
     access_time: preserve
 
+- name: Remove cloud-config to avoid boot delay
+  apt: 
+    name: cloud-config
+    state: absent
+
+- name: Make sure ISCSID and Open-ISCSID services are disabled
+  service: 
+    name: "{{ item }}"
+    state: stopped 
+    enabled: no
+  with_items: 
+    - iscsid
+    - open-iscsi
+    
 - name: Install the apt mirror list
   template:
     src: sources.list.j2

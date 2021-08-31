@@ -21,11 +21,12 @@ docker_dir: /opt/docker/data
 
 dotfiles_repo: https://github.com/notthebee/dotfiles
 
+#
+# Apt mirrors
+#
 version: focal
 
-# Automatically select the fastest mirror
-apt_mirror: mirror://mirrors.ubuntu.com/mirrors.txt
-
+apt_mirror: http://ftp.uni-mainz.de/ubuntu/
 
 
 #
