@@ -1,0 +1,15 @@
+deb {{ apt_mirror }} {{ version }} main restricted
+
+deb {{ apt_mirror }} {{ version }}-updates main restricted
+
+deb {{ apt_mirror }} {{ version }} universe
+deb {{ apt_mirror }} {{ version }}-updates universe
+
+deb {{ apt_mirror }} {{ version }} multiverse
+deb {{ apt_mirror }} {{ version }}-updates multiverse
+
+deb {{ apt_mirror }} {{ version }}-backports main restricted universe multiverse
+
+deb {{ apt_mirror }} {{ version }}-security main restricted
+deb {{ apt_mirror }} {{ version }}-security universe
+deb {{ apt_mirror }} {{ version }}-security multiverse

@@ -12,10 +12,18 @@
 - hosts: all
   become: yes
 
+
+  
   pre_tasks:
     - name: Copy persistent data to the server
       import_tasks: tasks/copy_persistent_data.yml
       tags: containers
+
+    - name: print out
+      debug:
+        var: hdparm_devices
+
+
 
   roles:
     - role: essential
@@ -33,6 +41,10 @@
     - role: filesystems/snapraid
       tags:
       - snapraid
+
+    - role: filesystems/hdparm
+      tags:
+      - hdparm
 
     - role: avahi
       tags: 

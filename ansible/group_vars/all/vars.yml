@@ -17,6 +17,10 @@ docker_dir: /opt/docker/data
 
 dotfiles_repo: https://github.com/notthebee/dotfiles
 
+version: focal
+
+# Automatically select the fastest mirror
+apt_mirror: mirror://mirrors.ubuntu.com/mirrors.txt
 
 #
 # Email credentials (for SMART and Snapraid error reporting)
@@ -132,7 +136,6 @@ samba_shares:
     write_list: "{{ username }}, {{ additional_users[0].name }}"
 
 
-
 #
 # Time Machine
 #
@@ -142,7 +145,6 @@ timemachine_drive: /dev/disk/by-label/TimeMachine
 
 enable_timemachine: true
 
-
 #
 # Snapraid and MergerFS
 #
@@ -151,6 +153,7 @@ mergerfs_root: /mnt/storage
 disks:
   - { name: /mnt/data1, src: /dev/disk/by-label/Data1, content: true }
   - { name: /mnt/data2, src: /dev/disk/by-label/Data2, content: true }
+
 
 parity_disks:
   - { name: /mnt/parity1, src: /dev/disk/by-label/Parity1, content: true }
@@ -171,8 +174,10 @@ snapraid_runner_email_sendon: "error"
 
 snapraid_runner_use_ssl: true
 
+content_file: "{{ disks[0].name }}/snapraid.content"
+
 snapraid_content_files:
-  - disks[0].name/snapraid.content
+  - "{{ content_file }}"
   - /var/snapraid.content
 
 snapraid_config_excludes:

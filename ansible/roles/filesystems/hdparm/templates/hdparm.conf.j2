@@ -1,0 +1,10 @@
+{% for device in disks %}
+{{ device.src }} {
+    spindown_time = {{ spindown }}
+}
+{% endfor %}
+{% for device in parity_disks %}
+{{ device.src }} {
+    spindown_time = {{ spindown }}
+}
+{% endfor %}

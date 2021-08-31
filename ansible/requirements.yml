@@ -3,4 +3,5 @@ roles:
   - name: bertvv.samba
   - name: geerlingguy.security
   - name: geerlingguy.ntp
+  - name: geerlingguy.hdparm
   - name: chriswayg.msmtp-mailer
