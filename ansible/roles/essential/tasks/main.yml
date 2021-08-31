@@ -12,7 +12,7 @@
     name: cloud-config
     state: absent
 
-- name: Make sure ISCSID and Open-ISCSID services are disabled
+- name: Make sure iSCSId and Open-iSCSId services are disabled
   service: 
     name: "{{ item }}"
     state: stopped 
@@ -57,7 +57,6 @@
   git:
     repo: "{{ dotfiles_repo }}"
     dest: /home/{{ username }}/dotfiles
-    force: yes
     recursive: no
 
 - name: Stow the dotfiles
@@ -71,11 +70,10 @@
     shell: "{{ shell }}"
 
 - name: Set the correct ownership for the user's home folder
-  file:
-    path: /home/{{ username }}
-    owner: "{{ username }}"
-    group: "{{ username }}"
-    recurse: yes
+  shell:
+    cmd: "chown -R {{ username }}:{{ username}} /home/{{ username }}"
+  register: chown_status
+  changed_when: chown_status.stdout != ""
 
 - name: Set the hostname
   hostname:
