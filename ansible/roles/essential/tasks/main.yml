@@ -69,6 +69,14 @@
     name: "{{ username }}"
     shell: "{{ shell }}"
 
+- name: Disable fish greeting
+  lineinfile:
+    path: /home/{{ username }}/.config/fish/fish_variables
+    state: present
+    regexp: 'fish_greeting:.+'
+    line: 'SETUVAR fish_greeting:'
+  when: '"fish" in shell'
+
 - name: Set the correct ownership for the user's home folder (not using ansible.builtin.file because of idempotency)
   shell:
     cmd: "chown -R {{ username }}:{{ username}} /home/{{ username }}"

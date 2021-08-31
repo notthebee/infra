@@ -1,5 +1,0 @@
-ssh_pwauth: true
-disable_root: false
-
-ssh_import_id:
-- gh:notthebee
