@@ -58,6 +58,7 @@
     repo: "{{ dotfiles_repo }}"
     dest: /home/{{ username }}/dotfiles
     recursive: no
+    force: yes
 
 - name: Stow the dotfiles
   shell: cd /home/{{ username }}/dotfiles && stow -v */
@@ -76,6 +77,7 @@
     regexp: 'fish_greeting:.+'
     line: 'SETUVAR fish_greeting:'
   when: '"fish" in shell'
+  ignore_errors: true
 
 - name: Set the correct ownership for the user's home folder (not using ansible.builtin.file because of idempotency)
   shell:

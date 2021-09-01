@@ -182,14 +182,13 @@ snapraid_runner_smtp_host: "{{ email_smtp_host }}"
 
 snapraid_runner_smtp_port: "{{ email_smtp_port }}"
 
+snapraid_runner_delete_threshold: 5000
+
 snapraid_runner_email_sendon: "error"
 
 snapraid_runner_use_ssl: true
 
-content_file: "{{ disks[0].name }}/snapraid.content"
-
 snapraid_content_files:
-  - "{{ content_file }}"
   - /var/snapraid.content
 
 snapraid_config_excludes:
@@ -197,7 +196,7 @@ snapraid_config_excludes:
   - /lost+found/
   - "*.!sync"
   - /tmp/
-  - "Downloads"
+  - "/Downloads/*"
 
 
 #

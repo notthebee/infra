@@ -1,0 +1,37 @@
+#cloud-config
+autoinstall:
+  version: 1
+  locale: en_us.UTF-8
+  keyboard:
+    layout: us
+  identity:
+    hostname: fragile
+    password: "$1$xyz$7ujQcnF8S3A6JQDF2fcsc/"
+    username: notthebee
+  network:
+    network:
+      version: 2
+      ethernets:
+        enp1s0:
+          critical: true
+          dhcp-identifier: mac
+          dhcp4: true
+  ssh:
+    install-server: true
+    authorized-keys: [ "ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIKGUGMUo1dRl9xoDlMxQGb8dNSY+6xiEpbZWAu6FAbWw moe@notthebe.ee" ]
+  storage:
+    grub:
+      reorder_uefi: False
+    swap:
+      size: 0
+    config:
+    - {ptable: gpt, serial: HFS128G39TNF-N3A0A_MJ89N5458114A9M3C, preserve: false, name: '', grub_device: false, type: disk, id: bootdrive}
+
+    - {device: bootdrive, size: 536870912, wipe: superblock, flag: boot, number: 1, preserve: false, grub_device: true, type: partition, id: efipart}
+    - {fstype: fat32, volume: efipart, preserve: false, type: format, id: efi}
+
+    - {device: bootdrive, size: -1, wipe: superblock, flag: linux, number: 2, preserve: false, grub_device: false, type: partition, id: rootpart}
+    - {fstype: ext4, volume: rootpart, preserve: false, type: format, id: root}
+
+    - {device: root, path: /, type: mount, id: rootmount}
+    - {device: efi, path: /boot/efi, type: mount, id: efimount}
