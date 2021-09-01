@@ -1,0 +1,21 @@
+---
+
+- name: Schedule snapraid sync
+  cron:
+    name: snapraid sync
+    job: snapraid sync {% if snapraid_sync_healthcheck_io_uuid %}| curl -fsS -m 10 --retry 5 -o /dev/null --data-binary "@-" {{ snapraid_healthcheck_io_host }}/{{ snapraid_sync_healthcheck_io_uuid }}{% endif %}
+    user: root
+    weekday: "{{ snapraid_sync_schedule.weekday | default ('*') }}"
+    minute: "{{ snapraid_sync_schedule.minute | default ('0')}}"
+    hour: "{{ snapraid_sync_schedule.hour | default ('0') }}"
+    dom: "{{ snapraid_sync_schedule.dom|default('*') }}"
+
+- name: Schedule snapraid scrub
+  cron:
+    name: snapraid scrub
+    job: snapraid scrub --plan {{ snapraid_scrub_percent }} --older-than {{ snapraid_scrub_age }} {% if snapraid_scrub_healthcheck_io_uuid %}| curl -fsS -m 10 --retry 5 -o /dev/null --data-binary "@-" {{ snapraid_healthcheck_io_host }}/{{ snapraid_scrub_healthcheck_io_uuid }}{% endif %}
+    user: root
+    weekday: "{{ snapraid_scrub_schedule.weekday | default ('*') }}"
+    minute: "{{ snapraid_scrub_schedule.minute | default ('0')}}"
+    hour: "{{ snapraid_scrub_schedule.hour | default ('0') }}"
+    dom: "{{ snapraid_scrub_schedule.dom|default('*') }}"

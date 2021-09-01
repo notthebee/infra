@@ -1,0 +1,26 @@
+---
+
+- name: clone snapraid-runner
+  git:
+    repo: https://github.com/Chronial/snapraid-runner.git
+    dest: /opt/snapraid-runner
+
+- name: install snapraid-runner configuration file
+  template:
+    src: snapraid-runner.conf.j2
+    dest: "{{ snapraid_runner_conf }}"
+    owner: root
+    group: root
+    mode: 0775
+
+- name: setup cron job snapraid-runner
+  cron:
+    user: "root"
+    job: "{{ item.job }}"
+    name: "{{ item.name }}"
+    weekday: "{{ item.weekday | default ('*') }}"
+    minute: "{{ item.minute | default ('00')}}"
+    hour: "{{ item.hour | default ('00') }}"
+    dom: "{{ item.dom|default('*') }}"
+  with_items:
+    - "{{ snapraid_runner_cron_jobs }}"
