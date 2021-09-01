@@ -2,7 +2,7 @@
 
 This repo is a living document of me trying to configure my home server/NAS using the principles of _Infrastracture as Code_.
 
-You can read more about IaS here: [https://perfectmediaserver.com/concepts/infraascode.html](https://perfectmediaserver.com/concepts/infraascode.html)
+You can read more about IaC here: [https://perfectmediaserver.com/concepts/infraascode.html](https://perfectmediaserver.com/concepts/infraascode.html)
 
 ### Special thanks
 * David Stephens for his [Ansible NAS](https://github.com/davestephens/ansible-nas) project. This is where I got the idea and "borrowed" a lot of concepts and implementations from.
