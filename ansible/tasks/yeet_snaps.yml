@@ -1,0 +1,30 @@
+---
+- name: Unmount the core* snaps
+  mount:
+    name: "/snap/core*"
+    state: unmounted
+
+- name: Remove the pre-installed snaps
+  snap:
+    name: "{{ item }}"
+    state: absent
+  with_items:
+    - lxd
+    - core
+    - core18
+    - snapd
+
+- name: Remove the snap package from apt
+  apt:
+    package: snapd
+    state: absent
+    purge: yes
+
+- name: Remove the snap folders
+  file:
+    name: "{{ item }}"
+    state: absent
+  with_items:
+    - /home/{{ username }}/snap
+    - /var/snap
+    - /var/lib/snap

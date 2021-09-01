@@ -17,6 +17,10 @@
       import_tasks: tasks/copy_persistent_data.yml
       tags: containers
 
+    - name: Remove snap functionality
+      import_tasks: tasks/yeet_snaps.yml
+      tags: nosnaps
+
   roles:
     - role: oefenweb.dns
       tags:
