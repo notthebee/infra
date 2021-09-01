@@ -1,4 +1,0 @@
----
-mergerfs_root: /srv/mergerfs
-
-wireguard_peers: "host1, host2"
