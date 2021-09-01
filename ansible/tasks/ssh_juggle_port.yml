@@ -20,17 +20,13 @@
 #   tasks:
 #     - import_tasks: _sshd_port_juggling.yml
 
-- name: SSH Port Juggle | Set the ansible_port to the {{ security_ssh_port }} 
-  set_fact:
-    ansible_port: "{{ security_ssh_port }}"
-
 - name: SSH Port Juggle | Try connecting via SSH
   wait_for_connection:
     timeout: 5
   ignore_errors: true
   register: _ssh_port_result
 
-- name: SSH Port Juggle | Set the ansible_port to the fallback default port and the user to root
+- name: SSH Port Juggle | Set the ansible_port to the fallback default port
   set_fact:
     ansible_port: "22"
   when:
