@@ -6,3 +6,4 @@ roles:
   - name: chriswayg.msmtp-mailer
   - name: stuvusit.smartd
   - name: oefenweb.dns
+  - name: notthebee.ubuntu_autoinstall

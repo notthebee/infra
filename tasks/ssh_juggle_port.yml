@@ -28,7 +28,7 @@
 
 - name: SSH Port Juggle | Set the ansible_port to the fallback default port
   set_fact:
-    ansible_port: "22"
+    ansible_ssh_port: "22"
   when:
     - _ssh_port_result is failed
 
