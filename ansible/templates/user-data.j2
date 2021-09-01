@@ -1,13 +1,13 @@
 #cloud-config
 autoinstall:
   version: 1
-  locale: en-us.UTF-8
+  locale: {{ locale }}
   keyboard:
-    layout: us
+    layout: {{ keyboard_layout }}
   identity:
-    hostname: fragile
-    password: $6$cOn46nlsDBIIErKf$J5ZUpmNC8fGwgkplxj8evLN5sIYTPWnuK5THBYkVBvzlfsH58uVbpwrBxfvvoU9CB1g4JpvWwRZW6P33I/jXB/
-    username: notthebee
+    hostname: {{ hostname }}
+    password: {{ password | password_hash('sha512') }}
+    username: {{ username }}
   network:
     network:
       version: 2
@@ -18,14 +18,14 @@ autoinstall:
           dhcp4: true
   ssh:
     install-server: true
-    authorized-keys: [ ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIKGUGMUo1dRl9xoDlMxQGb8dNSY+6xiEpbZWAu6FAbWw moe@notthebe.ee ]
+    authorized-keys: [ {{ ssh_public_key }} ]
   storage:
     grub:
       reorder_uefi: False
     swap:
       size: 0
     config:
-    - {ptable: gpt, serial: HFS128G39TNF-N3A0A_MJ89N5458114A9M3C, preserve: false, name: '', grub_device: false, type: disk, id: bootdrive}
+    - {ptable: gpt, serial: {{ boot_drive_serial }}, preserve: false, name: '', grub_device: false, type: disk, id: bootdrive}
 
     - {device: bootdrive, size: 536870912, wipe: superblock, flag: boot, number: 1, preserve: false, grub_device: true, type: partition, id: efipart}
     - {fstype: fat32, volume: efipart, preserve: false, type: format, id: efi}

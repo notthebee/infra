@@ -1,0 +1,10 @@
+---
+- hosts: all
+  gather_facts: no
+
+  tasks:
+    - name: Generate the user-data
+      delegate_to: localhost
+      template:
+        src: user-data.j2
+        dest: ../cloud-init/user-data

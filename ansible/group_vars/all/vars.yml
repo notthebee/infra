@@ -15,9 +15,11 @@ host: "{{ duckdns_domain }}.duckdns.org"
 
 ntp_timezone: "{{ timezone }}"
 
-username: notthebee
+locale: en-us.UTF-8
 
-ssh_public_key: https://github.com/notthebee.keys
+keyboard_layout: us
+
+username: notthebee
 
 guid: "1000"
 
