@@ -29,6 +29,8 @@ docker_dir: /opt/docker/data
 
 dotfiles_repo: https://github.com/notthebee/dotfiles
 
+boot_drive_serial: ""
+
 #
 # Apt mirrors
 #
