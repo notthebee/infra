@@ -13,6 +13,7 @@
     - core
     - core18
     - snapd
+  ignore_errors: yes
 
 - name: Remove the snap package from apt
   apt:

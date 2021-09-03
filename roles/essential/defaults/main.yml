@@ -10,3 +10,4 @@ extra_packages:
   - mosh
   - lm-sensors
   - iotop
+  - hddtemp

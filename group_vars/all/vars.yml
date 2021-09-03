@@ -31,6 +31,8 @@ dotfiles_repo: https://github.com/notthebee/dotfiles
 
 boot_drive_serial: ""
 
+enable_pikvm: true
+
 #
 # Apt mirrors
 #

@@ -1,5 +1,7 @@
 /files/docker_persistent_data/*
 !/files/docker_persistent_data/.gitkeep
-/group_vars/fragile
 /hosts
 .DS_Store
+secret.yml
+/group_vars/
+!/group_vars/all/vars.yml

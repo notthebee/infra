@@ -1,7 +1,8 @@
 ---
 - hosts: all
   gather_facts: yes
-  become: yes
+  become: no
 
   roles:
     - role: notthebee.ubuntu_autoinstall
+    - role: ../ansible-role-cloud-init
