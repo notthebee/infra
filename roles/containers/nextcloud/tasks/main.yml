@@ -16,10 +16,18 @@
       - "{{ docker_dir }}/{{ container_name }}/mariadb/mysql:/var/lib/mysql"
     restart_policy: unless-stopped
     
+- name: Make sure the Redis container is created and running
+  docker_container:
+    name: "nextcloud-redis"
+    image: "redis:alpine"
+    pull: yes
+    state: 'started'
+    restart_policy: unless-stopped
+ 
 - name: Make sure the Nextcloud container is created and running
   docker_container:
     name: "{{ container_name }}"
-    image: "ghcr.io/linuxserver/nextcloud:latest"
+    image: "ghcr.io/linuxserver/nextcloud:php8"
     pull: yes
     state: 'started'
     env:
@@ -37,5 +45,6 @@
     connected:
       - "{{ container_name }}"
       - nextcloud-mariadb
+      - nextcloud-redis
     appends: yes
   when: enable_swag

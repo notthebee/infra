@@ -4,6 +4,7 @@
     src: "{{ item.src }}"
     fstype: xfs
     state: mounted
+    passno: "2"
   with_items: "{{ disks }}"
   when: disks[0] is defined
 
@@ -13,6 +14,7 @@
     src: "{{ item.src }}"
     fstype: xfs
     state: mounted
+    passno: "2"
   with_items: "{{ parity_disks }}"
   when: parity_disks[0] is defined
 
@@ -32,6 +34,7 @@
     fstype: hfsplus
     opts: defaults,nofail,force,rw
     state: mounted
+    passno: "2"
   when: enable_timemachine | default(False)
 
 - name: Remount the drive if it's read-only
@@ -61,6 +64,7 @@
       fstype: hfsplus
       opts: defaults,nofail,force,rw
       state: mounted
+      passno: "2"
 
   - name: Start the Netatalk service
     service: 
