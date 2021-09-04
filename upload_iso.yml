@@ -4,5 +4,4 @@
   become: no
 
   roles:
-    #- role: notthebee.ubuntu_autoinstall
-    - role: ../ansible-role-cloud-init
+    - role: notthebee.ubuntu_autoinstall
