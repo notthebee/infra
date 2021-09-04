@@ -1,9 +1,0 @@
----
-- name: mount drives
-  mount:
-    name: "{{ item.name }}"
-    src: "{{ item.src }}"
-    fstype: xfs
-    opts: defaults,nofail,usrquota,grpquota,inode64
-    state: mounted
-  with_items: "{{ parity_disks }}"

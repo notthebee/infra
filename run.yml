@@ -22,6 +22,10 @@
       tags: nosnaps
 
   roles:
+    - role: filesystems/mounts
+      tags:
+        - mounts
+
     - role: oefenweb.dns
       tags:
         - dns 
@@ -43,7 +47,7 @@
       tags:
       - mergerfs
 
-    - role: filesystems/snapraid
+    - role: ironicbadger.ansible_role_snapraid
       tags:
       - snapraid
 
