@@ -70,4 +70,3 @@
     service: 
       name: netatalk
       state: started
-

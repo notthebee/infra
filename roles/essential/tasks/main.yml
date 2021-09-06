@@ -20,6 +20,12 @@
   with_items: 
     - iscsid
     - open-iscsi
+
+- name: Disable cron e-mail notifications
+  cron:
+    name: MAILTO
+    env: yes
+    job: ""
     
 - name: Install the apt mirror list
   template:

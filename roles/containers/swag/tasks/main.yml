@@ -25,7 +25,6 @@
       "EMAIL": "{{ email }}"
     ports:
       - "443:443"
-      - "80:80"
     volumes:
       - "{{ docker_dir }}/{{ container_name }}/config:/config"
     restart_policy: unless-stopped

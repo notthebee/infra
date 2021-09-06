@@ -140,6 +140,12 @@
         - containers
       when: enable_wireguard | default(False)
 
+    - role: containers/ikev2
+      tags: 
+        - ikev2
+        - containers
+      when: enable_ikev2 | default(False)
+
     - role: containers/home-assistant
       tags: 
         - home-assistant

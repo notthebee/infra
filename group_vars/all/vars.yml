@@ -112,6 +112,8 @@ enable_swag: true
 
 enable_wireguard: true
 
+enable_ikev2: true
+
 
 #
 # Samba

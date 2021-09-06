@@ -1,0 +1,20 @@
+---
+- name: Make sure the {{ container_name }} container is created and running
+  docker_container:
+    name: 'ikev2'
+    image: "notthebee/ikev2"
+    privileged: yes
+    pull: yes
+    state: 'started'
+    env:
+      VPNHOST: "{{ host }}"
+      EMAILADDR:  "{{ email }}"
+      VPNUSERNAME:  "{{ username }}"
+      VPNPASSWORD:  "{{ vpn_password }}"
+    volumes:
+      - "{{ docker_dir }}/{{ container_name }}/config:/config"
+      - "{{ docker_dir }}/{{ container_name }}/letsencrypt:/etc/letsencrypt"
+    ports:
+      - 4500:4500/udp
+      - 500:500/udp
+    restart_policy: unless-stopped
