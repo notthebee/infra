@@ -18,3 +18,17 @@
       - 4500:4500/udp
       - 500:500/udp
     restart_policy: unless-stopped
+
+- name: Create a directory for the .mobileconfig on the host machine
+  become: no
+  local_action:
+    module: file
+    path: "~/.ansible/ikev2"
+    state: directory
+
+- name: Generate the modified .mobileconfig
+  become: no
+  local_action:
+    module: template
+    src: vpn.mobileconfig.j2
+    dest: "~/.ansible/ikev2/{{ host }}.mobileconfig"
