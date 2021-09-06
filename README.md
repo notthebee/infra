@@ -28,6 +28,7 @@ The playbook is mostly being developed for personal use, so stuff is going to be
 * [MariaDB](https://hub.docker.com/r/linuxserver/mariadb) (A database server for Nextcloud)
 * [Vaultwarden](https://hub.docker.com/r/vaultwarden/server) (A FOSS Bitwarden fork written in Rust)
 * [Wireguard](https://hub.docker.com/r/linuxserver/wireguard) (A VPN server)
+* [IKEv2](https://hub.docker.com/r/notthebee/ikev2) (An IKEv2 VPN server for Apple devices)
 
 #### Misc
 * [Watchtower](https://hub.docker.com/r/containrrr/watchtower) (An automated updater for Docker images)
