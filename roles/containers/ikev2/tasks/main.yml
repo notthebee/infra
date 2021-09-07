@@ -11,6 +11,7 @@
       EMAILADDR:  "{{ email }}"
       VPNUSERNAME:  "{{ username }}"
       VPNPASSWORD:  "{{ vpn_password }}"
+      EXCLUDE_SSIDS: "{{ ikev2_excludedssids }}"
     volumes:
       - "{{ docker_dir }}/{{ container_name }}/config:/config"
       - "{{ docker_dir }}/{{ container_name }}/letsencrypt:/etc/letsencrypt"
@@ -19,16 +20,9 @@
       - 500:500/udp
     restart_policy: unless-stopped
 
-- name: Create a directory for the .mobileconfig on the host machine
-  become: no
-  local_action:
-    module: file
-    path: "~/.ansible/ikev2"
-    state: directory
-
-- name: Generate the modified .mobileconfig
-  become: no
-  local_action:
-    module: template
-    src: vpn.mobileconfig.j2
+- name: Copy the mobileconfig to the local host
+  synchronize:
+    mode: pull
+    delete: yes
+    src: "{{ docker_dir }}/{{ container_name }}/config/{{ host }}.mobileconfig"
     dest: "~/.ansible/ikev2/{{ host }}.mobileconfig"
