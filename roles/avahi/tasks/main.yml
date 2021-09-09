@@ -1,11 +1,9 @@
 ---
 - name: Install required system packages
   apt: 
-    name: "{{ item }}" 
+    name: avahi-daemon
     state: latest 
     update_cache: yes
-  with_items: 
-    - 'avahi-daemon'
 
 - name: Copy the main Avahi config
   template:

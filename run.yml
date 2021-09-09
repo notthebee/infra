@@ -51,9 +51,9 @@
       tags:
       - snapraid
 
-    - role: filesystems/hdparm
+    - role: filesystems/hd-idle
       tags:
-      - hdparm
+      - hd-idle
       
     # SMART error checking
     - role: stuvusit.smartd

@@ -1,17 +1,16 @@
 ---
 - name: Install required system packages
   apt: 
-    name: "{{ item }}" 
+    name:
+      - 'apt-transport-https'
+      - 'ca-certificates'
+      - 'curl'
+      - 'software-properties-common'
+      - 'python3-pip'
+      - 'virtualenv'
+      - 'python3-setuptools'
     state: latest 
     update_cache: yes
-  with_items: 
-    - 'apt-transport-https'
-    - 'ca-certificates'
-    - 'curl'
-    - 'software-properties-common'
-    - 'python3-pip'
-    - 'virtualenv'
-    - 'python3-setuptools'
 
 - name: Ensure group docker exists
   group:

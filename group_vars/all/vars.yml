@@ -15,7 +15,7 @@ host: "{{ duckdns_domain }}.duckdns.org"
 
 ntp_timezone: "{{ timezone }}"
 
-locale: en-us.UTF-8
+locale: en_US.UTF-8
 
 keyboard_layout: us
 
@@ -32,6 +32,8 @@ dotfiles_repo: https://github.com/notthebee/dotfiles
 boot_drive_serial: ""
 
 enable_pikvm: true
+
+spindown_time: 600 # in seconds
 
 #
 # Apt mirrors

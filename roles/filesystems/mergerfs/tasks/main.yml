@@ -1,8 +1,6 @@
 ---
 - name: Install required system packages
   apt: 
-    name: "{{ item }}" 
+    name: "mergerfs"
     state: latest 
     update_cache: yes
-  with_items: 
-    - 'mergerfs'

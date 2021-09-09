@@ -1,0 +1,53 @@
+---
+- name: Check if hd-idle is installed
+  shell:
+    cmd: which hd-idle
+  ignore_errors: true
+  register: hdidle
+  changed_when: hdidle.rc != 0
+
+- name: Install hd-idle
+  when: hdidle.rc != 0
+  block:
+
+  - name: Create the temporary directory
+    file:
+      path: /tmp/hd-idle
+      state: directory
+  
+  - name: Install github3 module
+    pip:
+      name: github3.py
+
+  - name: Get the latest release version
+    github_release:
+      user: adelolmo
+      repo: hd-idle
+      action: latest_release
+    register: release
+
+  - name: print
+    debug:
+      var: release
+
+  - name: Grab the latest amd64 deb package
+    get_url: 
+      url: "https://github.com/adelolmo/hd-idle/releases/download/{{ release['tag'] }}/hd-idle_{{ release['tag'] | regex_replace('^v','') }}_amd64.deb"
+      dest: /tmp/hd-idle
+
+  - name: Install the deb package 
+    shell:
+      cmd: cd /tmp/hd-idle && dpkg -y -i hd-idle*.deb
+
+- name: Install the hd-idle configuration file
+  template: 
+    src: hd-idle.default.j2
+    dest: /etc/default/hd-idle
+
+- name: Make sure that hd-idle is started and enabled on boot
+  systemd:
+    name: hd-idle
+    state: started
+    enabled: yes
+    masked: no
+  

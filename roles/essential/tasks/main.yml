@@ -54,10 +54,9 @@
 
 - name: Install extra packages
   apt: 
-    name: "{{ item }}" 
+    name: "{{ extra_packages }}" 
     state: latest 
     update_cache: yes
-  with_items: "{{ extra_packages }}"
   
 - name: Clone the latest dotfiles repo
   git:
@@ -94,3 +93,8 @@
 - name: Set the hostname
   hostname:
     name: "{{ inventory_hostname }}"
+
+- name: Generate the locale
+  locale_gen:
+    name: "{{ locale }}"
+    state: present
