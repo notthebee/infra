@@ -4,8 +4,8 @@
     name: hdparm 
     state: latest
 
-- name: Install the hdparm config file
+- name: Copy the udev rule
   template:
-    src: hdparm.conf.j2
-    dest: /etc/hdparm.conf
+    src: 69-hdparm.rules.j2
+    dest: /etc/udev/rules.d/69-hdparm.rules
     mode: 0644

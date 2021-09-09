@@ -36,7 +36,8 @@
       "TZ": "{{ timezone }}"
     volumes:
       - "{{ docker_dir }}/{{ container_name }}/config:/config"
-      - "{{ mergerfs_root }}/Nextcloud:/data"
+      - "{{ docker_dir }}/{{ container_name }}/data:/data"
+      - "{{ mergerfs_root }}/Nextcloud/{{ username }}:/data/{{ username }}"
     restart_policy: unless-stopped
 
 - name: Add {{ container_name }} to the SWAG network (reverse-proxy)
