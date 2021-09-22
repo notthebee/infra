@@ -5,3 +5,4 @@
 secret.yml
 /group_vars/
 !/group_vars/all/vars.yml
+mountsraspi

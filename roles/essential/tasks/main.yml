@@ -20,6 +20,7 @@
   with_items: 
     - iscsid
     - open-iscsi
+  ignore_errors: yes
 
 - name: Disable cron e-mail notifications
   cron:
@@ -34,6 +35,7 @@
     owner: root
     group: root
     mode: 0644
+  tags: mirrors
 
 - name: Update and upgrade apt packages
   become: true

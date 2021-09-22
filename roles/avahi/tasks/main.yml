@@ -20,14 +20,6 @@
     owner: root
     group: root
     mode: 0775
-
-- name: Copy the Netatalk config
-  template:
-    src: netatalk.service
-    dest: /etc/avahi/services/netatalk.service
-    owner: root
-    group: root
-    mode: 0775
   
 - name: Make sure the Avahi service is running and enabled
   service: 

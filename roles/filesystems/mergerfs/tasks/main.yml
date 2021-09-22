@@ -4,3 +4,17 @@
     name: "mergerfs"
     state: latest 
     update_cache: yes
+
+- name: Install the uncaching script
+  template:
+      src: mergerfs-uncache.j2
+      dest: /usr/local/bin/mergerfs-uncache
+      mode: 0775
+
+- name: Move data from cache drive to slow pool as it gets full
+  cron:
+    name: "uncache the mergerfs pool"
+    minute: "0"
+    hour: "3"
+    weekday: "1-6"
+    job: "/usr/local/bin/mergerfs-uncache"

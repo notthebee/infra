@@ -8,6 +8,8 @@
         - port
 
     - import_tasks: tasks/user.yml
+      tags:
+        - user
   
 - hosts: all
   become: yes
@@ -63,11 +65,6 @@
     - role: avahi
       tags: 
         - avahi
-
-    - role: filesystems/timemachine
-      tags:
-        - timemachine
-      when: enable_timemachine | default(False)
 
     - role: containers/watchtower
       tags:
@@ -159,7 +156,6 @@
         - smarthome
         - containers
       when: enable_smarthome | default(False)
-
 
     # SSH security (at the end because it breaks SSH connection)
     - role: geerlingguy.security

@@ -11,3 +11,4 @@ extra_packages:
   - lm-sensors
   - iotop
   - hddtemp
+  - ncdu

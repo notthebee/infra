@@ -8,6 +8,17 @@
   with_items: "{{ disks }}"
   when: disks[0] is defined
 
+- name: Mount the cache drives
+  mount:
+    name: "{{ item.path }}"
+    src: "{{ item.src }}"
+    fstype: ext4
+    state: mounted
+    opts: defaults,discard
+    passno: "2"
+  with_items: "{{ cache_disks }}"
+  when: cache_disks[0] is defined
+
 - name: Mount the parity drives
   mount:
     name: "{{ item.path }}"
@@ -18,11 +29,20 @@
   with_items: "{{ parity_disks }}"
   when: parity_disks[0] is defined
 
-- name: Mount the mergerfs array
+- name: Mount the mergerfs cached array
   mount:
     name: "{{ mergerfs_root }}"
+    src: /mnt/cache*:/mnt/data*
+    opts: category.create=lfs,direct_io,defaults,allow_other,moveonenospc=1,minfreespace=50G,fsname=mergerfs
+    fstype: fuse.mergerfs
+    state: mounted
+  when: disks[0] is defined
+
+- name: Mount the mergerfs array
+  mount:
+    name: "{{ mergerfs_root }}_slow"
     src: /mnt/data*
-    opts: direct_io,defaults,allow_other,minfreespace=50G,fsname=mergerfs
+    opts: direct_io,defaults,allow_other,moveonenospc=1,minfreespace=500G,fsname=mergerfs_slow
     fstype: fuse.mergerfs
     state: mounted
   when: disks[0] is defined
@@ -31,42 +51,8 @@
   mount:
     name: "{{ timemachine_root }}"
     src: "{{ timemachine_drive }}"
-    fstype: hfsplus
-    opts: defaults,nofail,force,rw
+    fstype: ext4
+    opts: defaults,discard
     state: mounted
     passno: "2"
   when: enable_timemachine | default(False)
-
-- name: Remount the drive if it's read-only
-  when: enable_timemachine | default(False)
-  block:
-    - name: Check if the drive is read-only
-      shell:
-        cmd: grep "[[:space:]]ro[[:space:],]" /proc/mounts | grep timemachine
-      register: timemachine_ro
-      failed_when: timemachine_ro.rc == 0
-      changed_when: timemachine_ro.rc == 0
-
-  rescue:
-  - name: Stop the Netatalk service
-    service: 
-      name: netatalk
-      state: stopped
-    
-  - name: Unmount and fsck the drive if it became read-only
-    shell:
-      cmd: umount "{{ timemachine_drive }}" && fsck.hfsplus "{{ timemachine_drive }}"
-
-  - name: Mount the Time Machine drive again
-    mount:
-      name: "{{ timemachine_root }}"
-      src: "{{ timemachine_drive }}"
-      fstype: hfsplus
-      opts: defaults,nofail,force,rw
-      state: mounted
-      passno: "2"
-
-  - name: Start the Netatalk service
-    service: 
-      name: netatalk
-      state: started

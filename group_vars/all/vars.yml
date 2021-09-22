@@ -17,6 +17,8 @@ ntp_timezone: "{{ timezone }}"
 
 locale: en_US.UTF-8
 
+fish_prompt_color: blue 
+
 keyboard_layout: us
 
 username: notthebee
@@ -71,7 +73,6 @@ msmtp_default_account: "mailbox"
 
 msmtp_alias_default : "{{ email }}"
 
-
 #
 # SSH (geerlingguy.security)
 #
@@ -84,8 +85,6 @@ security_autoupdate_reboot: "true"
 security_autoupdate_mail_to: "{{ email }}"
 
 security_autoupdate_mail_on_error: true
-
-
 
 #
 # Docker
@@ -116,6 +115,14 @@ enable_wireguard: true
 
 enable_ikev2: true
 
+#
+# Time Machine
+#
+timemachine_root: /mnt/timemachine
+
+timemachine_drive: /dev/disk/by-label/TimeMachine
+
+enable_timemachine: true
 
 #
 # IKEv2
@@ -136,8 +143,9 @@ samba_users:
 
 samba_global_include: global-include.conf
 
-samba_mitigate_cve_2017_7494: false
+samba_apple_extensions: yes 
 
+samba_mitigate_cve_2017_7494: false
 samba_shares:
   - name: Trash
     guest_ok: no
@@ -169,16 +177,21 @@ samba_shares:
     valid_users: "{{ username }}, {{ additional_users[0].name }}"
     write_list: "{{ username }}, {{ additional_users[0].name }}"
 
-
-#
-# Time Machine
-#
-timemachine_root: /mnt/timemachine
-
-timemachine_drive: /dev/disk/by-label/TimeMachine
-
-enable_timemachine: true
-
+  - name: TimeMachine
+    guest_ok: no
+    public: no
+    read_only: no
+    vfs_objects:
+      - name: fruit
+        options:
+        - name: time machine
+          value: 'yes'
+      - name: streams_xattr
+    writable: yes
+    browseable: yes
+    path: "{{ timemachine_root }}"
+    valid_users: "{{ username }}"
+    write_list: "{{ username }}"
 
 #
 # Snapraid and MergerFS
@@ -188,6 +201,9 @@ mergerfs_root: /mnt/storage
 disks:
   - { path: /mnt/data1, src: /dev/disk/by-label/Data1, content: true }
   - { path: /mnt/data2, src: /dev/disk/by-label/Data2, content: true }
+
+cache_disks:
+  - { path: /mnt/cache1, src: /dev/disk/by-label/Cache1, content: true }
 
 parity_disks:
   - { path: /mnt/parity1, src: /dev/disk/by-label/Parity1, content: true }
@@ -211,7 +227,7 @@ snapraid_runner_smtp_port: "{{ email_smtp_port }}"
 snapraid_runner_command: "python3 {{ snapraid_runner_bin }} -c {{ snapraid_runner_conf }}"
 
 snapraid_runner_cron_jobs:
-  - { job: 'docker stop $(docker ps -a) && {{ snapraid_runner_command }} && docker start $(docker ps -a -q)', name: 'snapraid_runner', weekday: '*', hour: '04' }
+  - { job: 'docker stop $(docker ps -a) && {{ snapraid_runner_command }} && docker start $(docker ps -a -q)', name: 'snapraid_runner', weekday: '0', hour: '3' }
 
 snapraid_runner_delete_threshold: 5000
 
@@ -228,7 +244,6 @@ snapraid_config_excludes:
   - "*.!sync"
   - /tmp/
   - "/Downloads/*"
-
 
 #
 # SMART error reporting

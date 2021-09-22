@@ -6,6 +6,8 @@
     password: "{{ password | password_hash('sha512') }}"
     groups: 
       - sudo
+      - users
+      - sambashare
     state: present
     append: true
     update_password: on_create
