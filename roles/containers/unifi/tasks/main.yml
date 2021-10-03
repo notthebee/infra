@@ -1,0 +1,22 @@
+---
+- name: Make sure the Unifi container is created and running
+  docker_container:
+    name: 'unifi'
+    image: "ghcr.io/linuxserver/unifi-controller"
+    pull: true
+    state: 'started'
+    env:
+      PUID: "{{ guid }}"
+      PGID: "{{ guid }}"
+    volumes:
+      - "{{ docker_dir }}/{{ container_name }}:/config"
+    ports:
+      - 3478:3478/udp
+      - 10001:10001/udp
+      - 8081:8080
+      - 8443:8443
+      - 8843:8843 #optional
+      - 8880:8880 #optional
+      - 6789:6789 #optional
+      - 5514:5514/udp #optional
+    restart_policy: unless-stopped

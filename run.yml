@@ -71,6 +71,12 @@
         - watchtower
         - containers
 
+    - role: containers/unifi
+      tags:
+        - unifi
+        - containers
+
+
     - role: containers/swag
       tags: 
         - swag
@@ -130,6 +136,19 @@
         - plex
         - containers
       when: enable_plex | default(False)
+
+    - role: containers/jellyfin
+      tags: 
+        - jellyfin
+        - containers
+      when: enable_jellyfin | default(False)
+
+    - role: containers/photoprism
+      tags: 
+        - photoprism
+        - containers
+      when: enable_photoprism | default(False)
+
 
     - role: containers/wireguard
       tags: 

@@ -2,7 +2,7 @@
 - name: Make sure the Homer container is created and running
   docker_container:
     name: 'homer'
-    image: "b4bz/homer"
+    image: "b4bz/homer:latest"
     pull: true
     state: 'started'
     ports:

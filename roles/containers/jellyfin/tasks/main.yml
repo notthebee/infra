@@ -1,0 +1,35 @@
+---
+- name: Make sure that QuickSync packages are installed
+  apt:
+    name:
+      - vainfo
+      - intel-media-va-driver-non-free
+    state: latest
+    update_cache: yes
+
+- name: Make sure the {{ container_name }} container is created and running
+  docker_container:
+    name: "{{ container_name }}"
+    image: "ghcr.io/linuxserver/jellyfin"
+    pull: yes
+    privileged: yes
+    devices:
+      - "/dev/dri/renderD128:/dev/dri/renderD128"
+    state: 'started'
+    env:
+      "DOCKER_MODS": "linuxserver/mods:jellyfin-opencl-intel"
+      "PUID": "{{ guid }}"
+      "PGID": "{{ guid }}"
+      "TZ": "{{ timezone }}"
+      "VERSION": "latest"
+    volumes:
+      - "{{ docker_dir }}/{{ container_name }}:/config"
+      - "{{ mergerfs_root }}/Media/TV:/data/TV"
+      - "{{ mergerfs_root }}_slow/Media/Transcodes:/config/data/transcodes"
+      - "{{ mergerfs_root }}/Media/Metadata:/metadata"
+      - "{{ mergerfs_root }}/Media/Cache:/data/Cache"
+      - "{{ mergerfs_root }}/Media/Movies:/data/Movies"
+      - "/etc/localtime:/etc/localtime:ro"
+    ports:
+      - 8096:8096
+    restart_policy: unless-stopped

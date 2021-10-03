@@ -12,3 +12,4 @@ extra_packages:
   - iotop
   - hddtemp
   - ncdu
+  - reptyr

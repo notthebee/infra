@@ -39,3 +39,4 @@
     shell: /sbin/nologin
   with_items: "{{ additional_users }}"
   when: additional_users is defined
+  no_log: true
