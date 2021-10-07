@@ -101,7 +101,7 @@
         - containers
       when: enable_deluge | default(False)
 
-    - role: containers/homer
+    - role: homer
       tags: 
         - homer
         - containers
