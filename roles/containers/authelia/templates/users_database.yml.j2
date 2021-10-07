@@ -1,0 +1,8 @@
+users:
+  {{ username }}:
+    displayname: "{{ username }}"
+    password: "{{ authelia_password | password_hash('sha512') }}"
+    email: {{ email }}
+    groups:
+      - admins
+      - dev

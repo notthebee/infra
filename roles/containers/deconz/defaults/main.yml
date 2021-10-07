@@ -1,2 +1,8 @@
 ---
 container_name: deconz
+
+homer_url: "http://{{ ansible_host }}:8085"
+
+homer_category: smarthome
+
+homer_name: "Phoscon-GW"

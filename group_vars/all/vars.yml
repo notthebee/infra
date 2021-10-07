@@ -69,7 +69,7 @@ msmtp_accounts:
   auth:      "on"
   from:      "{{ email }}"
   user:      "{{ email }}"
-  password:  "{{ email_password}}"
+  password:  "{{ email_password }}"
 
 msmtp_default_account: "mailbox"
 
@@ -95,13 +95,23 @@ copy_persistent_data: false
 
 force_copy_persistent_data: false
 
-enable_smarthome: true
+enable_deconz: true
+
+enable_homeassistant: true
 
 enable_plex: false
 
 enable_jellyfin: true
 
-enable_downloaders: true
+enable_unifi: false
+
+enable_authelia: true
+
+enable_sonarr: true
+
+enable_radarr: true
+
+enable_jackett: true
 
 enable_deluge: true
 
@@ -120,6 +130,8 @@ enable_swag: true
 enable_wireguard: true
 
 enable_ikev2: true
+
+enable_watchtower: true
 
 #
 # Time Machine

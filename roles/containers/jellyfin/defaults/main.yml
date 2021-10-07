@@ -1,2 +1,6 @@
 ---
 container_name: jellyfin
+
+homer_url: "http://{{ansible_host}}:8096"
+
+homer_category: media

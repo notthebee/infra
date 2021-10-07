@@ -1,2 +1,8 @@
 ---
 container_name: unifi
+
+homer_url: "https://{{ ansible_host }}:8443/manage"
+
+homer_category: system
+
+homer_name: "UniFi Controller"

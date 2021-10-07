@@ -1,0 +1,10 @@
+---
+container_name: home-assistant
+
+port: "8123"
+
+homer_url: "http://{{ ansible_host }}:8123"
+
+homer_category: smarthome
+
+homer_name: "Home Assistant"

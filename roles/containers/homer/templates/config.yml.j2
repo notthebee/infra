@@ -1,0 +1,90 @@
+---
+title: {{ homer_title }}
+subtitle: {{ homer_subtitle }}
+logo: "/assets/tools/homer-icons/logo.jpg"
+
+stylesheet:
+  - "assets/custom.css"
+
+header: true
+footer: false
+columns: 4
+connectivityCheck: true
+
+theme: default
+colors:
+  light:
+    highlight-primary: "#282E38"
+    highlight-secondary: "#181818"
+    highlight-hover: "#303030"
+    background: "#232730"
+    card-background: "#282E38"
+    text: "#81a1c1"
+    text-header: "#81a1c1"
+    text-title: "#d8dee9"
+    text-subtitle: "#f5f5f5"
+    card-shadow: rgba(0, 0, 0, 0.4)
+    link-hover: "#ffdd57"
+
+  dark:
+    highlight-primary: "#282E38"
+    highlight-secondary: "#181818"
+    highlight-hover: "#303030"
+    background: "#232730"
+    card-background: "#282E38"
+    text: "#81a1c1"
+    text-header: "#81a1c1"
+    text-title: "#d8dee9"
+    text-subtitle: "#f5f5f5"
+    card-shadow: rgba(0, 0, 0, 0.4)
+    link-hover: "#ffdd57"
+
+services:
+  - name: "Media"
+    icon: "fas fa-photo-video"
+    items:
+  {% for item in homer_urls if "media" in item.category and item.url != "" %}
+    - name: "{{ item.name }}"
+        type: Ping
+        logo: "{{ item.logo }}"
+        url: "{{ item.url }}"
+        target: "_blank"
+
+  {% endfor %}
+
+  - name: "Services"
+    icon: "fas fa-stream"
+    items:
+  {% for item in homer_urls if "services" in item.category and item.url != "" %}
+    - name: "{{ item.name }}"
+        type: Ping
+        logo: "{{ item.logo }}"
+        url: "{{ item.url }}"
+        target: "_blank"
+
+  {% endfor %}
+
+  - name: "System"
+    icon: "fas fa-cog"
+    items:
+  {% for item in homer_urls if "system" in item.category and item.url != "" %}
+    - name: "{{ item.name }}"
+        type: Ping
+        logo: "{{ item.logo }}"
+        url: "{{ item.url }}"
+        target: "_blank"
+
+  {% endfor %}
+
+  - name: "Home Automation"
+    icon: "fas fa-home"
+    items:
+  {% for item in homer_urls if "smarthome" in item.category and item.url != "" %}
+    - name: "{{ item.name }}"
+        type: Ping
+        logo: "{{ item.logo }}"
+        url: "{{ item.url }}"
+        target: "_blank"
+
+  {% endfor %}
+

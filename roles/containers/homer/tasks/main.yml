@@ -1,8 +1,69 @@
 ---
+- name: Get a list of containers
+  delegate_to: localhost
+  become: no
+  find:
+    paths: 
+      - "roles/containers"
+    file_type: directory
+    excludes: "homer"
+    recurse: no
+  register: containers
+
+- name: Include all default.yml files
+  include_vars:
+    dir: "{{ playbook_dir }}/{{ item.path }}/defaults"
+    files_matching: main.yml
+    name: "{{ item.path.split('/')[-1] }}"
+  with_items: "{{ containers.files }}"
+  no_log: true
+
+- name: Populate the dictionary of all containers
+  set_fact:
+    homer_urls: "{{ homer_urls | default([]) + [{ 'logo': '/assets/tools/homer-icons/' + item.path.split('/')[-1] + '.png', 'name': lookup('vars', item.path.split('/')[-1])['homer_name'] | default(item.path.split('/')[-1] | title), 'url' : lookup('vars', item.path.split('/')[-1])['homer_url'] | default(''), 'category': lookup('vars', item.path.split('/')[-1])['homer_category'] | default ('') }] }}"
+  when: lookup('vars', 'enable_' + item.path.split('/')[-1]) | default(False)
+  with_items: "{{ containers.files }}"
+
+- name: Create the icons folder
+  file:
+    path: "{{ docker_dir }}/{{ container_name }}/tools/homer-icons"
+    state: directory
+  
+- name: Copy the icons
+  copy:
+    src: "files/icons/{{ item.path.split('/')[-1] }}.png"
+    dest: "{{ docker_dir }}/{{ container_name}}/tools/homer-icons"
+    owner: "{{ username }}"
+    group: "{{ username }}"
+  when: lookup('vars', 'enable_' + item.path.split('/')[-1]) | default(False) and lookup('vars', item.path.split('/')[-1])['homer_url'] is defined
+  with_items: "{{ containers.files }}"
+
+- name: Copy the logo
+  copy:
+    src: "files/icons/logo.jpg"
+    dest: "{{ docker_dir }}/{{ container_name}}/tools/homer-icons"
+    owner: "{{ username }}"
+    group: "{{ username }}"
+
+- name: Copy the custom stylesheet
+  copy:
+    src: "files/custom.css"
+    dest: "{{ docker_dir }}/{{ container_name }}"
+    owner: "{{ username }}"
+    group: "{{ username }}"
+
+
+- name: Generate the Homer config file
+  template:
+    src: config.yml.j2
+    dest: "{{ docker_dir }}/{{ container_name}}/config.yml"
+    owner: "{{ username }}"
+    group: "{{ username }}"
+
 - name: Make sure the Homer container is created and running
   docker_container:
     name: 'homer'
-    image: "b4bz/homer:latest"
+    image: "b4bz/homer"
     pull: true
     state: 'started'
     ports:

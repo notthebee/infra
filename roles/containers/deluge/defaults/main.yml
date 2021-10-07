@@ -1,2 +1,6 @@
 ---
 container_name: deluge
+
+homer_url: "http://{{ ansible_host }}:8112"
+
+homer_category: media

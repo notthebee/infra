@@ -1,2 +1,6 @@
 ---
 container_name: sonarr
+
+homer_url: "http://{{ ansible_host }}:8989"
+
+homer_category: media

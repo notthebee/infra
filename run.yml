@@ -75,7 +75,13 @@
       tags:
         - unifi
         - containers
+      when: enable_unifi | default(False)
 
+    - role: containers/authelia
+      tags:
+        - authelia
+        - containers
+      when: enable_authelia | default(False)
 
     - role: containers/swag
       tags: 
@@ -117,19 +123,19 @@
       tags: 
         - jackett
         - containers
-      when: enable_downloaders | default(False)
+      when: enable_jackett | default(False)
 
     - role: containers/sonarr
       tags: 
         - sonarr
         - containers
-      when: enable_downloaders | default(False)
+      when: enable_sonarr | default(False)
 
     - role: containers/radarr
       tags: 
         - radarr
         - containers
-      when: enable_deluge | default(False)
+      when: enable_radarr | default(False)
 
     - role: containers/plex
       tags: 
@@ -162,19 +168,19 @@
         - containers
       when: enable_ikev2 | default(False)
 
-    - role: containers/home-assistant
+    - role: containers/homeassistant
       tags: 
-        - home-assistant
+        - homeassistant
         - smarthome
         - containers
-      when: enable_smarthome | default(False)
+      when: enable_homeassistant | default(False)
 
     - role: containers/deconz
       tags: 
         - deconz
         - smarthome
         - containers
-      when: enable_smarthome | default(False)
+      when: enable_deconz | default(False)
 
     # SSH security (at the end because it breaks SSH connection)
     - role: geerlingguy.security

@@ -1,1 +1,7 @@
 container_name: photoprism
+
+homer_url: "http://{{ ansible_host }}:2342"
+
+homer_category: services
+
+homer_name: "PhotoPrism"
