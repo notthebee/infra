@@ -50,7 +50,28 @@
     state: started 
     enabled: yes
 
-- name: Create the docker data directory
-  file:
+- name: Check if the persistent data folder exists on the remote machine
+  stat:
     path: "{{ docker_dir }}"
+  register: persistent_data
+
+- name: Check if the persistent data folder is empty
+  find:
+    paths: 
+      - "{{ docker_dir }}/"
+    recurse: yes
+  register: persistent_data_find
+
+- name: Create the persistent data folder on the remote machine
+  file:
+    dest: "{{ docker_dir }}"
     state: directory
+    owner: "{{ username }}"
+    group: "{{ username }}"
+    recurse: yes
+  when: persistent_data.stat.exists == false
+
+- name: Restore the "{{ docker_dir }}" folder from the MergerFS array
+  shell:
+    cmd: "rsync -avz --delete {{ mergerfs_root }}/docker_data {{ docker_dir }}"
+  when: persistent_data_find.matched < 20 or persistent_data.stat.exists == false

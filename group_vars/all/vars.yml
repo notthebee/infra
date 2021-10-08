@@ -249,7 +249,7 @@ snapraid_runner_smtp_port: "{{ email_smtp_port }}"
 snapraid_runner_command: "python3 {{ snapraid_runner_bin }} -c {{ snapraid_runner_conf }}"
 
 snapraid_runner_cron_jobs:
-  - { job: 'docker stop $(docker ps -q) && {{ snapraid_runner_command }} && docker start $(docker ps -a -q)', name: 'snapraid_runner', weekday: '0', hour: '3' }
+  - { job: 'docker stop $(docker ps -q) && rsync -avz --delete --exclude cache {{ docker_dir }} {{ mergerfs_root }}/docker_data && {{ snapraid_runner_command }} && docker start $(docker ps -a -q)', name: 'snapraid_runner', weekday: '0', hour: '3' }
 
 snapraid_runner_delete_threshold: 5000
 

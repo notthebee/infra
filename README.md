@@ -17,12 +17,15 @@ The playbook is mostly being developed for personal use, so stuff is going to be
 ## Services included:
 #### Media
 * [Plex](https://hub.docker.com/r/linuxserver/plex) (A media server)
+* [Jellyfin](https://hub.docker.com/r/linuxserver/jellyfin) (Yet another media server)
 * [Radarr](https://hub.docker.com/r/linuxserver/radarr) (A movie tracker/downloader)
 * [Jackett](https://hub.docker.com/r/linuxserver/jackett) (A torrent/NZB indexer)
 * [Sonarr](https://hub.docker.com/r/linuxserver/sonarr) (A TV show tracker/downloader)
 * [Arch-DelugeVPN](https://hub.docker.com/r/binhex/arch-delugevpn) (An Arch Linux container running Deluge and an Wireguard/OpenVPN client with a kill switch)
 
 #### Services
+* [Authelia](https://hub.docker.com/r/authelia/authelia) (An authentication provider)
+* [UniFi Controller](https://hub.docker.com/r/linuxserver/unifi-controller) (A controller for UniFi devices)
 * [Homer](https://hub.docker.com/r/b4bz/homer) (A static home page)
 * [Nextcloud](https://hub.docker.com/r/linuxserver/nextcloud) (A self-hosted cloud platform)
 * [MariaDB](https://hub.docker.com/r/linuxserver/mariadb) (A database server for Nextcloud)
@@ -42,7 +45,6 @@ The playbook is mostly being developed for personal use, so stuff is going to be
 ## Other features:
 * MergerFS with Snapraid
 * Samba
-* Netatalk (AFP) for Time Machine
 
 ## Usage
 Install Ansible (macOS):
