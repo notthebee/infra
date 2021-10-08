@@ -89,12 +89,8 @@ security_autoupdate_mail_to: "{{ email }}"
 security_autoupdate_mail_on_error: true
 
 #
-# Docker
+# Enable/disable individual Docker containers
 #
-copy_persistent_data: false
-
-force_copy_persistent_data: false
-
 enable_deconz: true
 
 enable_homeassistant: true
@@ -145,7 +141,6 @@ enable_timemachine: true
 #
 # IKEv2
 #
-
 ikev2_ondemand: true
 
 #
@@ -248,10 +243,12 @@ snapraid_runner_smtp_port: "{{ email_smtp_port }}"
 
 snapraid_runner_command: "python3 {{ snapraid_runner_bin }} -c {{ snapraid_runner_conf }}"
 
+# Stop all the docker containers, backup the {{ docker_dir }} to the MergerFS pool, execute the snapraid runner and start the containers back up
+# Stopping the containers is necessary – backing up the data folder with the containers running will result in corrputed database files and no files can be changed during the Snapraid sync
 snapraid_runner_cron_jobs:
   - { job: 'docker stop $(docker ps -q) && rsync -avz --delete --exclude cache {{ docker_dir }} {{ mergerfs_root }}/docker_data && {{ snapraid_runner_command }} && docker start $(docker ps -a -q)', name: 'snapraid_runner', weekday: '0', hour: '3' }
 
-snapraid_runner_delete_threshold: 5000
+snapraid_runner_delete_threshold: 999999
 
 snapraid_runner_email_sendon: "error"
 
