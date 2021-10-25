@@ -20,7 +20,7 @@
 
 - name: Populate the dictionary of all containers
   set_fact:
-    homer_urls: "{{ homer_urls | default([]) + [{ 'logo': '/assets/tools/homer-icons/' + item.path.split('/')[-1] + '.png', 'name': lookup('vars', item.path.split('/')[-1])['homer_name'] | default(item.path.split('/')[-1] | title), 'url' : lookup('vars', item.path.split('/')[-1])['homer_url'] | default(''), 'category': lookup('vars', item.path.split('/')[-1])['homer_category'] | default ('') }] }}"
+    homer_urls: "{{ homer_urls | default([]) + [{ 'logo': '/assets/tools/homer-icons/' + item.path.split('/')[-1] + '.png', 'name': lookup('vars', item.path.split('/')[-1])['dashboard_name'] | default(item.path.split('/')[-1] | title), 'url' : lookup('vars', item.path.split('/')[-1])['dashboard_url'] | default(''), 'endpoint': 'http://' + ansible_default_ipv4['address'] + ':3000/' + lookup('vars', item.path.split('/')[-1])['dashboard_url'] | default(''), 'category': lookup('vars', item.path.split('/')[-1])['homer_category'] | default ('') }] }}"
   when: lookup('vars', 'enable_' + item.path.split('/')[-1]) | default(False)
   with_items: "{{ containers.files }}"
 
@@ -35,7 +35,7 @@
     dest: "{{ docker_dir }}/{{ container_name}}/tools/homer-icons"
     owner: "{{ username }}"
     group: "{{ username }}"
-  when: lookup('vars', 'enable_' + item.path.split('/')[-1]) | default(False) and lookup('vars', item.path.split('/')[-1])['homer_url'] is defined
+  when: lookup('vars', 'enable_' + item.path.split('/')[-1]) | default(False) and lookup('vars', item.path.split('/')[-1])['dashboard_url'] is defined
   with_items: "{{ containers.files }}"
 
 - name: Copy the logo
@@ -74,4 +74,14 @@
       "TZ": "{{ timezone }}"
     volumes:
       - "{{ docker_dir }}/{{ container_name }}:/www/assets"
+    restart_policy: unless-stopped
+
+- name: Make sure cors-container is created and running
+  docker_container:
+    name: 'cors-container'
+    image: "imjacobclark/cors-container"
+    pull: yes
+    state: 'started'
+    ports:
+      - 3000:3000
     restart_policy: unless-stopped

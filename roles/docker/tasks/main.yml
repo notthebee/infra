@@ -50,6 +50,23 @@
     state: started 
     enabled: yes
 
+- name: Get a list of containers
+  delegate_to: localhost
+  become: no
+  find:
+    paths: 
+      - "roles/containers"
+    file_type: directory
+    recurse: no
+  register: containers
+
+- name: Stop and remove all the disabled containers
+  docker_container: 
+    name: "{{ item.path.split('/')[-1] }}"
+    state: absent
+  when: not lookup('vars', 'enable_' + item.path.split('/')[-1])
+  with_items: "{{ containers.files }}"
+
 - name: Check if the persistent data folder exists on the remote machine
   stat:
     path: "{{ docker_dir }}"

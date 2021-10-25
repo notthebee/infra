@@ -1,14 +1,49 @@
 @charset "UTF-8";
-@import url('https://fonts.googleapis.com/css2?family=Fira+Sans:wght@400;700&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Open+Sans:wght@300;400;600;700&display=swap');
 
 body, h1, h2, p, .title {
-  font-family: Fira Sans !important;
+  font-family: Open Sans !important;
   font-weight: 400 !important;
   }
+
+p.title {
+  font-weight: 700 !important
+}
 
 nav {
 	display: none !important;
 }
 body #bighead .first-line .logo img {
     border-radius: 50%;
+}
+body #app .card, body #app .card:hover, body #app .message {
+  box-shadow: unset;
+  
+}
+body .card {
+  box-shadow: unset;
+  border-radius: 10px;
+}
+body #app .card {
+  border-radius: 10px;
+}
+.status :not(::before) {
+  display: none;
+}
+.image.is-48x48 {
+  width: 36px;
+  height: 36px;
+}
+.status.online, .status.offline {
+  position: absolute;
+  right: 12px;
+  font-size: 0 !important;
+  color: var(--background) !important;
+}
+.column > div {
+  padding-bottom: 1.8em;
+}
+
+.card-content {
+  height: 100% !important;
 }

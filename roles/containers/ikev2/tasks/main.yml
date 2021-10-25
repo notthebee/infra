@@ -16,9 +16,11 @@
       - "{{ docker_dir }}/{{ container_name }}/config:/config"
       - "{{ docker_dir }}/{{ container_name }}/letsencrypt:/etc/letsencrypt"
     ports:
+      - 80:80/tcp
       - 4500:4500/udp
       - 500:500/udp
     restart_policy: unless-stopped
+
 
 - name: Copy the mobileconfig to the local host
   synchronize:

@@ -3,6 +3,11 @@
   docker_container:
     name: "{{ container_name }}"
     image: "ghcr.io/linuxserver/jackett"
+    labels:
+      "flame.type": "application"
+      "flame.name": "{{ container_name | title }}"
+      "flame.url": "{{ dashboard_url }}"
+      "flame.icon": "custom"
     pull: yes
     state: 'started'
     env:

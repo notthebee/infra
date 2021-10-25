@@ -4,6 +4,11 @@
     name: 'unifi'
     image: "ghcr.io/linuxserver/unifi-controller"
     pull: true
+    labels:
+      "flame.type": "application"
+      "flame.name": "{{ dashboard_name }}"
+      "flame.url": "{{ dashboard_url }}"
+      "flame.icon": "custom"
     state: 'started'
     env:
       PUID: "{{ guid }}"

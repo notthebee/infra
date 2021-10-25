@@ -6,6 +6,11 @@
     pull: yes
     command: "--transaction-isolation=READ-COMMITTED --binlog-format=ROW --skip-innodb-read-only-compressed"
     state: 'started'
+    labels:
+      "flame.type": "application"
+      "flame.name": "{{ container_name | title }}"
+      "flame.url": "{{ dashboard_url }}"
+      "flame.icon": "custom"
     env:
       "TZ": "{{ timezone }}"
       "MYSQL_ROOT_PASSWORD": "{{ mysql_root_password }}"

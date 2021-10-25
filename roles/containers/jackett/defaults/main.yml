@@ -1,5 +1,7 @@
 ---
 container_name: jackett
-homer_url: "http://192.168.178.250:9117/UI/Dashboard"
+dashboard_url: "http://192.168.178.250:9117"
 
 homer_category: system
+
+dashboard_name: Jackett

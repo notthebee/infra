@@ -48,6 +48,7 @@ services:
         type: Ping
         logo: "{{ item.logo }}"
         url: "{{ item.url }}"
+        endpoint: "{{ item.endpoint }}"
         target: "_blank"
 
   {% endfor %}
@@ -60,6 +61,7 @@ services:
         type: Ping
         logo: "{{ item.logo }}"
         url: "{{ item.url }}"
+        endpoint: "{{ item.endpoint }}"
         target: "_blank"
 
   {% endfor %}
@@ -72,9 +74,22 @@ services:
         type: Ping
         logo: "{{ item.logo }}"
         url: "{{ item.url }}"
+        endpoint: "{{ item.endpoint }}"
+        target: "_blank"
+  {% endfor %}
+    - name: "FRITZ!Box"
+        type: Ping
+        logo: /assets/tools/homer-icons/fritzbox.png
+        url: "http://192.168.178.1"
+        endpoint: "http://192.168.178.250:3000/http://192.168.178.1"
+        target: "_blank"
+      - name: "PiKVM"
+        type: Ping
+        logo: /assets/tools/homer-icons/pikvm.png
+        url: "http://192.168.178.29"
+        endpoint: "http://192.168.178.250:3000/http://192.168.178.29"
         target: "_blank"
 
-  {% endfor %}
 
   - name: "Home Automation"
     icon: "fas fa-home"
@@ -84,7 +99,9 @@ services:
         type: Ping
         logo: "{{ item.logo }}"
         url: "{{ item.url }}"
+        endpoint: "{{ item.endpoint }}"
         target: "_blank"
 
   {% endfor %}
+
 

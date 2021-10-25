@@ -1,6 +1,6 @@
 ---
 container_name: radarr
 
-homer_url: "http://{{ ansible_host }}:7878"
+dashboard_url: "http://{{ ansible_default_ipv4.address }}:7878"
 
 homer_category: media

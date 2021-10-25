@@ -1,8 +1,8 @@
 ---
 container_name: unifi
 
-homer_url: "https://{{ ansible_host }}:8443/manage"
+dashboard_url: "https://{{ ansible_default_ipv4.address }}:8443"
 
 homer_category: system
 
-homer_name: "UniFi Controller"
+dashboard_name: "UniFi Controller"

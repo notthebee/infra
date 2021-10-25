@@ -13,6 +13,11 @@
     image: "ghcr.io/linuxserver/jellyfin"
     pull: yes
     privileged: yes
+    labels:
+      "flame.type": "application"
+      "flame.name": "{{ dashboard_name }}"
+      "flame.url": "{{ dashboard_url }}"
+      "flame.icon": "custom"
     devices:
       - "/dev/dri/renderD128:/dev/dri/renderD128"
     state: 'started'
@@ -33,3 +38,11 @@
     ports:
       - 8096:8096
     restart_policy: unless-stopped
+
+- name: Add {{ container_name }} to the SWAG network (reverse-proxy)
+  docker_network:
+    name: swag_network
+    connected:
+      - jellyfin
+    appends: yes
+  when: enable_swag

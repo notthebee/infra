@@ -119,6 +119,8 @@ enable_duckdns: true
 
 enable_homer: true
 
+enable_flame: false
+
 enable_nextcloud: true
 
 enable_swag: true

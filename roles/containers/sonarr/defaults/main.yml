@@ -1,6 +1,6 @@
 ---
 container_name: sonarr
 
-homer_url: "http://{{ ansible_host }}:8989"
+dashboard_url: "http://{{ ansible_default_ipv4.address }}:8989"
 
 homer_category: media

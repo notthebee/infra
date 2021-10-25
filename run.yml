@@ -103,6 +103,13 @@
         - containers
       when: enable_homer | default(False)
 
+    - role: containers/flame
+      tags: 
+        - flame
+        - containers
+      when: enable_flame | default(False)
+
+
     - role: containers/duckdns
       tags: 
         - duckdns

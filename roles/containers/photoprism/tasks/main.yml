@@ -6,6 +6,11 @@
     pull: yes
     command: "mysqld --transaction-isolation=READ-COMMITTED --character-set-server=utf8mb4 --collation-server=utf8mb4_unicode_ci --max-connections=512 --innodb-rollback-on-timeout=OFF --innodb-lock-wait-timeout=120"
     state: 'started'
+    labels:
+      "flame.type": "application"
+      "flame.name": "{{ container_name | title }}"
+      "flame.url": "{{ dashboard_url }}"
+      "flame.icon": "custom"
     env:
       "TZ": "{{ timezone }}"
       "MYSQL_ROOT_PASSWORD": "{{ mysql_root_password }}"
@@ -37,7 +42,7 @@
       "PHOTOPRISM_GID": "{{ guid }}"
       "PHOTOPRISM_UID": "{{ guid }}"
       "TZ": "{{ timezone }}"
-      "PHOTOPRISM_SITE_URL": "http://{{ ansible_host }}:2342/"
+      "PHOTOPRISM_SITE_URL": "http://{{ ansible_default_ipv4.address }}:2342/"
       "PHOTOPRISM_EXPERIMENTAL": "false"
       "PHOTOPRISM_HTTP_HOST": "0.0.0.0"
       "PHOTOPRISM_HTTP_PORT": "2342"
@@ -47,7 +52,6 @@
       "PHOTOPRISM_DATABASE_NAME": "{{ mysql_db }}"
       "PHOTOPRISM_DATABASE_USER": "{{ mysql_user }}"
       "PHOTOPRISM_DATABASE_PASSWORD": "{{ mysql_password }}"
-      "PHOTOPRISM_ADMIN_PASSWORD": "{{ photoprism_password }}"        
       "PHOTOPRISM_DISABLE_CHOWN": "false"              
       "PHOTOPRISM_DISABLE_BACKUPS": "true"            
       "PHOTOPRISM_DISABLE_WEBDAV": "true"             

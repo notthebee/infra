@@ -3,8 +3,8 @@ container_name: home-assistant
 
 port: "8123"
 
-homer_url: "http://{{ ansible_host }}:8123"
+dashboard_url: "http://{{ ansible_default_ipv4.address }}:8123"
 
 homer_category: smarthome
 
-homer_name: "Home Assistant"
+dashboard_name: "Home Assistant"

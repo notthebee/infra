@@ -1,6 +1,6 @@
 ---
 container_name: deluge
 
-homer_url: "http://{{ ansible_host }}:8112"
+dashboard_url: "http://{{ ansible_default_ipv4.address }}:8112"
 
 homer_category: media

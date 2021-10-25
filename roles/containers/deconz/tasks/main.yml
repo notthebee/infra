@@ -12,20 +12,30 @@
 - name: Make sure the {{ container_name }} container is created and running if there's a Zigbee device
   docker_container:
     name: "{{ container_name }}"
-    image: "marthoc/deconz"
+    image: "marthoc/deconz:latest"
     pull: yes
     state: 'started'
+    labels:
+      "flame.type": "application"
+      "flame.name": "{{ dashboard_name }}"
+      "flame.url": "{{ dashboard_url }}"
+      "flame.icon": "custom"
     ports:
-      - "4043:443"
-      - "8085:80"
+      - "4043:4043"
+      - "8085:8085"
+      - "5900:5900"
+      - "6080:6080"
     volumes:
       - "{{ docker_dir }}/{{ container_name }}:/root/.local/share/dresden-elektronik/deCONZ"
     devices:
       - "{{ zigbee_dev.files[0].path }}"
     env:
       "TZ": "{{ timezone }}"
-      "DECONZ_WEB_PORT": "80"
-      "DECONZ_WS_PORT": "443"
+      "DECONZ_WEB_PORT": "8085"
+      "DECONZ_VNC_PORT": "5900"
+      "DECONZ_NOVNC_PORT": "6080"
+      "DECONZ_VNC_MODE": "1"
+      "DECONZ_WS_PORT": "4043"
       "DEBUG_INFO": "1"
       "DEBUG_APS": "0"
       "DEBUG_ZCL": "0"
