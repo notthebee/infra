@@ -1,24 +1,48 @@
 ---
+- name: Set the name of a sudo group
+  when: ansible_distribution == 'Ubuntu'
+  set_fact:
+    sudo_group: sudo
+   
+- name: Set the name of a sudo group
+  when: ansible_distribution == 'Alpine'
+  set_fact:
+    sudo_group: wheel
+
 - name: Create a login user
   become: yes
   user:
     name: "{{ username }}"
     password: "{{ password | password_hash('sha512') }}"
     groups: 
-      - sudo
+      - "{{ sudo_group }}"
       - users
-      - sambashare
     state: present
     append: true
     update_password: on_create
+ 
+- name: Ensure group "{{ username }}" exists
+  become: yes
+  group:
+    name: "{{ username }}"
+    state: present
+ 
+- name: Append the samba group
+  when: ansible_distribution == 'Ubuntu'
+  become: yes
+  user:
+    name: "{{ username }}"
+    groups: 
+      - sambashare
+    append: true
 
 - name: Allow 'sudo' group to have passwordless sudo
   become: yes
   lineinfile:
     path: /etc/sudoers
     state: present
-    regexp: '^%sudo'
-    line: '%sudo ALL=(ALL) NOPASSWD: ALL'
+    regexp: '^%{{ sudo_group }}'
+    line: '%{{ sudo_group }} ALL=(ALL) NOPASSWD: ALL'
     validate: '/usr/sbin/visudo -cf %s'
 
 - name: Copy the public SSH key 

@@ -1,48 +1,66 @@
 ---
-# Set up the shell environment and install essential packages
-- name: Suppress login messages
-  file:
-    name: /home/{{ username }}/.hushlogin
-    state: touch
-    modification_time: preserve
-    access_time: preserve
+- name: Include OS-specific variables
+  include_vars: "{{ ansible_facts['distribution'] }}.yml"
 
-- name: Remove cloud-config to avoid boot delay
-  apt: 
-    name: cloud-config
-    state: absent
+- name: Ubuntu specific tasks
+  become: yes
+  when: ansible_facts['distribution'] == 'Ubuntu'
+  block:
+  - name: Remove cloud-config to avoid boot delay
+    apt: 
+      name: cloud-config
+      state: absent
 
-- name: Make sure iSCSId and Open-iSCSId services are disabled
-  service: 
-    name: "{{ item }}"
-    state: stopped 
-    enabled: no
-  with_items: 
-    - iscsid
-    - open-iscsi
-  ignore_errors: yes
+  - name: Generate the locale
+    locale_gen:
+      name: "{{ locale }}"
+      state: present
 
-- name: Disable cron e-mail notifications
-  cron:
-    name: MAILTO
-    env: yes
-    job: ""
-    
-- name: Install the apt mirror list
-  template:
-    src: sources.list.j2
-    dest: /etc/apt/sources.list
-    owner: root
-    group: root
-    mode: 0644
-  tags: mirrors
+  - name: Make sure iSCSId and Open-iSCSId services are disabled
+    service: 
+      name: "{{ item }}"
+      state: stopped 
+      enabled: no
+    with_items: 
+      - iscsid
+      - open-iscsi
+    ignore_errors: yes
 
-- name: Update and upgrade apt packages
-  become: true
-  apt:
-    upgrade: "yes"
-    update_cache: yes
-    cache_valid_time: 86400 
+  - name: Install the apt mirror list
+    template:
+      src: sources.list.j2
+      dest: /etc/apt/sources.list
+      owner: root
+      group: root
+      mode: 0644
+    tags: mirrors
+  
+  - name: Update and upgrade apt packages
+    apt:
+      upgrade: "yes"
+      update_cache: yes
+      cache_valid_time: 86400 
+
+- name: Alpine specific tasks
+  become: yes
+  when: ansible_facts['distribution'] == 'Alpine'
+  block:
+  - name: Enable community repository
+    replace:
+      path: /etc/apk/repositories
+      regexp: '^#(http.*community)'
+      replace: '\1'
+
+  - name: Update and upgrade apk packages
+    apk:
+      upgrade: yes
+      update_cache: yes
+
+  - name: Set the default shell
+    replace:
+      path: /etc/passwd
+      regexp: "/home/{{ username }}:/bin/ash"
+      replace: "/home/{{ username }}:{{ shell }}"
 
 - name: Check if reboot required
   stat:
@@ -55,10 +73,9 @@
   when: reboot_required_file.stat.exists == true
 
 - name: Install extra packages
-  apt: 
+  package: 
     name: "{{ extra_packages }}" 
     state: latest 
-    update_cache: yes
   
 - name: Clone the latest dotfiles repo
   git:
@@ -96,7 +113,15 @@
   hostname:
     name: "{{ inventory_hostname }}"
 
-- name: Generate the locale
-  locale_gen:
-    name: "{{ locale }}"
-    state: present
+- name: Suppress login messages
+  file:
+    name: /home/{{ username }}/.hushlogin
+    state: touch
+    modification_time: preserve
+    access_time: preserve
+
+- name: Disable cron e-mail notifications
+  cron:
+    name: MAILTO
+    env: yes
+    job: ""

@@ -8,8 +8,9 @@ extra_packages:
   - neovim
   - tmux
   - mosh
+  - rsync
   - lm-sensors
   - iotop
-  - hddtemp
   - ncdu
+  - hddtemp
   - reptyr

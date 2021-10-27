@@ -17,7 +17,7 @@ ntp_timezone: "{{ timezone }}"
 
 locale: en_US.UTF-8
 
-lan_network: "{{ '.'.join(ansible_host.split('.')[0:3]) }}.0/24"
+lan_network: "{{ '.'.join(ansible_default_ipv4.address.split('.')[0:3]) }}.0/24"
 
 fish_prompt_color: blue 
 
@@ -124,6 +124,8 @@ enable_flame: false
 enable_nextcloud: true
 
 enable_swag: true
+
+enable_pihole: true
 
 enable_wireguard: true
 

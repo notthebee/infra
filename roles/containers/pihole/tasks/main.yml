@@ -1,0 +1,31 @@
+---
+- name: Make sure the {{ container_name }} container is created and running
+  docker_container:
+    name: 'pihole'
+    image: "cbcrowe/pihole-unbound"
+    privileged: yes
+    hostname: "{{ inventory_hostname }}"
+    domainname: "{{ host }}"
+    pull: false
+    state: 'started'
+    env:
+      "ServerIP": "{{ ansible_default_ipv4.address }}"
+      "TZ": "{{ timezone }}"
+      "WEBPASSWORD": "{{ pihole_password }}"
+      "REV_SERVER": "true"
+      "REV_SERVER_DOMAIN": "local"
+      "REV_SERVER_TARGET": "{{ ansible_default_ipv4.gateway }}"
+      "REV_SERVER_CIDR": "{{ '.'.join(ansible_default_ipv4.address.split('.')[0:3]) }}.0/24"
+      "DNS1": "127.0.0.1#5335" # Hardcoded to our Unbound server
+      "DNS2": "127.0.0.1#5335" # Hardcoded to our Unbound server
+      "DNSSEC": "true" # Enable DNSSEC
+      "DOMAIN_NAME": "pihole.local"
+    volumes:
+      - "{{ docker_dir }}/{{ container_name }}/pihole:/etc/pihole"
+      - "{{ docker_dir }}/{{ container_name }}/dnmasq-unbound:/etc/dnsmasq.d"
+    ports:
+      - 443:443/tcp
+      - 81:80/tcp
+      - 53:53/tcp
+      - 53:53/udp
+    restart_policy: unless-stopped

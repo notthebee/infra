@@ -1,0 +1,16 @@
+---
+extra_packages:
+  - fish
+  - htop
+  - stow
+  - git
+  - neofetch
+  - neovim
+  - tmux
+  - mosh
+  - rsync
+  - lm-sensors
+  - iotop
+  - ncdu
+  - lsblk
+  - e2fsprogs-extra

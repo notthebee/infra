@@ -22,7 +22,8 @@
     restart_policy: unless-stopped
 
 
-- name: Copy the mobileconfig to the local host
+- name: Copy the mobileconfig to the local host (might fail on the first run)
+  ignore_errors: true
   synchronize:
     mode: pull
     delete: yes

@@ -38,3 +38,11 @@
       - "{{ mergerfs_root }}/Downloads:/home/nobody/Downloads"
       - "/etc/localtime:/etc/localtime:ro"
     restart_policy: unless-stopped
+
+- name: Add {{ container_name }} to the SWAG network (reverse-proxy)
+  docker_network:
+    name: swag_network
+    connected:
+      - deluge
+    appends: yes
+  when: enable_swag

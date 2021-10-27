@@ -7,11 +7,75 @@
       tags:
         - port
 
+- hosts: all
+  tasks:
     - import_tasks: tasks/user.yml
       tags:
         - user
-  
-- hosts: all
+
+# Router
+- hosts: coda
+  become: yes
+  roles:
+    - role: essential
+      tags: 
+        - essential
+
+    - role: docker
+      tags: 
+        - docker
+
+    - role: containers/ikev2
+      tags: 
+        - ikev2
+        - containers
+      when: enable_ikev2 | default(False)
+
+    - role: containers/pihole
+      tags: 
+        - pihole
+        - containers
+      when: enable_pihole | default(False)
+
+    - role: containers/duckdns
+      tags: 
+        - duckdns
+        - containers
+      when: enable_duckdns | default(False)
+
+  tasks:
+  - name: Update SSH configuration to be more secure.
+    register: ssh_conf
+    lineinfile:
+      dest: "/etc/ssh/sshd_config"
+      regexp: "{{ item.regexp }}"
+      line: "{{ item.line }}"
+      state: present
+      validate: 'sshd -T -f %s'
+      mode: 0644
+    with_items:
+      - regexp: "^PasswordAuthentication"
+        line: "PasswordAuthentication no"
+      - regexp: "^PermitRootLogin"
+        line: "PermitRootLogin no"
+      - regexp: "^Port"
+        line: "Port {{ security_ssh_port }}"
+      - regexp: "^PermitEmptyPasswords"
+        line: "PermitEmptyPasswords no"
+      - regexp: "^ChallengeResponseAuthentication"
+        line: "ChallengeResponseAuthentication yes"
+      - regexp: "^X11Forwarding"
+        line: "X11Forwarding no"
+
+  - name: restart SSHD service
+    service:
+      name: sshd
+      state: restarted
+    when: ssh_conf.changed
+
+
+# Home server/NAS
+- hosts: fragile
   become: yes
 
   pre_tasks:
@@ -109,13 +173,6 @@
         - containers
       when: enable_flame | default(False)
 
-
-    - role: containers/duckdns
-      tags: 
-        - duckdns
-        - containers
-      when: enable_duckdns | default(False)
-
     - role: containers/nextcloud
       tags: 
         - nextcloud
@@ -158,18 +215,11 @@
         - containers
       when: enable_photoprism | default(False)
 
-
     - role: containers/wireguard
       tags: 
         - wireguard
         - containers
       when: enable_wireguard | default(False)
-
-    - role: containers/ikev2
-      tags: 
-        - ikev2
-        - containers
-      when: enable_ikev2 | default(False)
 
     - role: containers/homeassistant
       tags: 
@@ -185,11 +235,6 @@
         - containers
       when: enable_deconz | default(False)
 
-    # SSH security (at the end because it breaks SSH connection)
-    - role: geerlingguy.security
-      tags: 
-        - security
-          
     # Samba
     - role: bertvv.samba
       tags: 
@@ -199,3 +244,8 @@
     - role: geerlingguy.ntp
       tags: 
         - ntp
+
+    # SSH security (at the end because it breaks SSH connection)
+    - role: geerlingguy.security
+      tags: 
+        - security
