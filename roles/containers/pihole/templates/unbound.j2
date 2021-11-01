@@ -1,0 +1,70 @@
+# Config pulled from https://docs.pi-hole.net/guides/unbound/
+
+server:
+    # If no logfile is specified, syslog is used
+    # logfile: "/var/log/unbound/unbound.log"
+
+
+    logfile: "/var/log/unbound.log"
+    verbosity: 3
+
+    hide-identity: yes
+    hide-version: yes
+    qname-minimisation: yes
+    rrset-roundrobin: yes
+    ssl-upstream: yes
+    ssl-cert-bundle: /etc/ssl/certs/ca-certificates.crt
+
+    interface: 127.0.0.1
+    port: 5335
+    do-ip4: yes
+    do-udp: yes
+    do-tcp: yes
+
+    # May be set to yes if you have IPv6 connectivity
+    do-ip6: no
+
+    # You want to leave this to no unless you have *native* IPv6. With 6to4 and
+    # Terredo tunnels your web browser should favor IPv4 for the same reasons
+    prefer-ip6: no
+
+    # Use this only when you downloaded the list of primary root servers!
+    # If you use the default dns-root-data package, unbound will find it automatically
+    #root-hints: "/var/lib/unbound/root.hints"
+
+    # Trust glue only if it is within the server's authority
+    harden-glue: yes
+
+    # Require DNSSEC data for trust-anchored zones, if such data is absent, the zone becomes BOGUS
+    harden-dnssec-stripped: yes
+
+    # Don't use Capitalization randomization as it known to cause DNSSEC issues sometimes
+    # see https://discourse.pi-hole.net/t/unbound-stubby-or-dnscrypt-proxy/9378 for further details
+    use-caps-for-id: no
+
+    # Reduce EDNS reassembly buffer size.
+    # Suggested by the unbound man page to reduce fragmentation reassembly problems
+    edns-buffer-size: 1472
+
+    msg-cache-size: 50m
+    rrset-cache-size: 100m
+
+    # Perform prefetching of close to expired message cache entries
+    # This only applies to domains that have been frequently queried
+    prefetch: yes
+
+    # One thread should be sufficient, can be increased on beefy machines. In reality for most users running on small networks or on a single machine, it should be unnecessary to seek performance enhancement by increasing num-threads above 1.
+    so-reuseport: yes
+
+    # Ensure kernel buffer is large enough to not lose messages in traffic spikes
+    so-rcvbuf: 1m
+
+    # Ensure privacy of local IP ranges
+    private-address: {{ '.'.join(ansible_default_ipv4.address.split('.')[0:3]) }}.0/24
+
+forward-zone:
+    # forward all queries to these DNS servers:
+    name: "."
+  {% for item in dot_nameservers %}
+    forward-addr: {{ item }}
+  {% endfor %}

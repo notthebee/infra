@@ -1,13 +1,13 @@
 ---
 - name: Include OS-specific variables
-  include_vars: "{{ ansible_facts['distribution'] }}.yml"
+  include_vars: "{{ ansible_facts['os_family'] }}.yml"
 
 - name: Install required system packages
   package: 
     state: latest
     name: "{{ docker_packages }}"
 
-- name: Install Docker packages
+- name: Install Docker (Ubuntu)
   when: ansible_facts['distribution'] == 'Ubuntu'
   block:
   - name: Add Docker GPG apt Key
@@ -20,11 +20,67 @@
       repo: deb https://download.docker.com/linux/ubuntu bionic stable
       state: present
 
-  - name: Update apt and install docker-ce
+- name: Install Docker (Raspbian)
+  when: ansible_facts['distribution'] == 'Debian'
+  block:
+  - name: Add Docker GPG apt Key
+    apt_key:
+      url: https://download.docker.com/linux/raspbian/gpg
+      state: present
+
+  - name: Add Docker Repository
+    apt_repository:
+      repo: deb https://download.docker.com/linux/raspbian buster stable
+      state: present
+
+  - name: Add buster-backports GPG key (for libseccomp2)
+    apt_key:
+      keyserver: keyserver.ubuntu.com
+      id: "{{ item }}"
+    loop:
+      - 04EE7237B7D453EC
+      - 648ACFD622F3D138
+
+  - name: Add buster-backports repository
+    apt_repository:
+      repo: deb http://deb.debian.org/debian buster-backports main contrib non-free
+
+  - name: Update to the latest version of libseccomp2
     apt: 
       update_cache: yes 
-      name: docker-ce 
+      name: libseccomp2
+      default_release: buster-backports
       state: latest
+
+  - name: Switch to iptables-legacy
+    alternatives:
+      name: iptables
+      path: /usr/sbin/iptables-legacy
+
+  - name: Switch to ip6tables-legacy
+    alternatives:
+      name: ip6tables
+      path: /usr/sbin/ip6tables-legacy
+      
+  - name: Switch to pip3
+    alternatives:
+      name: pip
+      link: /usr/bin/pip
+      path: /usr/bin/pip3
+
+  - name: Switch to python3
+    alternatives:
+      name: python
+      link: /usr/bin/python
+      path: /usr/bin/python3
+
+
+- name: Update apt and install docker-ce
+  when: ansible_facts['os_family'] == 'Debian'
+  apt: 
+    update_cache: yes 
+    name: docker-ce 
+    state: latest
 
 - name: Ensure group docker exists
   group:

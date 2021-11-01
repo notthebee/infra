@@ -1,14 +1,8 @@
 ---
 - name: Set the name of a sudo group
-  when: ansible_distribution == 'Ubuntu'
   set_fact:
     sudo_group: sudo
    
-- name: Set the name of a sudo group
-  when: ansible_distribution == 'Alpine'
-  set_fact:
-    sudo_group: wheel
-
 - name: Create a login user
   become: yes
   user:
@@ -28,7 +22,7 @@
     state: present
  
 - name: Append the samba group
-  when: ansible_distribution == 'Ubuntu'
+  when: enable_samba | default(False) 
   become: yes
   user:
     name: "{{ username }}"
@@ -46,6 +40,7 @@
     validate: '/usr/sbin/visudo -cf %s'
 
 - name: Copy the public SSH key 
+  become: yes
   authorized_key:
     user: "{{ username }}"
     state: present

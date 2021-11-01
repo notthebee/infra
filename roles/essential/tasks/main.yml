@@ -1,6 +1,6 @@
 ---
 - name: Include OS-specific variables
-  include_vars: "{{ ansible_facts['distribution'] }}.yml"
+  include_vars: "{{ ansible_facts['os_family'] }}.yml"
 
 - name: Ubuntu specific tasks
   become: yes
@@ -10,11 +10,6 @@
     apt: 
       name: cloud-config
       state: absent
-
-  - name: Generate the locale
-    locale_gen:
-      name: "{{ locale }}"
-      state: present
 
   - name: Make sure iSCSId and Open-iSCSId services are disabled
     service: 
@@ -34,12 +29,19 @@
       group: root
       mode: 0644
     tags: mirrors
-  
-  - name: Update and upgrade apt packages
-    apt:
-      upgrade: "yes"
-      update_cache: yes
-      cache_valid_time: 86400 
+
+- name: Generate the locale (Debian and Ubuntu)
+  when: ansible_os_family == 'Debian'
+  locale_gen:
+    name: "{{ locale }}"
+    state: present
+
+- name: Update and upgrade apt packages (Debian and Ubuntu)
+  when: ansible_os_family == 'Debian'
+  apt:
+    upgrade: "yes"
+    update_cache: yes
+    cache_valid_time: 86400 
 
 - name: Alpine specific tasks
   become: yes

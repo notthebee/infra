@@ -11,6 +11,8 @@ timezone: Europe/Amsterdam
 
 dns_nameservers: [9.9.9.9, 149.112.112.112]
 
+dot_nameservers: [185.95.218.42@853#dns.digitale-gesellschaft.ch, 94.140.15.140@853#dns-unfiltered.adguard.com]
+
 host: "{{ duckdns_domain }}.duckdns.org"
 
 ntp_timezone: "{{ timezone }}"
@@ -146,6 +148,8 @@ enable_timemachine: true
 # IKEv2
 #
 ikev2_ondemand: true
+
+
 
 #
 # Samba

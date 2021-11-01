@@ -1,8 +1,18 @@
 ---
+- name: Set the architecture variable
+  set_fact:
+    arch: "armhf"
+  when: '"armv" in ansible_architecture'
+
+- name: Set the architecture variable
+  set_fact:
+    arch: "amd64"
+  when: '"x86_64" in ansible_architecture'
+
 - name: Make sure the {{ container_name }} container is created and running
   docker_container:
     name: 'ikev2'
-    image: "notthebee/ikev2"
+    image: "notthebee/ikev2:{{ arch }}"
     privileged: yes
     pull: yes
     state: 'started'

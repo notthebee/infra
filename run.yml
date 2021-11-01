@@ -1,5 +1,5 @@
 ---
-- hosts: all
+- hosts: home
   gather_facts: no
 
   pre_tasks:
@@ -7,13 +7,14 @@
       tags:
         - port
 
-- hosts: all
+- hosts: home
   tasks:
     - import_tasks: tasks/user.yml
       tags:
         - user
 
-# Router
+
+# PiHole/IKEv2 server
 - hosts: coda
   become: yes
   roles:
@@ -25,54 +26,42 @@
       tags: 
         - docker
 
-    - role: containers/ikev2
+    # MSMTP (for SMART notifications)
+    - role: chriswayg.msmtp-mailer
       tags: 
-        - ikev2
-        - containers
-      when: enable_ikev2 | default(False)
+        - msmtp
 
-    - role: containers/pihole
-      tags: 
-        - pihole
-        - containers
-      when: enable_pihole | default(False)
+    - role: oefenweb.dns
+      tags:
+        - dns
 
     - role: containers/duckdns
-      tags: 
-        - duckdns
-        - containers
       when: enable_duckdns | default(False)
+      tags:
+        - duckdns 
+        - containers
 
-  tasks:
-  - name: Update SSH configuration to be more secure.
-    register: ssh_conf
-    lineinfile:
-      dest: "/etc/ssh/sshd_config"
-      regexp: "{{ item.regexp }}"
-      line: "{{ item.line }}"
-      state: present
-      validate: 'sshd -T -f %s'
-      mode: 0644
-    with_items:
-      - regexp: "^PasswordAuthentication"
-        line: "PasswordAuthentication no"
-      - regexp: "^PermitRootLogin"
-        line: "PermitRootLogin no"
-      - regexp: "^Port"
-        line: "Port {{ security_ssh_port }}"
-      - regexp: "^PermitEmptyPasswords"
-        line: "PermitEmptyPasswords no"
-      - regexp: "^ChallengeResponseAuthentication"
-        line: "ChallengeResponseAuthentication yes"
-      - regexp: "^X11Forwarding"
-        line: "X11Forwarding no"
+    - role: containers/pihole
+      when: enable_pihole | default(False)
+      tags:
+        - pihole 
+        - containers
 
-  - name: restart SSHD service
-    service:
-      name: sshd
-      state: restarted
-    when: ssh_conf.changed
+    - role: containers/ikev2
+      when: enable_ikev2 | default(False)
+      tags:
+        - containers
+        - ikev2 
 
+    # NTP
+    - role: geerlingguy.ntp
+      tags: 
+        - ntp
+
+    # SSH security (at the end because it breaks SSH connection)
+    - role: geerlingguy.security
+      tags: 
+        - security
 
 # Home server/NAS
 - hosts: fragile
@@ -88,10 +77,6 @@
       tags:
         - mounts
 
-    - role: oefenweb.dns
-      tags:
-        - dns 
-
     - role: essential
       tags: 
         - essential
@@ -104,6 +89,10 @@
     - role: docker
       tags: 
         - docker
+
+    - role: oefenweb.dns
+      tags:
+        - dns
 
     - role: filesystems/mergerfs
       tags:

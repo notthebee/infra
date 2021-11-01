@@ -1,4 +1,16 @@
 ---
+- name: Create the configuration directory
+  file:
+    path: "{{ docker_dir }}/{{ container_name }}/unbound.conf.d/"
+    state: directory
+    recurse: yes
+
+- name: Copy the unbound configuration file
+  template:
+    src: unbound.j2
+    dest: "{{ docker_dir }}/{{ container_name }}/unbound.conf.d/pi-hole.conf"
+
+
 - name: Make sure the {{ container_name }} container is created and running
   docker_container:
     name: 'pihole'
@@ -13,19 +25,19 @@
       "TZ": "{{ timezone }}"
       "WEBPASSWORD": "{{ pihole_password }}"
       "REV_SERVER": "true"
-      "REV_SERVER_DOMAIN": "local"
+      "REV_SERVER_DOMAIN": "box"
       "REV_SERVER_TARGET": "{{ ansible_default_ipv4.gateway }}"
       "REV_SERVER_CIDR": "{{ '.'.join(ansible_default_ipv4.address.split('.')[0:3]) }}.0/24"
       "DNS1": "127.0.0.1#5335" # Hardcoded to our Unbound server
       "DNS2": "127.0.0.1#5335" # Hardcoded to our Unbound server
       "DNSSEC": "true" # Enable DNSSEC
-      "DOMAIN_NAME": "pihole.local"
+      "DOMAIN_NAME": "pihole.box"
     volumes:
       - "{{ docker_dir }}/{{ container_name }}/pihole:/etc/pihole"
       - "{{ docker_dir }}/{{ container_name }}/dnmasq-unbound:/etc/dnsmasq.d"
+      - "{{ docker_dir }}/{{ container_name }}/unbound.conf.d/pi-hole.conf:/etc/unbound/unbound.conf.d/pi-hole.conf"
     ports:
-      - 443:443/tcp
-      - 81:80/tcp
-      - 53:53/tcp
-      - 53:53/udp
+      - "81:80/tcp"
+      - "53:53/tcp"
+      - "53:53/udp"
     restart_policy: unless-stopped
