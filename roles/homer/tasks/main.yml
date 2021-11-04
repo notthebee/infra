@@ -66,8 +66,6 @@
     image: "b4bz/homer"
     pull: true
     state: 'started'
-    ports:
-      - "8080:8080"
     env:
       "PUID": "{{ guid }}"
       "PGID": "{{ guid }}"
@@ -85,3 +83,11 @@
     ports:
       - 3000:3000
     restart_policy: unless-stopped
+
+- name: Add {{ container_name }} to the SWAG network (reverse-proxy)
+  docker_network:
+    name: swag_network
+    connected:
+      - homer
+    appends: yes
+  when: enable_swag

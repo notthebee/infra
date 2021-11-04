@@ -35,8 +35,6 @@
       - "{{ mergerfs_root }}/Media/Cache:/data/Cache"
       - "{{ mergerfs_root }}/Media/Movies:/data/Movies"
       - "/etc/localtime:/etc/localtime:ro"
-    ports:
-      - 8096:8096
     restart_policy: unless-stopped
 
 - name: Add {{ container_name }} to the SWAG network (reverse-proxy)

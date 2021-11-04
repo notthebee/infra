@@ -35,11 +35,10 @@
       tags:
         - dns
 
-    - role: containers/duckdns
+    - role: duckdns
       when: enable_duckdns | default(False)
       tags:
         - duckdns 
-        - containers
 
     - role: containers/pihole
       when: enable_pihole | default(False)

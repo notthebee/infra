@@ -1,0 +1,6 @@
+---
+- name: Update DuckDNS IP
+  cron:
+    name: "Update DuckDNS IP"
+    minute: "*/5"
+    job: "echo url=\"https://www.duckdns.org/update?domains={{ duckdns_domain }}&token={{ duckdns_token }}&ip=\" | curl -k -K -"
