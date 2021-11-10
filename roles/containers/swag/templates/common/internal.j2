@@ -1,0 +1,7 @@
+listen 80;
+    listen 443 ssl;
+    allow {{ lan_network }};
+    deny all;
+    include /config/nginx/ssl.conf;
+    client_max_body_size 0;
+    add_header X-Robots-Tag "noindex, nofollow, nosnippet, noarchive"; 

@@ -43,3 +43,11 @@
       "DEBUG_OTAU": "0"
     restart_policy: unless-stopped
   when: zigbee_dev.files | length > 0
+
+- name: Add {{ container_name }} to the SWAG network (reverse-proxy)
+  docker_network:
+    name: swag_network
+    connected:
+      - "{{ container_name }}"
+    appends: yes
+  when: enable_swag

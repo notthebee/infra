@@ -1,6 +1,6 @@
 ---
 container_name: jellyfin
 
-dashboard_url: "http://{{ container_name }}.box"
+dashboard_url: "http://jellyfin.box"
 
 homer_category: media

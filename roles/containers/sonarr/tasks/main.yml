@@ -14,11 +14,17 @@
       "PUID": "{{ guid }}"
       "PGID": "{{ guid }}"
       "TZ": "{{ timezone }}"
-    ports:
-      - "0.0.0.0:8989:8989"
     volumes:
       - "/etc/localtime:/etc/localtime"
       - "{{ docker_dir }}/{{ container_name }}:/config"
       - "{{ mergerfs_root }}/Media/TV:/tv"
       - "{{ mergerfs_root }}/Downloads:/downloads"
     restart_policy: unless-stopped
+
+- name: Add {{ container_name }} to the SWAG network (reverse-proxy)
+  docker_network:
+    name: swag_network
+    connected:
+      - "{{ container_name }}"
+    appends: yes
+  when: enable_swag

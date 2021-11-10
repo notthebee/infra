@@ -33,8 +33,6 @@
       - seccomp:unconfined
       - apparmor:unconfined
     state: 'started'
-    ports:
-      - "2342:2342"
     shm_size: 2G
     env:
       "UID": "{{ guid }}"
@@ -74,10 +72,17 @@
       - "{{ docker_dir }}/{{ container_name }}/storage:/photoprism/storage"
     restart_policy: unless-stopped
 
-- name: Add {{ container_name }} to the Photoprism network (reverse-proxy)
+- name: Schedule a library scan at 1 AM every day
+  cron:
+    name: Scan the PhotoPrism library
+    hour: "1"
+    job: "/usr/bin/docker exec -it photoprism /photoprism/bin/photoprism index"
+
+- name: Add {{ container_name }} to the SWAG network (reverse-proxy)
   docker_network:
-    name: photoprism
+    name: swag_network
     connected:
       - "{{ container_name }}"
       - photoprism-mariadb
     appends: yes
+  when: enable_swag

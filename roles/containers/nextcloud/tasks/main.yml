@@ -54,3 +54,10 @@
       - nextcloud-redis
     appends: yes
   when: enable_swag
+
+
+- name: Schedule a Nextcloud library scan at midnight every day
+  cron:
+    name: Scan the Nextcloud library
+    hour: "0"
+    job: "docker exec -it photoprism /photoprism/bin/photoprism index"

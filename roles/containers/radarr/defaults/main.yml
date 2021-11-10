@@ -1,6 +1,6 @@
 ---
 container_name: radarr
 
-dashboard_url: "http://{{ ansible_default_ipv4.address }}:7878"
+dashboard_url: "http://radarr.box/"
 
 homer_category: media

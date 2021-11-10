@@ -1,7 +1,7 @@
 ---
 container_name: unifi
 
-dashboard_url: "https://{{ ansible_default_ipv4.address }}:8443"
+dashboard_url: "https://unifi.box"
 
 homer_category: system
 

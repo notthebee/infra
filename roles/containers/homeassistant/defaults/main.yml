@@ -1,9 +1,7 @@
 ---
-container_name: home-assistant
+container_name: homeassistant
 
-port: "8123"
-
-dashboard_url: "http://{{ ansible_default_ipv4.address }}:8123"
+dashboard_url: "http://homeassistant.box"
 
 homer_category: smarthome
 

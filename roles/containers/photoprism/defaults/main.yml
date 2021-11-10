@@ -1,6 +1,6 @@
 container_name: photoprism
 
-dashboard_url: "http://{{ ansible_default_ipv4.address }}:2342"
+dashboard_url: "http://photoprism.box"
 
 homer_category: services
 

@@ -17,6 +17,7 @@
     pull: yes
     state: 'started'
     env:
+      DNS_SERVERS: "{{ ansible_default_ipv4.address }}"
       VPNHOST: "{{ host }}"
       EMAILADDR:  "{{ email }}"
       VPNUSERNAME:  "{{ username }}"

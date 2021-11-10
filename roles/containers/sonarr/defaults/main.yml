@@ -1,6 +1,6 @@
 ---
 container_name: sonarr
 
-dashboard_url: "http://{{ ansible_default_ipv4.address }}:8989"
+dashboard_url: "http://sonarr.box"
 
 homer_category: media

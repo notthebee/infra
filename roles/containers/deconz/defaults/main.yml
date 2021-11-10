@@ -1,7 +1,7 @@
 ---
 container_name: deconz
 
-dashboard_url: "http://{{ ansible_default_ipv4.address }}:8085"
+dashboard_url: "http://deconz.box/"
 
 homer_category: smarthome
 

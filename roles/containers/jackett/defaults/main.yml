@@ -1,6 +1,7 @@
 ---
 container_name: jackett
-dashboard_url: "http://192.168.178.250:9117"
+
+dashboard_url: "http://jackett.box/"
 
 homer_category: system
 

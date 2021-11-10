@@ -38,6 +38,6 @@
       - "{{ docker_dir }}/{{ container_name }}/unbound.conf.d/pi-hole.conf:/etc/unbound/unbound.conf.d/pi-hole.conf"
     ports:
       - "81:80/tcp"
-      - "53:53/tcp"
-      - "53:53/udp"
+      - "{{ ansible_default_ipv4.address }}:53:53/tcp"
+      - "{{ ansible_default_ipv4.address }}:53:53/udp"
     restart_policy: unless-stopped

@@ -1,6 +1,6 @@
 ---
 container_name: deluge
 
-dashboard_url: "http://{{ container_name }}.box"
+dashboard_url: "http://deluge.box"
 
 homer_category: media
