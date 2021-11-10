@@ -60,11 +60,11 @@ Clone the repository:
 git clone https://github.com/notthebee/infra
 ```
 
-Copy the sample inventory and adjust the variables in `vars.yml`:
+Create a host varialbe file and adjust the variables:
 ```
 cd infra/ansible
-cp -r group_vars/sample group_vars/YOUR_HOSTNAME
-vi group_vars/YOUR_HOSTNAME/vars.yml
+mkdir -p host_vars/YOUR_HOSTNAME
+vi host_vars/YOUR_HOSTNAME/vars.yml
 ```
 
 Create a Keychain item for your Ansible Vault password (on macOS):
@@ -77,10 +77,11 @@ security add-generic-password \
 
 The `pass.sh` script will extract the Ansible Vault password from your Keychain automatically each time Ansible requests it.
 
-Encrypt the `secret.yml` file and adjust the variables:
+Create an encrypted `secret.yml` file and adjust the variables:
 ```
-ansible-vault encrypt group_vars/YOUR_HOSTNAME/secret.yml
-ansible-vault edit group_vars/YOUR_HOSTNAME/secret.yml
+touch host_vars/YOUR_HOSTNAME/secret.yml
+ansible-vault encrypt host_vars/YOUR_HOSTNAME/secret.yml
+ansible-vault edit host_vars/YOUR_HOSTNAME/secret.yml
 ```
 
 Add your custom inventory file to `hosts`:
