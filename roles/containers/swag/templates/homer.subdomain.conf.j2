@@ -1,8 +1,10 @@
 server {
     {% include "common/internal.j2" %}
+    {% include "common/params.j2" %}
     server_name homer.box;
 
     location / {
+        {% include "common/cors.j2" %}
         include /config/nginx/proxy.conf;
         include /config/nginx/resolver.conf;
         set $upstream_app homer;

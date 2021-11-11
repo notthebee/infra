@@ -41,6 +41,6 @@
   docker_network:
     name: swag_network
     connected:
-      - jellyfin
+      - "{{ container_name }}"
     appends: yes
   when: enable_swag

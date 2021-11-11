@@ -1,8 +1,10 @@
 ---
 container_name: jackett
 
-dashboard_url: "http://jackett.box/"
+dashboard_url: "https://jackett.box/"
 
 homer_category: system
 
 dashboard_name: Jackett
+
+health_url: "http://{{ ansible_default_ipv4.address }}:3000/http://jackett:9117/api/v2.0/indexers/all/results/torznab"

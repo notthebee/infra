@@ -1,19 +1,11 @@
 server {
     {% include "common/internal.j2" %}
+    {% include "common/params.j2" %}
     server_name {{ swag_urls['homeassistant'] }};
 
     location / {
-        # enable the next two lines for http auth
-        #auth_basic "Restricted";
-        #auth_basic_user_file /config/nginx/.htpasswd;
-
-        # enable the next two lines for ldap auth
-        #auth_request /auth;
-        #error_page 401 =200 /ldaplogin;
-
-        # enable for Authelia
-        #include /config/nginx/authelia-location.conf;
-
+        {% include "common/cors.j2" %}
+        add_header 'Access-Control-Allow-Methods' 'GET, POST, OPTIONS, HEAD';
         include /config/nginx/proxy.conf;
         include /config/nginx/resolver.conf;
         set $upstream_app {{ ansible_default_ipv4.address }};

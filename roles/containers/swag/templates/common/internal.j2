@@ -1,6 +1,8 @@
-listen 80;
+
+    listen 80;
     listen 443 ssl;
     allow {{ lan_network }};
+    allow 172.18.0.0/16;
     deny all;
     include /config/nginx/ssl.conf;
     client_max_body_size 0;

@@ -3,6 +3,7 @@ server {
     listen [::]:443 ssl;
 
     server_name {{ swag_urls['nextcloud'] }};
+    {% include "common/params.j2" %}
 
     include /config/nginx/ssl.conf;
 
@@ -10,6 +11,7 @@ server {
     client_max_body_size 0;
 
     location / {
+        {% include "common/cors.j2" %}
         include /config/nginx/proxy.conf;
         include /config/nginx/resolver.conf;
         set $upstream_app nextcloud;

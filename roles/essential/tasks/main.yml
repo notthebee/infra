@@ -38,10 +38,8 @@
 
 - name: Update and upgrade apt packages (Debian and Ubuntu)
   when: ansible_os_family == 'Debian'
-  apt:
-    upgrade: "yes"
-    update_cache: yes
-    cache_valid_time: 86400 
+  shell:
+    cmd: apt update && apt upgrade -y
 
 - name: Alpine specific tasks
   become: yes
@@ -114,6 +112,17 @@
 - name: Set the hostname
   hostname:
     name: "{{ inventory_hostname }}"
+
+- name: Replace the hostname entry with our own
+  ansible.builtin.lineinfile:
+    path: /etc/hosts
+    insertafter: ^127\.0\.0\.1 *localhost
+    line: "127.0.0.1 {{ inventory_hostname }}"
+    owner: root
+    group: root
+    mode: '0644' 
+
+
 
 - name: Suppress login messages
   file:

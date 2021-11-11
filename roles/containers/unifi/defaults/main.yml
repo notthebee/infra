@@ -6,3 +6,5 @@ dashboard_url: "https://unifi.box"
 homer_category: system
 
 dashboard_name: "UniFi Controller"
+
+upstream_port: "8443"

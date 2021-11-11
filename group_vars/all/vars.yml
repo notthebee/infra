@@ -154,6 +154,8 @@ ikev2_ondemand: true
 #
 # Samba
 #
+enable_samba: true
+
 samba_server_string: "{{ hostname }}"
 
 samba_users:

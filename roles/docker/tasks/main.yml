@@ -148,5 +148,13 @@
 
   - name: Restore the "{{ docker_dir }}" folder from the MergerFS array
     shell:
-      cmd: "rsync -avz --delete {{ mergerfs_root }}/docker_data {{ docker_dir }}"
+      cmd: "rsync -avz --delete {{ mergerfs_root }}/docker_data/data/ {{ docker_dir }}/"
     when: persistent_data_find.matched < 20 or persistent_data.stat.exists == false
+
+  - name: Chmod the data folder
+    file:
+      dest: "{{ docker_dir }}"
+      state: directory
+      owner: "{{ username }}"
+      group: "{{ username }}"
+      recurse: yes

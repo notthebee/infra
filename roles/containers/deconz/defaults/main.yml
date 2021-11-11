@@ -6,3 +6,5 @@ dashboard_url: "http://deconz.box/"
 homer_category: smarthome
 
 dashboard_name: "Phoscon-GW"
+
+upstream_port: "8085"

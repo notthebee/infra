@@ -1,25 +1,4 @@
 ---
-# This task list is intended to be imported by playbooks, before any
-# other tasks are performed.  It lets us determine whether the configured SSH
-# port is available, and lets us fall back to the default port if necessary.
-#
-# The use case here is when a role in the playbook is configured to change the
-# sshd port, but the first time the role is executed the host is still
-# listening on the default port.  With this check in place, we can fall back
-# to the default port on the first run, and then on subsequent runs use the
-# configured port.
-#
-# Be advised that running this task list in a `gather_facts: false` state as
-# required means simple failures can go unexplained.  For example, if python2
-# is not available, the `wait_for_connection` calls will just time out without
-# explanation.
-#
-# Execute these tasks as the first thing in a playbook like so:
-# - hosts: some-host-group
-#   gather_facts: false
-#   tasks:
-#     - import_tasks: _sshd_port_juggling.yml
-
 - name: SSH Port Juggle | Try connecting via SSH
   wait_for_connection:
     timeout: 5

@@ -16,11 +16,14 @@
     files_matching: main.yml
     name: "{{ item.path.split('/')[-1] }}"
   with_items: "{{ containers.files }}"
-  no_log: true
+
+- name: Print out
+  debug:
+    var: "{{ containers.files }}"
 
 - name: Populate the dictionary of all containers
   set_fact:
-    homer_urls: "{{ homer_urls | default([]) + [{ 'logo': '/assets/tools/homer-icons/' + item.path.split('/')[-1] + '.png', 'name': lookup('vars', item.path.split('/')[-1])['dashboard_name'] | default(item.path.split('/')[-1] | title), 'url' : lookup('vars', item.path.split('/')[-1])['dashboard_url'] | default(''), 'endpoint': 'http://' + ansible_default_ipv4['address'] + ':3000/' + lookup('vars', item.path.split('/')[-1])['dashboard_url'] | default(''), 'category': lookup('vars', item.path.split('/')[-1])['homer_category'] | default ('') }] }}"
+    homer_urls: "{{ homer_urls | default([]) + [{ 'logo': '/assets/tools/homer-icons/' + item.path.split('/')[-1] + '.png', 'name': lookup('vars', item.path.split('/')[-1])['dashboard_name'] | default(item.path.split('/')[-1] | title), 'url' : lookup('vars', item.path.split('/')[-1])['dashboard_url'] | default(''), 'endpoint': lookup('vars', item.path.split('/')[-1])['health_url'] | default(''), 'category': lookup('vars', item.path.split('/')[-1])['homer_category'] | default ('') }] }}"
   when: lookup('vars', 'enable_' + item.path.split('/')[-1]) | default(False)
   with_items: "{{ containers.files }}"
 
@@ -89,5 +92,6 @@
     name: swag_network
     connected:
       - homer
+      - cors-container
     appends: yes
   when: enable_swag

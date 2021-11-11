@@ -72,14 +72,17 @@
       tags: nosnaps
 
   roles:
-    - role: filesystems/mounts
-      tags:
-        - mounts
-
     - role: essential
       tags: 
         - essential
 
+    - role: filesystems/mergerfs
+      tags:
+      - mergerfs
+      
+    - role: filesystems/mounts
+      tags:
+        - mounts
     # MSMTP (for SMART notifications)
     - role: chriswayg.msmtp-mailer
       tags: 
@@ -92,10 +95,6 @@
     - role: oefenweb.dns
       tags:
         - dns
-
-    - role: filesystems/mergerfs
-      tags:
-      - mergerfs
 
     - role: ironicbadger.ansible_role_snapraid
       tags:
@@ -209,12 +208,6 @@
         - containers
       when: enable_wireguard | default(False)
 
-    - role: containers/homeassistant
-      tags: 
-        - homeassistant
-        - smarthome
-        - containers
-      when: enable_homeassistant | default(False)
 
     - role: containers/deconz
       tags: 
@@ -222,6 +215,13 @@
         - smarthome
         - containers
       when: enable_deconz | default(False)
+
+    - role: containers/homeassistant
+      tags: 
+        - homeassistant
+        - smarthome
+        - containers
+      when: enable_homeassistant | default(False)
 
     # Samba
     - role: bertvv.samba

@@ -37,7 +37,7 @@
 
   - name: Install the deb package 
     shell:
-      cmd: cd /tmp/hd-idle && dpkg -y -i hd-idle*.deb
+      cmd: cd /tmp/hd-idle && dpkg -i hd-idle*.deb
 
 - name: Install the hd-idle configuration file
   template: 

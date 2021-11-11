@@ -4,6 +4,7 @@ server {
     server_name {{ swag_urls['sonarr'] }};
 
     location / {
+        {% include "common/cors.j2" %}
         include /config/nginx/proxy.conf;
         include /config/nginx/resolver.conf;
         set $upstream_app sonarr;
