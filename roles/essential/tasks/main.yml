@@ -1,7 +1,4 @@
 ---
-- name: Include OS-specific variables
-  include_vars: "{{ ansible_facts['os_family'] }}.yml"
-
 - name: Ubuntu specific tasks
   become: yes
   when: ansible_facts['distribution'] == 'Ubuntu'
@@ -40,27 +37,6 @@
   when: ansible_os_family == 'Debian'
   shell:
     cmd: apt update && apt upgrade -y
-
-- name: Alpine specific tasks
-  become: yes
-  when: ansible_facts['distribution'] == 'Alpine'
-  block:
-  - name: Enable community repository
-    replace:
-      path: /etc/apk/repositories
-      regexp: '^#(http.*community)'
-      replace: '\1'
-
-  - name: Update and upgrade apk packages
-    apk:
-      upgrade: yes
-      update_cache: yes
-
-  - name: Set the default shell
-    replace:
-      path: /etc/passwd
-      regexp: "/home/{{ username }}:/bin/ash"
-      replace: "/home/{{ username }}:{{ shell }}"
 
 - name: Check if reboot required
   stat:
@@ -121,8 +97,6 @@
     owner: root
     group: root
     mode: '0644' 
-
-
 
 - name: Suppress login messages
   file:

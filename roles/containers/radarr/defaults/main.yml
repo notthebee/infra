@@ -4,5 +4,3 @@ container_name: radarr
 dashboard_url: "http://radarr.box/"
 
 homer_category: media
-
-upstream_port: "7878"

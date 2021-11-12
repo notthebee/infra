@@ -1,0 +1,10 @@
+---
+container_name: openbooks
+
+dashboard_url: "http://openbooks.box/"
+
+health_url: "http://{{ ansible_default_ipv4.address }}:3000/http://openbooks.box"
+
+homer_category: media
+
+dashboard_name: "OpenBooks"

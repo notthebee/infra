@@ -1,7 +1,0 @@
----
-docker_packages:
-  - 'curl'
-  - 'py3-setuptools'
-  - 'py3-pip'
-  - 'docker'
-  - 'py3-virtualenv'

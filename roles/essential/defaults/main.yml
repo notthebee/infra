@@ -1,6 +1,8 @@
 ---
 extra_packages:
   - fish
+  - iperf3
+  - speedtest-cli
   - htop
   - stow
   - git

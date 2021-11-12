@@ -4,5 +4,3 @@ container_name: deluge
 dashboard_url: "http://deluge.box"
 
 homer_category: media
-
-upstream_port: "8112"

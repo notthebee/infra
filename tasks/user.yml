@@ -28,7 +28,6 @@
     name: "sambashare"
     state: present
  
- 
 - name: Append the samba group
   when: enable_samba | default(False) 
   become: yes
@@ -66,3 +65,4 @@
     shell: /sbin/nologin
   with_items: "{{ additional_users }}"
   when: additional_users is defined
+  no_log: true

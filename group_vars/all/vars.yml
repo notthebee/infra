@@ -109,6 +109,8 @@ enable_sonarr: true
 
 enable_radarr: true
 
+enable_openbooks: true
+
 enable_jackett: true
 
 enable_deluge: true

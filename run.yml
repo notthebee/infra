@@ -208,6 +208,11 @@
         - containers
       when: enable_wireguard | default(False)
 
+    - role: containers/openbooks
+      tags: 
+        - openbooks
+        - containers
+      when: enable_openbooks | default(False)
 
     - role: containers/deconz
       tags: 

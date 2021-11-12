@@ -5,5 +5,3 @@ dashboard_url: "http://photoprism.box"
 homer_category: services
 
 dashboard_name: "PhotoPrism"
-
-upstream_port: "2342"

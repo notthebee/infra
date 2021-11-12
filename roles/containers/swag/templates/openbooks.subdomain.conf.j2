@@ -1,0 +1,16 @@
+server {
+    {% include "common/internal.j2" %}
+    {% include "common/params.j2" %}
+    server_name {{ swag_urls['openbooks'] }};
+
+    location / {
+        {% include "common/cors.j2" %}
+        include /config/nginx/proxy.conf;
+        include /config/nginx/resolver.conf;
+        set $upstream_app openbooks;
+        set $upstream_port 80;
+        set $upstream_proto http;
+        proxy_pass $upstream_proto://$upstream_app:$upstream_port;
+        proxy_buffering off;
+    }
+}
