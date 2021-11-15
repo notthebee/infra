@@ -1,5 +1,5 @@
 ---
-docker_packages:
+docker_deps:
   - 'apt-transport-https'
   - 'ca-certificates'
   - 'curl'
@@ -8,3 +8,8 @@ docker_packages:
   - 'virtualenv'
   - 'python3-setuptools'
   - 'python3-pip'
+  - 'docker-compose'
+
+docker_packages:
+  - 'docker-ce'
+  - 'docker-compose'

@@ -1,7 +1,7 @@
 ---
 container_name: vaultwarden
 
-dashboard_url: "https://bitwarden.{{ host }}"
+dashboard_url: "https://{{ subdomains['bitwarden'] }}.{{ host }}"
 
 homer_category: services
 

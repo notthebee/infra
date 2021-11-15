@@ -1,0 +1,25 @@
+---
+- name: Make sure ddclient is installed
+  apt:
+    name: ddclient
+    state: latest
+    update_cache: yes
+
+
+- name: Install the configuration file
+  template:
+    src: ddclient.conf.j2
+    dest: /etc/ddclient.conf
+  register: config
+
+- name: Make sure the ddclient service is started & enabled
+  service:
+    name: ddclient
+    state: started
+    enabled: yes
+
+- name: Restart the ddclient service on config change
+  service:
+    name: ddclient
+    state: restarted
+  when: config.changed

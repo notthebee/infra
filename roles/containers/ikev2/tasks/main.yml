@@ -18,7 +18,7 @@
     state: 'started'
     env:
       DNS_SERVERS: "{{ ansible_default_ipv4.address }}"
-      VPNHOST: "{{ host }}"
+      VPNHOST: "{{ vpn_host }}"
       EMAILADDR:  "{{ email }}"
       VPNUSERNAME:  "{{ username }}"
       VPNPASSWORD:  "{{ vpn_password }}"

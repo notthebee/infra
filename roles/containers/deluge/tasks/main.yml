@@ -37,6 +37,7 @@
       "PGID": "{{ guid }}"
       "TZ": "{{ timezone }}"
     ports:
+      - "8112:8112"
       - "58846:58846"
     volumes:
       - "{{ docker_dir }}/{{ container_name }}/data:/data"

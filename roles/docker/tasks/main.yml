@@ -5,7 +5,7 @@
 - name: Install required system packages
   package: 
     state: latest
-    name: "{{ docker_packages }}"
+    name: "{{ docker_deps }}"
 
 - name: Install Docker (Ubuntu)
   when: ansible_facts['distribution'] == 'Ubuntu'
@@ -79,7 +79,7 @@
   when: ansible_facts['os_family'] == 'Debian'
   apt: 
     update_cache: yes 
-    name: docker-ce 
+    name: "{{ docker_packages }}"
     state: latest
 
 - name: Ensure group docker exists

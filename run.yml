@@ -12,8 +12,6 @@
     - import_tasks: tasks/user.yml
       tags:
         - user
-
-
 # PiHole/IKEv2 server
 - hosts: coda
   become: yes
@@ -35,10 +33,22 @@
       tags:
         - dns
 
+    - role: ddclient
+      when: enable_ddclient | default(False)
+      tags:
+        - ddclient
+
     - role: duckdns
       when: enable_duckdns | default(False)
       tags:
         - duckdns 
+
+    - role: containers/cloudflare-ddns
+      tags: 
+        - cloudflare-ddns
+        - containers
+      when: enable_cloudflare | default(False)
+
 
     - role: containers/pihole
       when: enable_pihole | default(False)

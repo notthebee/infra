@@ -13,8 +13,6 @@ dns_nameservers: [9.9.9.9, 149.112.112.112]
 
 dot_nameservers: [185.95.218.42@853#dns.digitale-gesellschaft.ch, 94.140.15.140@853#dns-unfiltered.adguard.com]
 
-host: "{{ duckdns_domain }}.duckdns.org"
-
 ntp_timezone: "{{ timezone }}"
 
 locale: en_US.UTF-8
@@ -119,7 +117,13 @@ enable_bitwarden: true
 
 enable_photoprism: true
 
-enable_duckdns: true
+enable_duckdns: false
+
+enable_cloudflare: true
+
+enable_piped: true
+
+enable_ddclient: true
 
 enable_homer: true
 
