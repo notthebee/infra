@@ -18,6 +18,21 @@
   with_items: "{{ containers.files }}"
   no_log: true
 
+- name: Install python3-passlib
+  package:
+    name: python3-passlib
+    state: latest
+  when: swag_htpasswd_user is defined and swag_htpasswd_password is defined
+
+- name: Populate the .htpasswd file
+  htpasswd:
+    path: "{{ docker_dir }}/{{ container_name }}/config/nginx/.htpasswd"
+    name: "{{ swag_htpasswd_user }}"
+    password: "{{ swag_htpasswd_password }}"
+    owner: root
+    mode: 0640
+  when: swag_htpasswd_user is defined and swag_htpasswd_password is defined
+
 - name: Populate the dictionary of all containers
   set_fact:
     swag_urls: "{{ swag_urls | default({}) | combine({ item.path.split('/')[-1] : lookup('vars', item.path.split('/')[-1])['dashboard_url'] | default('') | regex_replace('https?://|/*', '') }) }}"
@@ -28,13 +43,18 @@
   docker_network:
     name: swag_network
 
-- name: Copy the SWAG config files
+- name: Install the SWAG config files
   template:
     src: "{{ item }}"
     dest: "{{ docker_dir }}/{{ container_name }}/config/nginx/proxy-confs/{{ item | basename | regex_replace('.j2$', '') }}"
   with_fileglob:
     - templates/*.j2
   register: swag_config
+
+- name: Install the DNS config file
+  template:
+    src: "dns-conf/cloudflare.ini.j2"
+    dest: "{{ docker_dir }}/{{ container_name }}/config/dns-conf/cloudflare.ini"
 
 - name: Make sure the SWAG container is created and running
   docker_container:
@@ -51,12 +71,10 @@
       "TZ": "{{ timezone }}"
       "URL": "{{ host }}"
       "SUBDOMAINS": "{{ ','.join(subdomains.values()) }}"
-      "SUBDOMAINS_ONLY": "false"
-      "VALIDATION": "http"
-      "CERTPROVIDER": "letsencrypt"
+      "VALIDATION": "dns"
+      "DNSPLUGIN": "cloudflare"
       "EMAIL": "{{ email }}"
     ports:
-      - "80:80"
       - "443:443"
     volumes:
       - "{{ docker_dir }}/{{ container_name }}/config:/config"

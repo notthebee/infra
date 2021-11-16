@@ -119,9 +119,11 @@ enable_photoprism: true
 
 enable_duckdns: false
 
-enable_cloudflare: true
+enable_cloudflare-ddns: true
 
-enable_piped: true
+enable_youtransfer: true
+
+enable_piped: false
 
 enable_ddclient: true
 

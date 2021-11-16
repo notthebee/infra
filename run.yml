@@ -140,6 +140,13 @@
         - containers
       when: enable_authelia | default(False)
 
+    - role: containers/youtransfer
+      tags:
+        - youtransfer
+        - containers
+      when: enable_youtransfer | default(False)
+
+
     - role: containers/swag
       tags: 
         - swag

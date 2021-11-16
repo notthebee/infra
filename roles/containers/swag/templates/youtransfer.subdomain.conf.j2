@@ -2,22 +2,26 @@ server {
     listen 443 ssl;
     listen [::]:443 ssl;
 
-    server_name {{ swag_urls['nextcloud'] }};
-    {% include "common/params.j2" %}
+    server_name {{ swag_urls['youtransfer'] }};
 
+    {% include "common/params.j2" %}
     include /config/nginx/ssl.conf;
 
-    client_max_body_size 0;
+    client_max_body_size 128M;
+
 
     location / {
         {% include "common/cors.j2" %}
+        auth_basic "Restricted";
+        auth_basic_user_file /config/nginx/.htpasswd;
         include /config/nginx/proxy.conf;
         include /config/nginx/resolver.conf;
-        set $upstream_app nextcloud;
-        set $upstream_port 443;
-        set $upstream_proto https;
+        set $upstream_app youtransfer;
+        set $upstream_port 5000;
+        set $upstream_proto http;
         proxy_pass $upstream_proto://$upstream_app:$upstream_port;
 
-        proxy_max_temp_file_size 2048m;
     }
+
+
 }

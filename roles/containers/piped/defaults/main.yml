@@ -1,0 +1,11 @@
+dashboard_url: "https://{{ subdomains['piped'] }}.{{ host }}"
+
+container_name: piped
+
+frontend_url: "{{ subdomains['piped'] }}.{{ host }}"
+
+proxy_url: "{{ subdomains['piped-proxy'] }}.{{ host }}"
+
+api_url: "{{ subdomains['piped-api'] }}.{{ host }}"
+
+homer_category: services

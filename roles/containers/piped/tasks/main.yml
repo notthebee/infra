@@ -1,0 +1,78 @@
+---
+- name: Clone the piped-docker repository
+  git:
+    clone: yes
+    repo: https://github.com/TeamPiped/Piped-Docker
+    dest: "{{ docker_dir }}/{{ container_name }}"
+  ignore_errors: yes
+
+- name: Populate the frontend variable in the configure-instance.sh file
+  lineinfile:
+    search_string: "read frontend"
+    path: "{{ docker_dir }}/{{ container_name }}/configure-instance.sh"
+    line: "frontend={{ frontend_url }}"
+    state: present
+
+- name: Populate the backend variable in the configure-instance.sh file
+  lineinfile:
+    search_string: "read backend"
+    path: "{{ docker_dir }}/{{ container_name }}/configure-instance.sh"
+    line: "backend={{ api_url }}"
+    state: present
+
+- name: Populate the proxy variable in the configure-instance.sh file
+  lineinfile:
+    search_string: "read proxy"
+    path: "{{ docker_dir }}/{{ container_name }}/configure-instance.sh"
+    line: "proxy={{ proxy_url }}"
+    state: present
+
+- name: Populate the reverseproxy variable in the configure-instance.sh file
+  lineinfile:
+    search_string: "read reverseproxy"
+    path: "{{ docker_dir }}/{{ container_name }}/configure-instance.sh"
+    line: "reverseproxy=nginx"
+    state: present
+
+- name: Fix the 'sed' command in the configure-instance.sh file
+  lineinfile:
+    regexp: "sed.*"
+    state: absent
+    path: "{{ docker_dir }}/{{ container_name }}/configure-instance.sh"
+
+- name: Fix the 'sed' command in the configure-instance.sh file
+  lineinfile:
+    line: "{{ item }}"
+    state: present
+    insertafter: "cp -r template/ config/"
+    path: "{{ docker_dir }}/{{ container_name }}/configure-instance.sh"
+  with_items:
+    - sed -i "s|FRONTEND_HOSTNAME|$frontend|g" config/*
+    - sed -i "s|BACKEND_HOSTNAME|$backend|g" config/*
+    - sed -i "s|PROXY_HOSTNAME|$proxy|g" config/*
+
+- name: Change the default PostgreSQL password
+  replace:
+    path: "{{ item }}"
+    regexp: "changeme"
+    replace: "{{ piped_postgresql_password }}"
+  with_items:
+    - "{{ docker_dir }}/{{ container_name }}/template/config.properties"
+    - "{{ docker_dir }}/{{ container_name }}/template/docker-compose.nginx.yml"
+    - "{{ docker_dir }}/{{ container_name }}/template/docker-compose.caddy.yml"
+
+- name: Run the configure-instance.sh script
+  shell:
+    cmd: "cd {{docker_dir }}/{{ container_name }} && bash configure-instance.sh"
+
+- name: Add "version" parameter to the docker-compose file
+  lineinfile:
+    line: "version: '3'"
+    state: present
+    insertbefore: BOF
+    path: "{{ docker_dir }}/{{ container_name }}/docker-compose.yml"
+
+
+- name: Run the docker-compose file
+  shell:
+    cmd: "cd {{docker_dir }}/{{ container_name }} && docker-compose up -d"

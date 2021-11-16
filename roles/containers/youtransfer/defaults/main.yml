@@ -1,0 +1,8 @@
+---
+container_name: youtransfer
+
+dashboard_name: YouTransfer
+
+dashboard_url: "https://{{ subdomains['youtransfer'] }}.{{ host }}"
+
+homer_category: services

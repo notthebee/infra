@@ -12,6 +12,8 @@
       "flame.url": "{{ dashboard_url }}"
       "flame.icon": "custom"
     env:
+      "PUID": "{{ guid }}"
+      "PGID": "{{ guid }}"
       "TZ": "{{ timezone }}"
       "MYSQL_ROOT_PASSWORD": "{{ mysql_root_password }}"
       "MYSQL_DATABASE": "{{ mysql_db }}"
