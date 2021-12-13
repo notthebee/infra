@@ -1,0 +1,6 @@
+---
+container_name: booksonic
+
+dashboard_url: "http://booksonic.box"
+
+homer_category: media

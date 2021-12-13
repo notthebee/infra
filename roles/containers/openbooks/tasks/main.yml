@@ -10,8 +10,6 @@
       "flame.name": "{{ dashboard_name }}"
       "flame.url": "{{ dashboard_url }}"
       "flame.icon": "custom"
-    volumes:
-      - "{{ mergerfs_root }}/Downloads/Books:/books"
     env:
       "TZ": "{{ timezone }}"
     restart_policy: unless-stopped

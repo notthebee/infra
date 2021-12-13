@@ -47,9 +47,32 @@
   template:
     src: "{{ item }}"
     dest: "{{ docker_dir }}/{{ container_name }}/config/nginx/proxy-confs/{{ item | basename | regex_replace('.j2$', '') }}"
+  when: lookup('vars', 'enable_' + (item | basename).split('.')[0]) | default(False)
   with_fileglob:
     - templates/*.j2
   register: swag_config
+
+- name: Create a list of variables files that were deployed
+  set_fact:
+    installed_templates: "{{installed_templates | default([]) + [ item.dest ]}}" 
+  with_items: "{{ swag_config.results }}"
+  when: item.skipped is not defined
+
+- name: List all config files in the target folder
+  find:
+    path: "{{ docker_dir }}/{{ container_name }}/config/nginx/proxy-confs/"
+    patterns:
+      - ".*\\.conf(?!\\.sample)"
+    use_regex: yes
+  register: found_files
+
+- name: Remove config files for disabled services
+  file: 
+    path: "{{ item.path }}"
+    state: absent
+  when: item.path not in installed_templates
+  with_items: "{{ found_files['files'] }}"
+  register: removed_swag_config
 
 - name: Install the DNS config file
   template:
@@ -76,6 +99,7 @@
       "EMAIL": "{{ email }}"
     ports:
       - "443:443"
+      - "80:80"
     volumes:
       - "{{ docker_dir }}/{{ container_name }}/config:/config"
     restart_policy: unless-stopped
@@ -92,4 +116,4 @@
     state: started
     restart: yes
   when:
-    swag_config.changed
+    swag_config.changed or removed_swag_config.changed

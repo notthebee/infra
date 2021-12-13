@@ -195,11 +195,29 @@
         - containers
       when: enable_sonarr | default(False)
 
+    - role: containers/readarr
+      tags: 
+        - readarr
+        - containers
+      when: enable_readarr | default(False)
+
+    - role: containers/lidarr
+      tags: 
+        - lidarr
+        - containers
+      when: enable_lidarr | default(False)
+
     - role: containers/radarr
       tags: 
         - radarr
         - containers
       when: enable_radarr | default(False)
+
+    - role: containers/booksonic
+      tags: 
+        - booksonic
+        - containers
+      when: enable_booksonic | default(False)
 
     - role: containers/plex
       tags: 

@@ -91,55 +91,79 @@ security_autoupdate_mail_on_error: true
 #
 # Enable/disable individual Docker containers
 #
+
+# Home automation
+
 enable_deconz: true
 
 enable_homeassistant: true
+
+# Media
 
 enable_plex: false
 
 enable_jellyfin: true
 
-enable_unifi: false
+enable_photoprism: true
 
-enable_authelia: true
+enable_booksonic: true
+
+# Yo-ho-ho
+
+enable_deluge: true
 
 enable_sonarr: true
 
 enable_radarr: true
 
+enable_lidarr: false
+
+enable_readarr: false
+
 enable_openbooks: true
+
 
 enable_jackett: true
 
-enable_deluge: true
+# Public-facing services
+
+enable_nextcloud: true
 
 enable_bitwarden: true
 
-enable_photoprism: true
+enable_youtransfer: false
+
+enable_swag: true
+
+# DDNS
 
 enable_duckdns: false
 
 enable_cloudflare-ddns: true
 
-enable_youtransfer: true
-
-enable_piped: false
-
 enable_ddclient: true
+
+# VPN
+
+enable_wireguard: true
+
+enable_ikev2: true
+
+# Homepages
 
 enable_homer: true
 
 enable_flame: false
 
-enable_nextcloud: true
+# Misc
 
-enable_swag: true
+enable_unifi: false
+
+enable_authelia: true
+
+enable_piped: false
 
 enable_pihole: true
-
-enable_wireguard: true
-
-enable_ikev2: true
 
 enable_watchtower: true
 
@@ -236,6 +260,7 @@ mergerfs_root: /mnt/storage
 disks:
   - { path: /mnt/data1, src: /dev/disk/by-label/Data1, content: true }
   - { path: /mnt/data2, src: /dev/disk/by-label/Data2, content: true }
+  - { path: /mnt/data3, src: /dev/disk/by-label/Data3, content: true }
 
 cache_disks:
   - { path: /mnt/cache1, src: /dev/disk/by-label/Cache1, content: true }

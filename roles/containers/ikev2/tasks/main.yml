@@ -38,5 +38,5 @@
   synchronize:
     mode: pull
     delete: yes
-    src: "{{ docker_dir }}/{{ container_name }}/config/{{ host }}.mobileconfig"
-    dest: "~/.ansible/ikev2/{{ host }}.mobileconfig"
+    src: "{{ docker_dir }}/{{ container_name }}/config/{{ vpn_host }}.mobileconfig"
+    dest: "~/.ansible/ikev2/{{ vpn_host }}.mobileconfig"

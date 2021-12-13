@@ -18,6 +18,6 @@ server {
         set $upstream_proto https;
         proxy_pass $upstream_proto://$upstream_app:$upstream_port;
 
-        proxy_max_temp_file_size 2048m;
+        proxy_max_temp_file_size 100000m;
     }
 }

@@ -2,7 +2,7 @@
 - name: Make sure the {{ container_name }} container is created and running
   docker_container:
     name: "{{ container_name }}"
-    image: "ghcr.io/linuxserver/sonarr"
+    image: "ghcr.io/linuxserver/readarr:nightly"
     pull: yes
     labels:
       "flame.type": "application"
@@ -15,13 +15,12 @@
       "PGID": "{{ guid }}"
       "TZ": "{{ timezone }}"
     volumes:
-      - "/etc/localtime:/etc/localtime"
+      - "/etc/localtime:/etc/localtime:ro"
       - "{{ docker_dir }}/{{ container_name }}:/config"
-      - "{{ mergerfs_root }}/Media/TV:/tv"
+      - "{{ mergerfs_root }}/Media/Books:/books"
+      - "{{ mergerfs_root }}/Media/Audiobooks:/audiobooks"
       - "{{ mergerfs_root }}/Downloads:/downloads"
     restart_policy: unless-stopped
-    ports:
-      - 8989:8989
 
 - name: Add {{ container_name }} to the SWAG network (reverse-proxy)
   docker_network:
