@@ -1,4 +1,8 @@
 ---
+- name: Import the colorscheme variables
+  include_vars:
+    file: "vars/colorschemes/{{ colorscheme | lower }}.yml"
+
 - name: Get a list of containers
   delegate_to: localhost
   become: no
@@ -54,7 +58,6 @@
     dest: "{{ docker_dir }}/{{ container_name }}"
     owner: "{{ username }}"
     group: "{{ username }}"
-
 
 - name: Generate the Homer config file
   template:

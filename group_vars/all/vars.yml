@@ -39,6 +39,8 @@ enable_pikvm: true
 
 spindown_time: 600 # in seconds
 
+colorscheme: nord
+
 #
 # Apt mirrors
 #

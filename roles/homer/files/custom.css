@@ -47,3 +47,15 @@ body #app .card {
 .card-content {
   height: 100% !important;
 }
+
+.status.offline::before {
+  background-color: var(--status-offline) !important;
+  border: unset !important;
+  box-shadow: 0 0 5px 1px var(--status-offline) !important;
+}
+
+.status.online::before {
+  background-color: var(--status-online) !important;
+  border: unset !important;
+  box-shadow: 0 0 5px 1px var(--status-online) !important;
+}

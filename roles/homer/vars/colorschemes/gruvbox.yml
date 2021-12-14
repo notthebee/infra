@@ -1,0 +1,13 @@
+highlight_primary: "#3c3836"
+highlight_secondary: "#282828"
+highlight_hover: "#32302f"
+background: "#1d2021"
+card_background: "#282828"
+text: "#a89984"
+text_header: "#a89984"
+text_title: "#ebdbb2"
+text_subtitle: "#ebdbb2"
+card_shadow: rgba(0, 0, 0, 0.4)
+link_hover: "#fabd2f"
+status_offline: "#cc241d"
+status_online: "#98971a"
