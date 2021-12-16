@@ -1,6 +1,19 @@
 @charset "UTF-8";
 @import url('https://fonts.googleapis.com/css2?family=Open+Sans:wght@300;400;600;700&display=swap');
 
+body .no-footer #main-section {
+  background-color: rgba(0, 0, 0 , 0.15) !important;
+  display: flex;
+  flex-grow: 1;
+}
+body #app {
+  display: flex;
+  flex-direction: column;
+}
+
+footer {
+  display: none;
+}
 body, h1, h2, p, .title {
   font-family: Open Sans !important;
   font-weight: 400 !important;

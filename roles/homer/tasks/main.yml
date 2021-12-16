@@ -1,7 +1,11 @@
 ---
-- name: Import the colorscheme variables
-  include_vars:
-    file: "vars/colorschemes/{{ colorscheme | lower }}.yml"
+- name: Import Xresources variables
+  include_role:
+    name: xresources
+
+- name: Print out
+  debug: 
+    var: colors.color0
 
 - name: Get a list of containers
   delegate_to: localhost
@@ -20,10 +24,6 @@
     files_matching: main.yml
     name: "{{ item.path.split('/')[-1] }}"
   with_items: "{{ containers.files }}"
-
-- name: Print out
-  debug:
-    var: "{{ containers.files }}"
 
 - name: Populate the dictionary of all containers
   set_fact:

@@ -6,4 +6,6 @@ container_name: nextcloud
 
 dashboard_url: "https://{{ subdomains['nextcloud'] }}.{{ host }}"
 
+health_url: "http://{{ ansible_default_ipv4.address }}:3000/https://{{ subdomains['nextcloud'] }}.{{ host }}"
+
 homer_category: services

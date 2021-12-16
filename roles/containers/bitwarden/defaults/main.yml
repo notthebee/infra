@@ -6,3 +6,5 @@ dashboard_url: "https://{{ subdomains['bitwarden'] }}.{{ host }}"
 homer_category: services
 
 dashboard_name: Bitwarden
+
+health_url: "http://{{ ansible_default_ipv4.address }}:3000/https://{{ subdomains['bitwarden'] }}.{{ host }}"
