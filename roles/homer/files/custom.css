@@ -1,8 +1,7 @@
 @charset "UTF-8";
-@import url('https://fonts.googleapis.com/css2?family=Open+Sans:wght@300;400;600;700&display=swap');
+@import url("https://fonts.googleapis.com/css2?family=Open+Sans:wght@300;400;600;700&display=swap");
 
 body .no-footer #main-section {
-  background-color: rgba(0, 0, 0 , 0.15) !important;
   display: flex;
   flex-grow: 1;
 }
@@ -14,24 +13,29 @@ body #app {
 footer {
   display: none;
 }
-body, h1, h2, p, .title {
+body,
+h1,
+h2,
+p,
+.title {
   font-family: Open Sans !important;
   font-weight: 400 !important;
-  }
+}
 
 p.title {
-  font-weight: 700 !important
+  font-weight: 700 !important;
 }
 
 nav {
-	display: none !important;
+  display: none !important;
 }
 body #bighead .first-line .logo img {
-    border-radius: 50%;
+  border-radius: 50%;
 }
-body #app .card, body #app .card:hover, body #app .message {
+body #app .card,
+body #app .card:hover,
+body #app .message {
   box-shadow: unset;
-  
 }
 body .card {
   box-shadow: unset;
@@ -47,7 +51,8 @@ body #app .card {
   width: 36px;
   height: 36px;
 }
-.status.online, .status.offline {
+.status.online,
+.status.offline {
   position: absolute;
   right: 12px;
   font-size: 0 !important;
@@ -72,3 +77,4 @@ body #app .card {
   border: unset !important;
   box-shadow: 0 0 5px 1px var(--status-online) !important;
 }
+

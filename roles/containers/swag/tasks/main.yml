@@ -39,6 +39,10 @@
   when: lookup('vars', 'enable_' + item.path.split('/')[-1]) | default(False)
   with_items: "{{ containers.files }}"
 
+- name: Print out
+  debug:
+    var: swag_urls
+
 - name: Create a SWAG network, add all the containers to be reverse-proxied into it
   docker_network:
     name: swag_network
@@ -117,3 +121,18 @@
     restart: yes
   when:
     swag_config.changed or removed_swag_config.changed
+
+- name: Update PiHole's DNS config
+  template:
+    src: "pihole/05-pihole-custom-cname.conf.j2"
+    dest: "{{ docker_dir }}/pihole/dnmasq-unbound/05-pihole-custom-cname.conf"
+  when: 
+    lookup('vars', 'enable_pihole') | default(False)
+
+- name: Update PiHole's DNS config on coda
+  delegate_to: coda
+  template:
+    src: pihole/05-pihole-custom-cname.conf.j2
+    dest: "{{ docker_dir }}/pihole/dnmasq-unbound/05-pihole-custom-cname.conf"
+  when: 
+    hostvars['coda']['enable_pihole']

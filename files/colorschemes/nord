@@ -7,8 +7,8 @@
 ! License:    MIT
 
 #define nord0 #2E3440
-#define nord1 #3B4252
-#define nord2 #434C5E
+#define nord1 #323946
+#define nord2 #323946
 #define nord3 #4C566A
 #define nord4 #D8DEE9
 #define nord5 #E5E9F0

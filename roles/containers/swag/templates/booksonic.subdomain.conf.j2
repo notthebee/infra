@@ -3,6 +3,7 @@ server {
     {% include "common/params.j2" %}
     server_name {{ swag_urls['booksonic'] }};
 
+    include /config/nginx/authelia-server.conf;
     location / {
         {% include "common/cors.j2" %}
         include /config/nginx/proxy.conf;

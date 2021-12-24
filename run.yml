@@ -12,6 +12,8 @@
     - import_tasks: tasks/user.yml
       tags:
         - user
+
+
 # PiHole/IKEv2 server
 - hosts: coda
   become: yes
@@ -71,6 +73,8 @@
     - role: geerlingguy.security
       tags: 
         - security
+
+
 
 # Home server/NAS
 - hosts: fragile
@@ -133,6 +137,12 @@
         - unifi
         - containers
       when: enable_unifi | default(False)
+
+    - role: containers/pihole
+      when: enable_pihole | default(False)
+      tags:
+        - pihole 
+        - containers
 
     - role: containers/authelia
       tags:

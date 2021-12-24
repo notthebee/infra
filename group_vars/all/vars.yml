@@ -37,9 +37,11 @@ boot_drive_serial: ""
 
 enable_pikvm: true
 
+pikvm_address: pikvm.box
+
 spindown_time: 600 # in seconds
 
-colorscheme: solarized
+colorscheme: nord
 
 #
 # Apt mirrors
@@ -203,6 +205,11 @@ samba_global_include: global-include.conf
 samba_apple_extensions: yes 
 
 samba_mitigate_cve_2017_7494: false
+
+samba_server_max_protocol: "SMB3"
+
+samba_server_min_protocol: "SMB3"
+
 samba_shares:
   - name: Trash
     guest_ok: no

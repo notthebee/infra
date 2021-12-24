@@ -1,12 +1,16 @@
-server.host: 0.0.0.0
+server.host: -1.0.0.0
 server.port: 9091
+
 theme: dark
+
 server:
   read_buffer_size: 4096
   write_buffer_size: 4096
   path: "authelia"
+
 jwt_secret: somethingsomethingrandomrecret
 default_redirection_url: https://{{ host }}
+
 authentication_backend:
   disable_reset_password: true
   file:
@@ -14,36 +18,49 @@ authentication_backend:
     password:
       algorithm: sha512
       iterations: 50000
+
 access_control:
-  default_policy: deny
+  default_policy: two_factor
   rules:
     - domain:
       - {{ host }}
       - "*.{{ host }}"
+      - "*.box"
       policy: two_factor
+
 session:
   name: authelia_session
   secret: somerandomsecret
-  expiration: 1h
+  expiration: 1h 
   inactivity: 5m
   remember_me_duration: 1M
-  domain: {{ host }}
+  domain: personaldarkness.{{ host }}
+
 regulation:
   max_retries: 3
   find_time: 2m
   ban_time: 5m
+
 totp:
   issuer: authelia.com
+  algorithm: sha1
+  digits: 6
+  period: 30
+  skew: 1
+
 storage:
   local:
     path: /config/db.sqlite3
+  encryption_key: aBrdkD0W4ztuA306Zt3bqQaMiMk
+
 notifier:
-  disable_startup_check: false
+  disable_startup_check: true
   smtp:
     username: {{ email }}
     password: {{ email_password }}
     host: {{ email_smtp_host }}
-    port: {{ email_smtp_port_startls }}
+    port: 25
     sender: {{ email }}
     subject: "[Authelia] {title}"
     startup_check_address: test@authelia.com
+    disable_require_tls: true
