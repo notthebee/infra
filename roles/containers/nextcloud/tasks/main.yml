@@ -62,4 +62,4 @@
   cron:
     name: Scan the Nextcloud library
     hour: "0"
-    job: "docker exec -it photoprism /photoprism/bin/photoprism index"
+    job: "docker exec nextcloud sudo -u abc php8 /config/www/nextcloud/occ files:scan --all"
