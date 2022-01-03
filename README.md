@@ -20,11 +20,13 @@ The playbook is mostly being developed for personal use, so stuff is going to be
 * [Jellyfin](https://hub.docker.com/r/linuxserver/jellyfin) (Yet another media server)
 * [Radarr](https://hub.docker.com/r/linuxserver/radarr) (A movie tracker/downloader)
 * [Jackett](https://hub.docker.com/r/linuxserver/jackett) (A torrent/NZB indexer)
+* [Booksonic](https://hub.docker.com/r/linuxserver/booksonic) (An audiobook server)
 * [Sonarr](https://hub.docker.com/r/linuxserver/sonarr) (A TV show tracker/downloader)
-* [Arch-DelugeVPN](https://hub.docker.com/r/binhex/arch-delugevpn) (An Arch Linux container running Deluge and an Wireguard/OpenVPN client with a kill switch)
+* [arch-delugevpn](https://hub.docker.com/r/binhex/arch-delugevpn) (An Arch Linux container running Deluge and an Wireguard/OpenVPN client with a kill switch)
 
 #### Services
 * [Authelia](https://hub.docker.com/r/authelia/authelia) (An authentication provider)
+* [cloudflare-ddns](https://hub.docker.com/r/oznu/cloudflare-ddns) (A dynamic DNS updater for Cloudflare)
 * [UniFi Controller](https://hub.docker.com/r/linuxserver/unifi-controller) (A controller for UniFi devices)
 * [Homer](https://hub.docker.com/r/b4bz/homer) (A static home page)
 * [Flame](https://github.com/pawelmalak/flame) (Another static home page)
@@ -48,6 +50,7 @@ The playbook is mostly being developed for personal use, so stuff is going to be
 ## Other features:
 * MergerFS with Snapraid
 * Samba
+* Fail2Ban for Nextcloud and Vaultwarden with Cloudflare support
 
 ## Usage
 Install Ansible (macOS):
