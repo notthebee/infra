@@ -320,3 +320,21 @@ snapraid_config_excludes:
 # SMART error reporting
 #
 smartd_default_mail_recipients: [ "{{ email }}" ]
+### BEGIN Secret variables (encrypt and put into vault.yml)
+cloudflare_token: ''
+email_password: ''
+host: ''
+ikev2_excludedssids: ''
+namecheap_host: ''
+namecheap_token: ''
+password: ''
+pihole_password: ''
+pikvm_password: ''
+piped_postgresql_password: ''
+ssh_public_key: ''
+subdomains: ''
+swag_htpasswd_password: ''
+swag_htpasswd_user: ''
+vpn_host: ''
+vpn_password: ''
+### END Secret variables (encrypt and put into vault.yml)
