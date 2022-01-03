@@ -39,10 +39,6 @@
   when: lookup('vars', 'enable_' + item.path.split('/')[-1]) | default(False)
   with_items: "{{ containers.files }}"
 
-- name: Print out
-  debug:
-    var: swag_urls
-
 - name: Create a SWAG network, add all the containers to be reverse-proxied into it
   docker_network:
     name: swag_network
@@ -101,6 +97,7 @@
       "VALIDATION": "dns"
       "DNSPLUGIN": "cloudflare"
       "EMAIL": "{{ email }}"
+      "DOCKER_MODS": "linuxserver/mods:swag-cloudflare-real-ip"
     ports:
       - "443:443"
       - "80:80"
@@ -136,3 +133,4 @@
     dest: "{{ docker_dir }}/pihole/dnmasq-unbound/05-pihole-custom-cname.conf"
   when: 
     hostvars['coda']['enable_pihole']
+

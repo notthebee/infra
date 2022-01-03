@@ -1,0 +1,53 @@
+- name: Install fail2ban
+  package:
+    name: fail2ban
+    state: latest
+
+- name: Make sure the fail2ban systemd service is enabled and started
+  service:
+    name: fail2ban
+    state: started
+    enabled: yes
+
+- name: Copy custom fail2ban rules
+  copy:
+    src: "{{ item }}"
+    dest: "/etc/fail2ban/filter.d"
+    owner: "{{ username }}"
+    group: "{{ username }}"
+  with_fileglob: 
+    - "files/filter.d/*.conf"
+  register: copied_rules
+
+- name: Create a list of rule files that were deployed
+  set_fact:
+    installed_configs: "{{ installed_configs | default([]) + [ item.dest.split('/')[-1].split('.')[0] ] }}" 
+  with_items: "{{ copied_rules.results }}"
+
+- name: Install the jail.local file
+  template:
+    src: "jail.local.j2"
+    dest: "/etc/fail2ban/jail.local"
+
+- name: Install the paths-overrides.local file
+  template:
+    src: "paths-overrides.local.j2"
+    dest: "/etc/fail2ban/paths-overrides.local"
+
+
+- name: Put the cloudflare token into the configuration file
+  lineinfile:
+    regex: "^cftoken ="
+    line: "cftoken = {{ cloudflare_firewall_token }}"
+    path: "/etc/fail2ban/action.d/cloudflare.conf"
+
+- name: Put the cloudflare email into the configuration file
+  lineinfile:
+    regex: "^cfuser ="
+    line: "cfuser = {{ email }}"
+    path: "/etc/fail2ban/action.d/cloudflare.conf"
+
+- name: Restart fail2ban
+  service:
+    name: fail2ban
+    state: restarted

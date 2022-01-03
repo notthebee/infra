@@ -320,20 +320,3 @@ snapraid_config_excludes:
 # SMART error reporting
 #
 smartd_default_mail_recipients: [ "{{ email }}" ]
-
-#
-# Secret variables (encrypt with ansible-vault)
-#
-duckdns_token: ""
-
-duckdns_domain: ""
-  
-mysql_root_password: ""
-
-mysql_password: ""
-
-password: ""
-
-password2: ""
-
-email_password: ""

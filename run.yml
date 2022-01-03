@@ -90,6 +90,10 @@
       tags: 
         - essential
 
+    - role: fail2ban
+      tags:
+      - fail2ban
+
     - role: filesystems/mergerfs
       tags:
       - mergerfs

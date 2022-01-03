@@ -15,6 +15,9 @@
       WEBSOCKET_ENABLED: "true"
       INVITATIONS_ALLOWED: "false"
       SIGNUPS_ALLOWED: "false"
+      DOMAIN: "{{ dashboard_url }}"
+      LOG_FILE: "/data/vaultwarden.log"
+      TZ: "{{ timezone }}"
     volumes:
       - "{{ docker_dir }}/{{ container_name }}:/data"
     restart_policy: unless-stopped
