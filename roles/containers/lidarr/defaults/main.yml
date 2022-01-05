@@ -1,6 +1,6 @@
 ---
 container_name: lidarr
 
-dashboard_url: "http://lidarr.box"
+dashboard_url: "http://lidarr.{{ host_local }}"
 
 homer_category: media

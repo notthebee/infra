@@ -81,7 +81,7 @@ services:
         type: Ping
         logo: /assets/tools/homer-icons/fritzbox.png
         url: "http://fritz.box/"
-        endpoint: "http://{{ ansible_default_ipv4.address }}:3000/http://fritz.box/"
+        endpoint: "http://{{ ansible_default_ipv4.address }}:3000/http://fritz.box"
         target: "_blank"
       - name: "PiKVM"
         type: Ping
@@ -92,8 +92,8 @@ services:
       - name: "PiHole"
         type: Ping
         logo: /assets/tools/homer-icons/pihole.png
-        url: "http://pihole.box:81"
-        endpoint: "http://{{ ansible_default_ipv4.address }}:3000/http://pihole.box:81"
+        url: "http://192.168.178.34:81"
+        endpoint: "http://192.168.178.34:81"
         target: "_blank"
 
 

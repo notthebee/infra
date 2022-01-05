@@ -14,10 +14,9 @@
       "TZ": "{{ timezone }}"
     restart_policy: unless-stopped
 
-- name: Add {{ container_name }} to the SWAG network (reverse-proxy)
+- name: Add {{ container_name }} to the internal network
   docker_network:
-    name: swag_network
+    name: swag_internal_network
     connected:
       - "{{ container_name }}"
     appends: yes
-  when: enable_swag

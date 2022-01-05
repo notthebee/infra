@@ -1,3 +1,0 @@
-{% for item in (swag_urls | dict2items) if "box" in item.value and item.value != "" %}
-cname={{ item.value }},fragile.box
-{% endfor %}

@@ -1,7 +1,7 @@
 ---
 container_name: unifi
 
-dashboard_url: "https://unifi.box"
+dashboard_url: "https://unifi.{{ host_local }}"
 
 homer_category: system
 

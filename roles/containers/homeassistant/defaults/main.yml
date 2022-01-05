@@ -1,7 +1,7 @@
 ---
 container_name: homeassistant
 
-dashboard_url: "https://homeassistant.box"
+dashboard_url: "https://homeassistant.{{ host_local }}"
 
 homer_category: smarthome
 

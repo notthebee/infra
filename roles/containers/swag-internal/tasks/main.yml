@@ -39,11 +39,7 @@
   when: lookup('vars', 'enable_' + item.path.split('/')[-1]) | default(False)
   with_items: "{{ containers.files }}"
 
-- name: Create a SWAG network, add all the containers to be reverse-proxied into it
-  docker_network:
-    name: swag_network
-
-- name: Install the SWAG config files
+- name: Install the {{ container_name }} config files
   template:
     src: "{{ item }}"
     dest: "{{ docker_dir }}/{{ container_name }}/config/nginx/proxy-confs/{{ item | basename | regex_replace('.j2$', '') }}"
@@ -80,14 +76,23 @@
     src: "dns-conf/cloudflare.ini.j2"
     dest: "{{ docker_dir }}/{{ container_name }}/config/dns-conf/cloudflare.ini"
 
-- name: Make sure the SWAG container is created and running
+
+- name: Create a macvlan network (Ansible's docker_network can't do macvlan)
+  shell:
+    cmd: "docker network create -d macvlan \
+             --subnet={{ lan_network }} \
+             --gateway={{ ansible_default_ipv4.gateway }} \
+             -o parent=enp2s0 swag_macvlan"
+  ignore_errors: yes
+
+- name: Make sure the {{ container_name }} container is created and running
   docker_container:
     name: "{{ container_name }}"
     image: "ghcr.io/linuxserver/swag"
     pull: yes
-    network_mode: swag_network
     networks:
-      - name: swag_network
+      - name: swag_macvlan
+      - name: swag_internal_network
     capabilities: 
       - net_admin
     state: 'started'
@@ -95,15 +100,11 @@
       "PUID": "{{ guid }}"
       "PGID": "{{ guid }}"
       "TZ": "{{ timezone }}"
-      "URL": "{{ host }}"
+      "URL": "{{ host_local }}"
       "SUBDOMAINS": "wildcard"
       "VALIDATION": "dns"
       "DNSPLUGIN": "cloudflare"
       "EMAIL": "{{ email }}"
-      "DOCKER_MODS": "linuxserver/mods:swag-cloudflare-real-ip"
-    ports:
-      - "443:443"
-      - "80:80"
     volumes:
       - "{{ docker_dir }}/{{ container_name }}/config:/config"
     restart_policy: unless-stopped
@@ -114,7 +115,7 @@
   changed_when: swag_nginx_test is not search("test is successful")
   failed_when: swag_nginx_test is not search("test is successful")
 
-- name: Restart SWAG on changes
+- name: Restart {{ container_name }} on changes
   docker_container:
     name: "{{ container_name }}"
     state: started

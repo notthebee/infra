@@ -288,8 +288,8 @@ iptables -A OUTPUT -o lo -j ACCEPT
 # accept output from tunnel adapter
 iptables -A OUTPUT -o "${VPN_DEVICE_TYPE}" -j ACCEPT
 
-iptables -A INPUT -s 172.18.0.0/16 -d 172.18.0.0/16 -j ACCEPT
-iptables -A OUTPUT -s 172.18.0.0/16 -d 172.18.0.0/16 -j ACCEPT
+iptables -A INPUT -s 172.20.0.0/16 -d 172.20.0.0/16 -j ACCEPT
+iptables -A OUTPUT -s 172.20.0.0/16 -d 172.20.0.0/16 -j ACCEPT
 
 echo "[info] iptables defined as follows..."
 echo "--------------------"

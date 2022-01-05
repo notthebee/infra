@@ -25,7 +25,7 @@ access_control:
     - domain:
       - {{ host }}
       - "*.{{ host }}"
-      - "*.box"
+      - "*.{{ host }}"
       policy: two_factor
 
 session:

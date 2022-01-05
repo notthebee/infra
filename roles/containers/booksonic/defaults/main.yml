@@ -1,6 +1,6 @@
 ---
 container_name: booksonic
 
-dashboard_url: "http://booksonic.box"
+dashboard_url: "http://booksonic.{{ host_local }}"
 
 homer_category: media

@@ -160,12 +160,17 @@
         - containers
       when: enable_youtransfer | default(False)
 
-
     - role: containers/swag
       tags: 
         - swag
         - containers
       when: enable_swag | default(False)
+
+    - role: containers/swag-internal
+      tags: 
+        - swag-internal
+        - containers
+      when: enable_swag-internal | default(False)
 
     - role: containers/bitwarden
       tags:

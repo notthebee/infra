@@ -1,7 +1,7 @@
 ---
 container_name: jackett
 
-dashboard_url: "https://jackett.box/"
+dashboard_url: "https://jackett.{{ host_local }}/"
 
 homer_category: system
 

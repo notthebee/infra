@@ -1,7 +1,7 @@
 ---
 container_name: deconz
 
-dashboard_url: "http://deconz.box/"
+dashboard_url: "http://deconz.{{ host_local }}/"
 
 homer_category: smarthome
 

@@ -27,7 +27,7 @@
       "VPN_PROV": custom
       "VPN_CLIENT": "wireguard"
       "ENABLE_PRIVOXY": "yes"
-      "LAN_NETWORK": "172.17.0.0/16, 172.18.0.0/16, {{ lan_network }}"
+      "LAN_NETWORK": "172.20.0.0/16, {{ lan_network }}"
       "NAME_SERVERS": "1.1.1.1, 1.0.0.1"
       "DELUGE_DAEMON_LOG_LEVEL": "info"
       "DELUGE_WEB_LOG_LEVEL": "info"
@@ -49,7 +49,7 @@
 
 - name: Add {{ container_name }} to the SWAG network (reverse-proxy)
   docker_network:
-    name: swag_network
+    name: swag_internal_network
     connected:
       - deluge
     appends: yes

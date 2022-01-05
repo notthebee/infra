@@ -92,7 +92,7 @@
 
 - name: Add {{ container_name }} to the SWAG network (reverse-proxy)
   docker_network:
-    name: swag_network
+    name: swag_internal_network
     connected:
       - homer
       - cors-container
