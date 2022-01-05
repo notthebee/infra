@@ -324,6 +324,7 @@ smartd_default_mail_recipients: [ "{{ email }}" ]
 cloudflare_token: ''
 email_password: ''
 host: ''
+host_local: ''
 ikev2_excludedssids: ''
 namecheap_host: ''
 namecheap_token: ''
