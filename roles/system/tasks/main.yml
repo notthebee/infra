@@ -3,4 +3,3 @@
 - include_tasks: yeet_snaps.yml
 - include_tasks: user.yml
 - include_tasks: dotfiles.yml
-- include_tasks: xresources.yml

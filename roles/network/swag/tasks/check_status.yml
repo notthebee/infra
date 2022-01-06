@@ -1,0 +1,18 @@
+---
+- name: Get infos on the swag containers
+  docker_container_info:
+    name: "{{ item }}"
+  register: swag_docker_status
+  with_items:
+    - swag_internal
+    - swag_public
+
+- name: Do containers even exist?
+  set_fact:
+    existing: yes
+  when: swag_docker_status.results[0].exists and swag_docker_status.results[1].exists
+
+- name: Are containers running?
+  set_fact:
+    running: yes
+  when: swag_docker_status.results[0].container['State']['Running'] and swag_docker_status.results[1].container['State']['Running']

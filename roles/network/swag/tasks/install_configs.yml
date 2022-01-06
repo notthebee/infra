@@ -1,0 +1,69 @@
+---
+- name: Create the proxy-conf folders
+  file:
+    path: "{{ docker_dir }}/swag/{{ item }}/proxy-confs/"
+    state: directory
+    recurse: yes
+    owner: "{{ username }}"
+    group: "{{ username }}"
+  with_items:
+    - internal
+    - public
+ 
+- name: Install the SWAG config files
+  template:
+    src: "{{ item }}"
+    dest: "{{ docker_dir }}/swag/{{ item.split('/')[-2] }}/proxy-confs/{{ item | basename | regex_replace('.j2$', '') }}"
+  when: lookup('vars', 'enable_' + (item | basename).split('.')[0]) | default(False)
+  with_fileglob:
+    - templates/internal/*.j2
+    - templates/public/*.j2
+  notify:
+    - restart swag
+    - test nginx
+  register: swag_config
+
+- name: Create a list of variables files that were deployed
+  set_fact:
+    installed_templates: "{{installed_templates | default([]) + [ item.dest ]}}" 
+  with_items: "{{ swag_config.results }}"
+  when: item.skipped is not defined
+
+- name: List all config files in the target folder
+  find:
+    paths: 
+      - "{{ docker_dir }}/swag/internal/proxy-confs/"
+      - "{{ docker_dir }}/swag/public/proxy-confs/"
+    patterns:
+      - ".*\\.conf(?!\\.sample)"
+    use_regex: yes
+  register: found_files
+
+- name: Print out
+  debug:
+    var: found_files
+
+- name: Remove config files for disabled services
+  file: 
+    path: "{{ item.path }}"
+    state: absent
+  when: item.path not in installed_templates
+  with_items: "{{ found_files['files'] }}"
+  notify:
+    - restart swag
+    - test nginx
+
+- name: Create the DNS conf folder
+  file:
+    path: "{{ docker_dir }}/swag/dns-conf"
+    state: directory
+    recurse: yes
+    owner: "{{ username }}"
+    group: "{{ username }}"
+ 
+- name: Install the DNS config file
+  template:
+    src: "dns-conf/cloudflare.ini.j2"
+    dest: "{{ docker_dir }}/swag/dns-conf/cloudflare.ini"
+  notify:
+    - restart swag

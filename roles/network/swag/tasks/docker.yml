@@ -1,0 +1,66 @@
+---
+- name: Create a macvlan network (Ansible's docker_network can't do macvlan)
+  shell:
+    cmd: "docker network create -d macvlan \
+             --subnet={{ lan_network }} \
+             --gateway={{ ansible_default_ipv4.gateway }} \
+             -o parent=enp2s0 swag_macvlan || /bin/true"
+  ignore_errors: yes
+  register: result
+  failed_when: "'FAILED' in result.stderr and 'already exists' not in result.stderr"
+  changed_when: "'already exists' not in result.stderr"
+
+- name: Make sure the swag_internal container is created and running
+  docker_container:
+    name: "swag_internal"
+    image: "ghcr.io/linuxserver/swag"
+    pull: yes
+    networks:
+      - name: swag_macvlan
+      - name: swag_internal_network
+    capabilities: 
+      - net_admin
+    state: 'started'
+    env:
+      "PUID": "{{ guid }}"
+      "PGID": "{{ guid }}"
+      "TZ": "{{ timezone }}"
+      "URL": "{{ host_local }}"
+      "SUBDOMAINS": "wildcard"
+      "VALIDATION": "dns"
+      "DNSPLUGIN": "cloudflare"
+      "EMAIL": "{{ email }}"
+    volumes:
+      - "{{ docker_dir }}/swag/internal/proxy-confs:/config/nginx/proxy-confs"
+      - "{{ docker_dir }}/swag/dns-conf:/config/dns-conf"
+      - "{{ docker_dir }}/swag/letsencrypt:/config/etc/letsencrypt"
+    restart_policy: unless-stopped
+
+- name: Make sure the swag_public container is created and running
+  docker_container:
+    name: "swag_public"
+    image: "ghcr.io/linuxserver/swag"
+    pull: yes
+    network_mode: swag_network
+    networks:
+      - name: swag_network
+    capabilities: 
+      - net_admin
+    state: 'started'
+    env:
+      "PUID": "{{ guid }}"
+      "PGID": "{{ guid }}"
+      "TZ": "{{ timezone }}"
+      "URL": "{{ host }}"
+      "SUBDOMAINS": "wildcard"
+      "VALIDATION": "dns"
+      "DNSPLUGIN": "cloudflare"
+      "EMAIL": "{{ email }}"
+      "DOCKER_MODS": "linuxserver/mods:swag-cloudflare-real-ip"
+    ports:
+      - "443:443"
+    volumes:
+      - "{{ docker_dir }}/swag/external/proxy-confs:/config/nginx/proxy-confs"
+      - "{{ docker_dir }}/swag/dns-conf:/config/dns-conf"
+      - "{{ docker_dir }}/swag/letsencrypt:/config/etc/letsencrypt"
+    restart_policy: unless-stopped

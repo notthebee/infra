@@ -1,11 +1,12 @@
 server {
-    {% include "common/internal.j2" %}
-    {% include "common/params.j2" %}
+    {% include "nginx/internal.j2" %}
+    {% include "nginx/params.j2" %}
     server_name {{ swag_urls['booksonic'] }};
+
 
     include /config/nginx/authelia-server.conf;
     location / {
-        {% include "common/cors.j2" %}
+        {% include "nginx/cors.j2" %}
         include /config/nginx/proxy.conf;
         include /config/nginx/resolver.conf;
         set $upstream_app booksonic;

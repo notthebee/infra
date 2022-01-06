@@ -43,7 +43,7 @@ services:
   - name: "Media"
     icon: "fas fa-photo-video"
     items:
-  {% for item in homer_urls if "media" in item.category and item.url != "" %}
+  {% for item in web_applications if "media" in item.category and item.url != "" %}
     - name: "{{ item.name }}"
         type: Ping
         logo: "{{ item.logo }}"
@@ -56,7 +56,7 @@ services:
   - name: "Services"
     icon: "fas fa-stream"
     items:
-  {% for item in homer_urls if "services" in item.category and item.url != "" %}
+  {% for item in web_applications if "services" in item.category and item.url != "" %}
     - name: "{{ item.name }}"
         type: Ping
         logo: "{{ item.logo }}"
@@ -69,7 +69,7 @@ services:
   - name: "System"
     icon: "fas fa-cog"
     items:
-  {% for item in homer_urls if "system" in item.category and item.url != "" %}
+  {% for item in web_applications if "system" in item.category and item.url != "" %}
     - name: "{{ item.name }}"
         type: Ping
         logo: "{{ item.logo }}"
@@ -101,7 +101,7 @@ services:
   - name: "Home Automation"
     icon: "fas fa-home"
     items:
-  {% for item in homer_urls if "smarthome" in item.category and item.url != "" %}
+  {% for item in web_applications if "smarthome" in item.category and item.url != "" %}
     - name: "{{ item.name }}"
         type: Ping
         logo: "{{ item.logo }}"

@@ -127,12 +127,6 @@
         - containers
       when: enable_swag | default(False)
 
-    - role: network/swag-internal
-      tags: 
-        - swag-internal
-        - containers
-      when: enable_swag-internal | default(False)
-   
     #
     # Homer
     # 

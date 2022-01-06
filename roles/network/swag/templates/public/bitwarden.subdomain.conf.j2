@@ -5,13 +5,13 @@ server {
     server_name {{ swag_urls['bitwarden'] }};
 
 
-    {% include "common/params.j2" %}
+    {% include "nginx/params.j2" %}
     include /config/nginx/ssl.conf;
 
     client_max_body_size 128M;
 
     location / {
-        {% include "common/cors.j2" %}
+        {% include "nginx/cors.j2" %}
         include /config/nginx/proxy.conf;
         include /config/nginx/resolver.conf;
         set $upstream_app bitwarden;

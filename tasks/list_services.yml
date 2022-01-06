@@ -1,0 +1,37 @@
+#
+# Gets variables from all web applications recursively (for Homer and SWAG)
+#
+---
+- name: Get a list of containers
+  delegate_to: localhost
+  become: no
+  find:
+    paths: 
+      - "roles/containers/services"
+      - "roles/containers/media"
+      - "roles/containers/homeautomation"
+      - "roles/containers/system"
+    file_type: directory
+    excludes: "homer"
+    recurse: no
+  register: containers
+
+- name: Include all default.yml files
+  include_vars:
+    dir: "{{ playbook_dir }}/{{ item.path }}/defaults"
+    files_matching: main.yml
+    name: "{{ item.path.split('/')[-1] }}"
+  with_items: "{{ containers.files }}"
+  no_log: true
+
+- name: Populate the dictionary of all containers
+  set_fact:
+    web_applications: "{{ web_applications | default([]) + [{ 'logo': '/assets/tools/homer-icons/' + item.path.split('/')[-1] + '.png', 'name': lookup('vars', item.path.split('/')[-1])['dashboard_name'] | default(item.path.split('/')[-1] | title), 'url' : lookup('vars', item.path.split('/')[-1])['dashboard_url'] | default(''), 'endpoint': lookup('vars', item.path.split('/')[-1])['health_url'] | default(''), 'category': lookup('vars', item.path.split('/')[-1])['homer_category'] | default ('') }] }}"
+  when: lookup('vars', 'enable_' + item.path.split('/')[-1]) | default(False)
+  with_items: "{{ containers.files }}"
+
+- name: Populate the URL dictionary with all containers
+  set_fact:
+    swag_urls: "{{ swag_urls | default({}) | combine({ item.path.split('/')[-1] : lookup('vars', item.path.split('/')[-1])['dashboard_url'] | default('') | regex_replace('https?://|/*', '') }) }}"
+  when: lookup('vars', 'enable_' + item.path.split('/')[-1]) | default(False)
+  with_items: "{{ containers.files }}"
