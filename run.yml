@@ -1,5 +1,8 @@
 ---
-- hosts: home
+#
+# Tasks and roles for all hosts
+#
+- hosts: fleet
   gather_facts: no
 
   pre_tasks:
@@ -7,26 +10,18 @@
       tags:
         - port
 
-- hosts: home
-  tasks:
-    - import_tasks: tasks/user.yml
-      tags:
-        - user
-
-
-# PiHole/IKEv2 server
-- hosts: coda
+- hosts: fleet
   become: yes
   roles:
-    - role: essential
+
+    - role: system
       tags: 
-        - essential
+        - system
 
     - role: docker
       tags: 
         - docker
 
-    # MSMTP (for SMART notifications)
     - role: chriswayg.msmtp-mailer
       tags: 
         - msmtp
@@ -35,65 +30,64 @@
       tags:
         - dns
 
-    - role: ddclient
-      when: enable_ddclient | default(False)
-      tags:
-        - ddclient
-
-    - role: duckdns
-      when: enable_duckdns | default(False)
-      tags:
-        - duckdns 
-
-    - role: containers/cloudflare-ddns
-      tags: 
-        - cloudflare-ddns
-        - containers
-      when: enable_cloudflare | default(False)
-
-
-    - role: containers/pihole
-      when: enable_pihole | default(False)
-      tags:
-        - pihole 
-        - containers
-
-    - role: containers/ikev2
-      when: enable_ikev2 | default(False)
-      tags:
-        - containers
-        - ikev2 
-
-    # NTP
     - role: geerlingguy.ntp
       tags: 
         - ntp
 
-    # SSH security (at the end because it breaks SSH connection)
     - role: geerlingguy.security
       tags: 
         - security
 
 
+#
+# PiHole/IKEv2 server
+#
+- hosts: coda
+  become: yes
+  roles:
+    - role: network/ddclient
+      when: enable_ddclient | default(False)
+      tags:
+        - ddclient
 
+    - role: network/duckdns
+      when: enable_duckdns | default(False)
+      tags:
+        - duckdns 
+
+    - role: network/cloudflare-ddns
+      tags: 
+        - cloudflare-ddns
+        - containers
+      when: enable_cloudflare | default(False)
+
+    - role: network/pihole
+      when: enable_pihole | default(False)
+      tags:
+        - pihole 
+        - containers
+
+    - role: network/ikev2
+      when: enable_ikev2 | default(False)
+      tags:
+        - containers
+        - ikev2 
+
+#
 # Home server/NAS
+#
 - hosts: fragile
   become: yes
 
-  pre_tasks:
-    - name: Remove snap functionality
-      import_tasks: tasks/yeet_snaps.yml
-      tags: nosnaps
-
   roles:
-    - role: essential
-      tags: 
-        - essential
 
-    - role: fail2ban
+    - role: security/fail2ban
       tags:
       - fail2ban
 
+    #
+    # Filesystems
+    #
     - role: filesystems/mergerfs
       tags:
       - mergerfs
@@ -101,198 +95,165 @@
     - role: filesystems/mounts
       tags:
         - mounts
-    # MSMTP (for SMART notifications)
-    - role: chriswayg.msmtp-mailer
-      tags: 
-        - msmtp
 
-    - role: docker
-      tags: 
-        - docker
-
-    - role: oefenweb.dns
+    - role: filesystems/hd-idle
       tags:
-        - dns
+      - hd-idle
+
+    - role: stuvusit.smartd
+      tags:
+      - smartd
 
     - role: ironicbadger.ansible_role_snapraid
       tags:
       - snapraid
 
-    - role: filesystems/hd-idle
-      tags:
-      - hd-idle
-      
-    # SMART error checking
-    - role: stuvusit.smartd
-      tags:
-      - smartd
-
-    - role: avahi
+    #
+    # Network
+    #
+    - role: network/avahi
       tags: 
         - avahi
 
-    - role: containers/watchtower
-      tags:
-        - watchtower
+    - role: network/wireguard
+      tags: 
+        - wireguard
         - containers
+      when: enable_wireguard | default(False)
 
-    - role: containers/unifi
-      tags:
-        - unifi
-        - containers
-      when: enable_unifi | default(False)
-
-    - role: containers/pihole
-      when: enable_pihole | default(False)
-      tags:
-        - pihole 
-        - containers
-
-    - role: containers/authelia
-      tags:
-        - authelia
-        - containers
-      when: enable_authelia | default(False)
-
-    - role: containers/youtransfer
-      tags:
-        - youtransfer
-        - containers
-      when: enable_youtransfer | default(False)
-
-    - role: containers/swag
+    - role: network/swag
       tags: 
         - swag
         - containers
       when: enable_swag | default(False)
 
-    - role: containers/swag-internal
+    - role: network/swag-internal
       tags: 
         - swag-internal
         - containers
       when: enable_swag-internal | default(False)
-
-    - role: containers/bitwarden
-      tags:
-        - bitwarden
-        - containers
-      when: enable_bitwarden | default(False)
-    
-    - role: containers/deluge
-      tags: 
-        - deluge
-        - containers
-      when: enable_deluge | default(False)
-
+   
+    #
+    # Homer
+    # 
     - role: homer
       tags: 
         - homer
         - containers
       when: enable_homer | default(False)
 
-    - role: containers/flame
-      tags: 
-        - flame
-        - containers
-      when: enable_flame | default(False)
-
-    - role: containers/nextcloud
-      tags: 
-        - nextcloud
-        - containers
-      when: enable_nextcloud | default(False)
-
-    - role: containers/jackett
+    #
+    # Services
+    #
+    - role: containers/system/jackett
       tags: 
         - jackett
         - containers
       when: enable_jackett | default(False)
 
-    - role: containers/sonarr
+    - role: containers/system/authelia
+      tags:
+        - authelia
+        - containers
+      when: enable_authelia | default(False)
+
+    - role: containers/system/watchtower
+      tags:
+        - watchtower
+        - containers
+
+    - role: containers/system/unifi
+      tags:
+        - unifi
+        - containers
+      when: enable_unifi | default(False)
+
+    #
+    # Media
+    #
+    - role: containers/media/deluge
+      tags: 
+        - deluge
+        - containers
+      when: enable_deluge | default(False)
+
+    - role: containers/media/sonarr
       tags: 
         - sonarr
         - containers
       when: enable_sonarr | default(False)
 
-    - role: containers/readarr
-      tags: 
-        - readarr
-        - containers
-      when: enable_readarr | default(False)
-
-    - role: containers/lidarr
-      tags: 
-        - lidarr
-        - containers
-      when: enable_lidarr | default(False)
-
-    - role: containers/radarr
+    - role: containers/media/radarr
       tags: 
         - radarr
         - containers
       when: enable_radarr | default(False)
 
-    - role: containers/booksonic
+    - role: containers/media/booksonic
       tags: 
         - booksonic
         - containers
       when: enable_booksonic | default(False)
 
-    - role: containers/plex
+    - role: containers/media/plex
       tags: 
         - plex
         - containers
       when: enable_plex | default(False)
 
-    - role: containers/jellyfin
+    - role: containers/media/jellyfin
       tags: 
         - jellyfin
         - containers
       when: enable_jellyfin | default(False)
 
-    - role: containers/photoprism
-      tags: 
-        - photoprism
-        - containers
-      when: enable_photoprism | default(False)
-
-    - role: containers/wireguard
-      tags: 
-        - wireguard
-        - containers
-      when: enable_wireguard | default(False)
-
-    - role: containers/openbooks
+    - role: containers/media/openbooks
       tags: 
         - openbooks
         - containers
       when: enable_openbooks | default(False)
 
-    - role: containers/deconz
+    #
+    # Services
+    #
+    - role: containers/services/photoprism
+      tags: 
+        - photoprism
+        - containers
+      when: enable_photoprism | default(False)
+
+    - role: containers/services/nextcloud
+      tags: 
+        - nextcloud
+        - containers
+      when: enable_nextcloud | default(False)
+
+    - role: containers/services/bitwarden
+      tags:
+        - bitwarden
+        - containers
+      when: enable_bitwarden | default(False)
+ 
+    #
+    # Home automation
+    #
+    - role: containers/homeautomation/deconz
       tags: 
         - deconz
         - smarthome
         - containers
       when: enable_deconz | default(False)
 
-    - role: containers/homeassistant
+    - role: containers/homeautomation/homeassistant
       tags: 
         - homeassistant
         - smarthome
         - containers
       when: enable_homeassistant | default(False)
 
+    #
     # Samba
+    #
     - role: bertvv.samba
       tags: 
         - samba
-
-    # NTP
-    - role: geerlingguy.ntp
-      tags: 
-        - ntp
-
-    # SSH security (at the end because it breaks SSH connection)
-    - role: geerlingguy.security
-      tags: 
-        - security

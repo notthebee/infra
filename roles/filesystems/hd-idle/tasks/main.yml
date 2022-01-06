@@ -26,10 +26,6 @@
       action: latest_release
     register: release
 
-  - name: print
-    debug:
-      var: release
-
   - name: Grab the latest amd64 deb package
     get_url: 
       url: "https://github.com/adelolmo/hd-idle/releases/download/{{ release['tag'] }}/hd-idle_{{ release['tag'] | regex_replace('^v','') }}_amd64.deb"

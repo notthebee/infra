@@ -109,7 +109,10 @@
   become: no
   find:
     paths: 
-      - "roles/containers"
+      - "roles/containers/media"
+      - "roles/containers/homeautomation"
+      - "roles/containers/services"
+      - "roles/containers/system"
     file_type: directory
     recurse: no
   register: containers

@@ -1,0 +1,33 @@
+---
+- name: Make sure the Homer container is created and running
+  docker_container:
+    name: 'homer'
+    image: "b4bz/homer"
+    pull: true
+    state: 'started'
+    env:
+      "PUID": "{{ guid }}"
+      "PGID": "{{ guid }}"
+      "TZ": "{{ timezone }}"
+    volumes:
+      - "{{ docker_dir }}/{{ container_name }}:/www/assets"
+    restart_policy: unless-stopped
+
+- name: Make sure cors-container is created and running
+  docker_container:
+    name: 'cors-container'
+    image: "imjacobclark/cors-container"
+    pull: yes
+    state: 'started'
+    ports:
+      - 3000:3000
+    restart_policy: unless-stopped
+
+- name: Add {{ container_name }} to the SWAG network (reverse-proxy)
+  docker_network:
+    name: swag_internal_network
+    connected:
+      - homer
+      - cors-container
+    appends: yes
+  when: enable_swag

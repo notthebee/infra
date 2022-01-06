@@ -1,0 +1,26 @@
+---
+- name: Get a list of web applications
+  delegate_to: localhost
+  become: no
+  find:
+    paths: 
+      - "roles/containers/homeautomation"
+      - "roles/containers/media"
+      - "roles/containers/services"
+      - "roles/containers/system"
+    file_type: directory
+    recurse: no
+  register: containers
+
+- name: Include all default.yml files
+  include_vars:
+    dir: "{{ playbook_dir }}/{{ item.path }}/defaults"
+    files_matching: main.yml
+    name: "{{ item.path.split('/')[-1] }}"
+  with_items: "{{ containers.files }}"
+
+- name: Populate the dictionary of all containers
+  set_fact:
+    homer_urls: "{{ homer_urls | default([]) + [{ 'logo': '/assets/tools/homer-icons/' + item.path.split('/')[-1] + '.png', 'name': lookup('vars', item.path.split('/')[-1])['dashboard_name'] | default(item.path.split('/')[-1] | title), 'url' : lookup('vars', item.path.split('/')[-1])['dashboard_url'] | default(''), 'endpoint': lookup('vars', item.path.split('/')[-1])['health_url'] | default(''), 'category': lookup('vars', item.path.split('/')[-1])['homer_category'] | default ('') }] }}"
+  when: lookup('vars', 'enable_' + item.path.split('/')[-1]) | default(False)
+  with_items: "{{ containers.files }}"

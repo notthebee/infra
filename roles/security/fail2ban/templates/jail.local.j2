@@ -1,0 +1,23 @@
+[DEFAULT]
+banaction = cloudflare 
+            iptables-allports
+bantime  = -1
+findtime  = 600
+maxretry = 3
+ignoreip = 127.0.0.1/8 ::1 {{ ansible_default_ipv4.address }}/24
+action = %(action_mwl)s
+destemail = {{ email }}
+sender = {{ email }}
+
+[sshd]
+enabled = true
+port = {{ security_ssh_port }}
+filter = sshd
+
+{% for name in installed_configs %}
+[{{ name }}]
+enabled  = true
+port     = http,https
+filter   = {{ name }}
+logpath  = %({{ name }}_log)s
+{% endfor %}
