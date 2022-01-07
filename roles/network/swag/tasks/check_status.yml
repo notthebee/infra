@@ -15,4 +15,4 @@
 - name: Are containers running?
   set_fact:
     running: yes
-  when: swag_docker_status.results[0].container['State']['Running'] and swag_docker_status.results[1].container['State']['Running']
+  when: existing is defined and swag_docker_status.results[0].container['State']['Running'] and swag_docker_status.results[1].container['State']['Running']

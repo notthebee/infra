@@ -17,12 +17,14 @@
     group: "{{ username }}"
   with_fileglob: 
     - "files/filter.d/*.conf"
+  when: lookup('vars', 'enable_' + (item | basename).split('.')[0].split('-')[0]) | default(False)
   register: copied_rules
 
 - name: Create a list of rule files that were deployed
   set_fact:
     installed_configs: "{{ installed_configs | default([]) + [ item.dest.split('/')[-1].split('.')[0] ] }}" 
   with_items: "{{ copied_rules.results }}"
+  when: item.skipped is not defined
 
 - name: Install the jail.local file
   template:
@@ -34,18 +36,19 @@
     src: "paths-overrides.local.j2"
     dest: "/etc/fail2ban/paths-overrides.local"
 
-
 - name: Put the cloudflare token into the configuration file
   lineinfile:
     regex: "^cftoken ="
     line: "cftoken = {{ cloudflare_firewall_token }}"
     path: "/etc/fail2ban/action.d/cloudflare.conf"
+  when: enable_cloudflare | default(False)
 
 - name: Put the cloudflare email into the configuration file
   lineinfile:
     regex: "^cfuser ="
     line: "cfuser = {{ email }}"
     path: "/etc/fail2ban/action.d/cloudflare.conf"
+  when: enable_cloudflare | default(False)
 
 - name: Restart fail2ban
   service:

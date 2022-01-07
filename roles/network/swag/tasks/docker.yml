@@ -60,7 +60,7 @@
     ports:
       - "443:443"
     volumes:
-      - "{{ docker_dir }}/swag/external/proxy-confs:/config/nginx/proxy-confs"
+      - "{{ docker_dir }}/swag/public/proxy-confs:/config/nginx/proxy-confs"
       - "{{ docker_dir }}/swag/dns-conf:/config/dns-conf"
       - "{{ docker_dir }}/swag/letsencrypt:/config/etc/letsencrypt"
     restart_policy: unless-stopped

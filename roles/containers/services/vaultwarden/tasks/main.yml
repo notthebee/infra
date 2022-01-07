@@ -2,7 +2,7 @@
     
 - name: Make sure the Vaultwarden container is created and running
   docker_container:
-    name: 'bitwarden'
+    name: 'vaultwarden'
     image: "vaultwarden/server"
     pull: true
     state: 'started'
@@ -27,6 +27,6 @@
   docker_network:
     name: swag_network
     connected:
-      - bitwarden
+      - vaultwarden
     appends: yes
   when: enable_swag

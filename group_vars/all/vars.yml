@@ -113,6 +113,8 @@ security_autoupdate_mail_to: "{{ email }}"
 
 security_autoupdate_mail_on_error: true
 
+security_fail2ban_enabled: false
+
 #
 # Enable/disable individual Docker containers
 #
@@ -141,10 +143,6 @@ enable_sonarr: true
 
 enable_radarr: true
 
-enable_lidarr: false
-
-enable_readarr: false
-
 enable_openbooks: true
 
 
@@ -154,13 +152,9 @@ enable_jackett: true
 
 enable_nextcloud: true
 
-enable_bitwarden: true
-
-enable_youtransfer: false
+enable_vaultwarden: true
 
 enable_swag: true
-
-enable_swag-internal: true
 
 # DDNS
 

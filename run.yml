@@ -22,6 +22,10 @@
       tags: 
         - docker
 
+    - role: security/fail2ban
+      tags:
+      - fail2ban
+
     - role: chriswayg.msmtp-mailer
       tags: 
         - msmtp
@@ -80,10 +84,6 @@
   become: yes
 
   roles:
-
-    - role: security/fail2ban
-      tags:
-      - fail2ban
 
     #
     # Filesystems
@@ -222,11 +222,11 @@
         - containers
       when: enable_nextcloud | default(False)
 
-    - role: containers/services/bitwarden
+    - role: containers/services/vaultwarden
       tags:
-        - bitwarden
+        - vaultwarden
         - containers
-      when: enable_bitwarden | default(False)
+      when: enable_vaultwarden | default(False)
  
     #
     # Home automation

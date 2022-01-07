@@ -23,6 +23,10 @@
       VPNUSERNAME:  "{{ username }}"
       VPNPASSWORD:  "{{ vpn_password }}"
       EXCLUDE_SSIDS: "{{ ikev2_excludedssids }}"
+    mounts:
+      - source: "{{ docker_dir }}/{{ container_name }}/log/charon.log"
+        target: "/var/log/charon.log"
+        type: bind
     volumes:
       - "{{ docker_dir }}/{{ container_name }}/config:/config"
       - "{{ docker_dir }}/{{ container_name }}/letsencrypt:/etc/letsencrypt"
