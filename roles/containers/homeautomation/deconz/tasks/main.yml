@@ -12,7 +12,7 @@
 - name: Make sure the {{ container_name }} container is created and running if there's a Zigbee device
   docker_container:
     name: "{{ container_name }}"
-    image: "marthoc/deconz:latest"
+    image: "deconzcommunity/deconz:stable"
     pull: yes
     state: 'started'
     labels:
@@ -26,7 +26,7 @@
       - "5900:5900"
       - "6080:6080"
     volumes:
-      - "{{ docker_dir }}/{{ container_name }}:/root/.local/share/dresden-elektronik/deCONZ"
+      - "{{ docker_dir }}/{{ container_name }}:/opt/deCONZ"
     devices:
       - "{{ zigbee_dev.files[0].path }}"
     env:
