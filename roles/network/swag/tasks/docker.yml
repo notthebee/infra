@@ -31,7 +31,7 @@
       "DNSPLUGIN": "cloudflare"
       "EMAIL": "{{ email }}"
     volumes:
-      - "{{ docker_dir }}/swag/internal/proxy-confs:/config/nginx/proxy-confs"
+      - "{{ docker_dir }}/swag/internal/nginx:/config/nginx"
       - "{{ docker_dir }}/swag/dns-conf:/config/dns-conf"
       - "{{ docker_dir }}/swag/letsencrypt:/config/etc/letsencrypt"
     restart_policy: unless-stopped
@@ -58,16 +58,8 @@
       "EMAIL": "{{ email }}"
     ports:
       - "443:443"
-    mounts:
-      - source: "{{ docker_dir }}/swag/public/cf_real_ip.conf"
-        target: /config/nginx/cf_real_ip.conf
-        type: bind
-        read_only: true
-      - source: "{{ docker_dir }}/swag/public/nginx.conf"
-        target: /config/nginx/nginx.conf
-        type: bind
     volumes:
-      - "{{ docker_dir }}/swag/public/proxy-confs:/config/nginx/proxy-confs"
+      - "{{ docker_dir }}/swag/public/nginx:/config/nginx"
       - "{{ docker_dir }}/swag/dns-conf:/config/dns-conf"
       - "{{ docker_dir }}/swag/letsencrypt:/config/etc/letsencrypt"
     restart_policy: unless-stopped

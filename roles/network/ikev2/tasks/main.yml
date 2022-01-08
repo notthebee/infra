@@ -9,6 +9,22 @@
     arch: "amd64"
   when: '"x86_64" in ansible_architecture'
 
+- name: Create the log diredctory
+  file:
+    path: "{{ docker_dir }}/{{ container_name }}/log"
+    state: directory
+    owner: "{{ username }}"
+    group: "{{ username }}"
+    recurse: yes
+
+- name: Create charon.log 
+  file:
+    path: "{{ docker_dir }}/{{ container_name }}/log/charon.log"
+    state: touch
+    owner: "{{ username }}"
+    group: "{{ username }}"
+    modification_time: preserve
+
 - name: Make sure the {{ container_name }} container is created and running
   docker_container:
     name: 'ikev2'

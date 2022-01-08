@@ -35,8 +35,9 @@
 
 - name: Update and upgrade apt packages (Debian and Ubuntu)
   when: ansible_os_family == 'Debian'
-  shell:
-    cmd: apt update && apt upgrade -y
+  apt:
+    upgrade: yes
+    update_cache: yes
 
 - name: Check if reboot required
   stat:
@@ -69,15 +70,6 @@
   user: 
     name: "{{ username }}"
     shell: "{{ shell }}"
-
-- name: Disable fish greeting
-  lineinfile:
-    path: /home/{{ username }}/.config/fish/fish_variables
-    state: present
-    regexp: 'fish_greeting:.+'
-    line: 'SETUVAR fish_greeting:'
-  when: '"fish" in shell'
-  ignore_errors: true
 
 - name: Set the correct ownership for the user's home folder (not using ansible.builtin.file because of idempotency)
   shell:

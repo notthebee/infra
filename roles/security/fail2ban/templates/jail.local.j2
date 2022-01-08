@@ -14,10 +14,10 @@ enabled = true
 port = {{ security_ssh_port }}
 filter = sshd
 
-{% for name in installed_configs %}
-[{{ name }}]
+{% if enable_nextcloud %}
+[nextcloud]
 enabled  = true
-port     = http,https
+port     = http,https,{{ security_ssh_port }}
 filter   = {{ name }}
 logpath  = %({{ name }}_log)s
-{% endfor %}
+{% endif %}

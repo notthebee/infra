@@ -14,6 +14,9 @@
   become: yes
   roles:
 
+    #
+    # Basics
+    #
     - role: system
       tags: 
         - system
@@ -25,6 +28,11 @@
     - role: security/fail2ban
       tags:
       - fail2ban
+
+    - role: security/endlessh
+      tags:
+      - endlessh
+      when: enable_endlessh | default(False)
 
     - role: chriswayg.msmtp-mailer
       tags: 
@@ -42,12 +50,23 @@
       tags: 
         - security
 
+    #
+    # Network
+    #
+    - role: network/wireguard
+      become: no
+      tags: 
+        - wireguard
+        - containers
+      when: enable_wireguard | default(False)
 
-#
-# PiHole/IKEv2 server
-#
-- hosts: coda
-  roles:
+    - role: network/ikev2
+      become: no
+      tags: 
+        - ikev2
+        - containers
+      when: enable_ikev2 | default(False)
+
     - role: network/ddclient
       become: yes
       when: enable_ddclient | default(False)
@@ -81,62 +100,38 @@
         - containers
         - ikev2 
 
-#
-# Home server/NAS
-#
-- hosts: fragile
-
-  roles:
-
     #
     # Filesystems
     #
     - role: filesystems/mergerfs
       become: yes
       tags:
-      - mergerfs
+        - mergerfs
+      when: enable_nas_stuff | default(False)
       
     - role: filesystems/mounts
       become: yes
       tags:
         - mounts
+      when: enable_nas_stuff | default(False)
 
     - role: filesystems/hd-idle
       become: yes
       tags:
-      - hd-idle
+        - hd-idle
+      when: enable_nas_stuff | default(False)
 
     - role: stuvusit.smartd
       become: yes
       tags:
-      - smartd
+        - smartd
+      when: enable_nas_stuff | default(False)
 
     - role: ironicbadger.ansible_role_snapraid
       become: yes
       tags:
-      - snapraid
-
-    #
-    # Network
-    #
-    - role: network/avahi
-      become: yes
-      tags: 
-        - avahi
-
-    - role: network/wireguard
-      become: no
-      tags: 
-        - wireguard
-        - containers
-      when: enable_wireguard | default(False)
-
-    - role: network/swag
-      become: no
-      tags: 
-        - swag
-        - containers
-      when: enable_swag | default(False)
+        - snapraid
+      when: enable_nas_stuff | default(False)
 
     #
     # Homer
@@ -280,3 +275,4 @@
       become: yes
       tags: 
         - samba
+      when: enable_nas_stuff | default(False)

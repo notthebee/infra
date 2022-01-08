@@ -15,8 +15,8 @@
       "PUID": "{{ guid }}"
       "PGID": "{{ guid }}"
       "TZ": "{{ timezone }}"
-      "SERVERURL": "{{ host }}"
-      "PEERS": "{{ wireguard_peers }}"
+      "SERVERURL": "{{ vpn_host }}"
+      "PEERS": "{{ ', '.join(wireguard_peers) }}"
     ports:
       - "51820/udp:51820/udp"
     volumes:

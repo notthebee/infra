@@ -127,20 +127,21 @@
 
 - name: Handle persistent data
   become: no
-  when: "'fragile' in inventory_hostname"
+  when: "enable_nas_stuff | default(False)"
   block:
   - name: Check if the persistent data folder exists on the remote machine
     stat:
       path: "{{ docker_dir }}"
     register: persistent_data
+    when: "enable_nas_stuff | default(False)"
 
   - name: Check if the persistent data folder is empty
-    when: "'fragile' in inventory_hostname"
     find:
       paths: 
         - "{{ docker_dir }}/"
       recurse: yes
     register: persistent_data_find
+    when: "enable_nas_stuff | default(False)"
 
   - name: Create the persistent data folder on the remote machine
     file:

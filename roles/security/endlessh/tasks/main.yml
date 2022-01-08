@@ -1,0 +1,39 @@
+- name: Install endlessh
+  package:
+    name: endlessh
+    state: latest
+
+- name: Copy the config file
+  copy:
+    src: files/config
+    dest: /etc/endlessh/config
+  notify:
+    - restart endlessh
+
+- name: Add the net_bind_capability to the executable (for running on port 22)
+  shell:
+    cmd: "setcap 'cap_net_bind_service=+ep' $(which endlessh)"
+
+- name: Add the net_bind_capability to the systemd service (for running on port 22)
+  lineinfile:
+    regexp: "^#AmbientCapabilities.*$"
+    line: "AmbientCapabilities=CAP_NET_BIND_SERVICE"
+    path: "/usr/lib/systemd/system/endlessh.service"
+
+- name: Comment 'PrivateUsers' (for running on port 22)
+  lineinfile:
+    regexp: "^PrivateUsers=true$"
+    line: "#PrivateUsers=true"
+    path: "/usr/lib/systemd/system/endlessh.service"
+
+- name: Add log output
+  lineinfile:
+    regexp: "^StandardOutput.*$"
+    line: "StandardOutput=file:/var/log/endlessh"
+    path: "/usr/lib/systemd/system/endlessh.service"
+
+- name: Start and enable endlessh
+  service:
+    name: endlessh
+    state: started
+    enabled: yes

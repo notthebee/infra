@@ -7,6 +7,8 @@
 #
 # Misc
 #
+hostname: "{{ inventory_hostname }}"
+
 timezone: Europe/Amsterdam
 
 dns_nameservers: [9.9.9.9, 149.112.112.112]
@@ -113,11 +115,13 @@ security_autoupdate_mail_to: "{{ email }}"
 
 security_autoupdate_mail_on_error: true
 
+# We have our own f2b rules
 security_fail2ban_enabled: false
 
 #
-# Enable/disable individual Docker containers
+# Enable/disable functionality
 #
+enable_nas_stuff: false
 
 # Home automation
 
@@ -144,7 +148,6 @@ enable_sonarr: true
 enable_radarr: true
 
 enable_openbooks: true
-
 
 enable_jackett: true
 
@@ -186,6 +189,8 @@ enable_pihole: true
 
 enable_watchtower: true
 
+enable_endlessh: false
+
 #
 # Time Machine
 #
@@ -199,13 +204,6 @@ enable_timemachine: true
 # IKEv2
 #
 ikev2_ondemand: true
-
-
-
-#
-# Samba
-#
-enable_samba: true
 
 samba_server_string: "{{ hostname }}"
 
@@ -280,6 +278,8 @@ samba_shares:
 # Snapraid and MergerFS
 #
 mergerfs_root: /mnt/storage
+
+enable_mergerfs: yes
 
 disks:
   - { path: /mnt/data1, src: /dev/disk/by-label/Data1, content: true }
