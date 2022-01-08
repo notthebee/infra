@@ -21,11 +21,3 @@ port     = http,https
 filter   = {{ name }}
 logpath  = %({{ name }}_log)s
 {% endfor %}
-
-{% if "vaultwarden" in installed_configs %}
-[vaultwarden-admin]
-enabled  = true
-port     = http,https
-filter   = vaultwarden-admin
-logpath  = %(vaultwarden-admin_log)s
-{% endif %}

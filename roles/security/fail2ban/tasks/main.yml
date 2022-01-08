@@ -3,38 +3,45 @@
     name: fail2ban
     state: latest
 
-- name: Make sure the fail2ban systemd service is enabled and started
-  service:
-    name: fail2ban
-    state: started
-    enabled: yes
-
 - name: Copy custom fail2ban rules
   copy:
     src: "{{ item }}"
     dest: "/etc/fail2ban/filter.d"
-    owner: "{{ username }}"
-    group: "{{ username }}"
   with_fileglob: 
     - "files/filter.d/*.conf"
   when: lookup('vars', 'enable_' + (item | basename).split('.')[0].split('-')[0]) | default(False)
   register: copied_rules
+  notify:
+    - Restart fail2ban
+
+- name: Disable e-mail notifications on jail stop and start
+  copy:
+    src: "files/action.d/sendmail-common.local"
+    dest: "/etc/fail2ban/action.d/sendmail-common.local"
+  notify:
+    - Restart fail2ban
 
 - name: Create a list of rule files that were deployed
   set_fact:
     installed_configs: "{{ installed_configs | default([]) + [ item.dest.split('/')[-1].split('.')[0] ] }}" 
   with_items: "{{ copied_rules.results }}"
   when: item.skipped is not defined
+  notify:
+    - Restart fail2ban
 
 - name: Install the jail.local file
   template:
     src: "jail.local.j2"
     dest: "/etc/fail2ban/jail.local"
+  notify:
+    - Restart fail2ban
 
 - name: Install the paths-overrides.local file
   template:
     src: "paths-overrides.local.j2"
     dest: "/etc/fail2ban/paths-overrides.local"
+  notify:
+    - Restart fail2ban
 
 - name: Put the cloudflare token into the configuration file
   lineinfile:
@@ -42,6 +49,8 @@
     line: "cftoken = {{ cloudflare_firewall_token }}"
     path: "/etc/fail2ban/action.d/cloudflare.conf"
   when: enable_cloudflare | default(False)
+  notify:
+    - Restart fail2ban
 
 - name: Put the cloudflare email into the configuration file
   lineinfile:
@@ -49,8 +58,11 @@
     line: "cfuser = {{ email }}"
     path: "/etc/fail2ban/action.d/cloudflare.conf"
   when: enable_cloudflare | default(False)
+  notify:
+    - Restart fail2ban
 
-- name: Restart fail2ban
+- name: Make sure the fail2ban systemd service is enabled and started
   service:
     name: fail2ban
-    state: restarted
+    state: started
+    enabled: yes
