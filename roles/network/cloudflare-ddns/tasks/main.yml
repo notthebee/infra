@@ -9,7 +9,7 @@
       "PUID": "{{ guid }}"
       "PGID": "{{ guid }}"
       "TZ": "{{ timezone }}"
-      "API_KEY": "{{ cloudflare_token }}"
+      "API_KEY": "{{ cloudflare_dns_token }}"
       "ZONE": "{{ host }}"
       "PROXIED": "true"
       "SUBDOMAIN": "ddns"
