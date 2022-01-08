@@ -56,9 +56,16 @@
       "VALIDATION": "dns"
       "DNSPLUGIN": "cloudflare"
       "EMAIL": "{{ email }}"
-      "DOCKER_MODS": "linuxserver/mods:swag-cloudflare-real-ip"
     ports:
       - "443:443"
+    mounts:
+      - source: "{{ docker_dir }}/swag/public/cf_real_ip.conf"
+        target: /config/nginx/cf_real_ip.conf
+        type: bind
+        read_only: true
+      - source: "{{ docker_dir }}/swag/public/nginx.conf"
+        target: /config/nginx/nginx.conf
+        type: bind
     volumes:
       - "{{ docker_dir }}/swag/public/proxy-confs:/config/nginx/proxy-confs"
       - "{{ docker_dir }}/swag/dns-conf:/config/dns-conf"

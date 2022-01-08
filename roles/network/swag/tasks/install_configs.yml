@@ -67,3 +67,10 @@
     dest: "{{ docker_dir }}/swag/dns-conf/cloudflare.ini"
   notify:
     - restart swag
+
+- name: Install the nginx config
+  copy:
+    src: "files/nginx.conf"
+    dest: "{{ docker_dir }}/swag/public/nginx.conf"
+  notify:
+    - restart swag

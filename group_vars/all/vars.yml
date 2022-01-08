@@ -336,7 +336,8 @@ snapraid_config_excludes:
 #
 smartd_default_mail_recipients: [ "{{ email }}" ]
 ### BEGIN Secret variables (encrypt and put into vault.yml)
-cloudflare_token: ''
+cloudflare_dns_token: ''
+cloudflare_firewall_token: ''
 email_password: ''
 host: ''
 host_local: ''

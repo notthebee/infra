@@ -1,0 +1,31 @@
+- name: Create the cloudflare folder
+  file:
+    path: "{{ docker_dir }}/swag/public/cloudflare/"
+    state: directory
+    owner: "{{ username }}"
+    group: "{{ username }}"
+
+- name: Download the real IP list for Cloudflare
+  get_url:
+    url: "{{ item }}"
+    dest: "{{ docker_dir }}/swag/public/cloudflare/cf_{{ item.split('/')[-1] }}"
+  with_items:
+    - https://www.cloudflare.com/ips-v4
+    - https://www.cloudflare.com/ips-v6
+
+- name: Concatenate the files
+  assemble:
+    src: "{{ docker_dir }}/swag/public/cloudflare"
+    dest: "{{ docker_dir }}/swag/public/cf_real_ip.conf"
+  notify:
+    - test nginx
+    - restart swag
+
+- name: Add "set_real_ip_from" to every line
+  replace:
+    dest: "{{ docker_dir }}/swag/public/cf_real_ip.conf"
+    regexp: "(^.*$)"
+    replace: 'set_real_ip_from \1;'
+  notify:
+    - test nginx
+    - restart swag
