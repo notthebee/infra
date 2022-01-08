@@ -47,31 +47,35 @@
 # PiHole/IKEv2 server
 #
 - hosts: coda
-  become: yes
   roles:
     - role: network/ddclient
+      become: yes
       when: enable_ddclient | default(False)
       tags:
         - ddclient
 
     - role: network/duckdns
+      become: no
       when: enable_duckdns | default(False)
       tags:
         - duckdns 
 
     - role: network/cloudflare-ddns
+      become: no
       tags: 
         - cloudflare-ddns
         - containers
       when: enable_cloudflare | default(False)
 
     - role: network/pihole
+      become: no
       when: enable_pihole | default(False)
       tags:
         - pihole 
         - containers
 
     - role: network/ikev2
+      become: no
       when: enable_ikev2 | default(False)
       tags:
         - containers
@@ -81,7 +85,6 @@
 # Home server/NAS
 #
 - hosts: fragile
-  become: yes
 
   roles:
 
@@ -89,22 +92,27 @@
     # Filesystems
     #
     - role: filesystems/mergerfs
+      become: yes
       tags:
       - mergerfs
       
     - role: filesystems/mounts
+      become: yes
       tags:
         - mounts
 
     - role: filesystems/hd-idle
+      become: yes
       tags:
       - hd-idle
 
     - role: stuvusit.smartd
+      become: yes
       tags:
       - smartd
 
     - role: ironicbadger.ansible_role_snapraid
+      become: yes
       tags:
       - snapraid
 
@@ -112,16 +120,19 @@
     # Network
     #
     - role: network/avahi
+      become: yes
       tags: 
         - avahi
 
     - role: network/wireguard
+      become: no
       tags: 
         - wireguard
         - containers
       when: enable_wireguard | default(False)
 
     - role: network/swag
+      become: no
       tags: 
         - swag
         - containers
@@ -131,6 +142,7 @@
     # Homer
     # 
     - role: homer
+      become: no
       tags: 
         - homer
         - containers
@@ -140,23 +152,27 @@
     # Services
     #
     - role: containers/system/jackett
+      become: no
       tags: 
         - jackett
         - containers
       when: enable_jackett | default(False)
 
     - role: containers/system/authelia
+      become: no
       tags:
         - authelia
         - containers
       when: enable_authelia | default(False)
 
     - role: containers/system/watchtower
+      become: no
       tags:
         - watchtower
         - containers
 
     - role: containers/system/unifi
+      become: no
       tags:
         - unifi
         - containers
@@ -166,42 +182,49 @@
     # Media
     #
     - role: containers/media/deluge
+      become: no
       tags: 
         - deluge
         - containers
       when: enable_deluge | default(False)
 
     - role: containers/media/sonarr
+      become: no
       tags: 
         - sonarr
         - containers
       when: enable_sonarr | default(False)
 
     - role: containers/media/radarr
+      become: no
       tags: 
         - radarr
         - containers
       when: enable_radarr | default(False)
 
     - role: containers/media/booksonic
+      become: no
       tags: 
         - booksonic
         - containers
       when: enable_booksonic | default(False)
 
     - role: containers/media/plex
+      become: no
       tags: 
         - plex
         - containers
       when: enable_plex | default(False)
 
     - role: containers/media/jellyfin
+      become: no
       tags: 
         - jellyfin
         - containers
       when: enable_jellyfin | default(False)
 
     - role: containers/media/openbooks
+      become: no
       tags: 
         - openbooks
         - containers
@@ -211,18 +234,21 @@
     # Services
     #
     - role: containers/services/photoprism
+      become: no
       tags: 
         - photoprism
         - containers
       when: enable_photoprism | default(False)
 
     - role: containers/services/nextcloud
+      become: no
       tags: 
         - nextcloud
         - containers
       when: enable_nextcloud | default(False)
 
     - role: containers/services/vaultwarden
+      become: no
       tags:
         - vaultwarden
         - containers
@@ -232,6 +258,7 @@
     # Home automation
     #
     - role: containers/homeautomation/deconz
+      become: no
       tags: 
         - deconz
         - smarthome
@@ -239,6 +266,7 @@
       when: enable_deconz | default(False)
 
     - role: containers/homeautomation/homeassistant
+      become: no
       tags: 
         - homeassistant
         - smarthome
@@ -249,5 +277,6 @@
     # Samba
     #
     - role: bertvv.samba
+      become: yes
       tags: 
         - samba

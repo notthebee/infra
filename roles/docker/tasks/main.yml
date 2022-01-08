@@ -118,6 +118,7 @@
   register: containers
 
 - name: Stop and remove all the disabled containers
+  become: no
   docker_container: 
     name: "{{ item.path.split('/')[-1] }}"
     state: absent
@@ -125,6 +126,7 @@
   with_items: "{{ containers.files }}"
 
 - name: Handle persistent data
+  become: no
   when: "'fragile' in inventory_hostname"
   block:
   - name: Check if the persistent data folder exists on the remote machine
@@ -155,6 +157,7 @@
     when: persistent_data_find.matched < 20 or persistent_data.stat.exists == false
 
   - name: Chmod the data folder
+    become: yes
     file:
       dest: "{{ docker_dir }}"
       state: directory

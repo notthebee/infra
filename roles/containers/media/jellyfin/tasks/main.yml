@@ -1,5 +1,6 @@
 ---
 - name: Make sure that QuickSync packages are installed
+  become: yes
   apt:
     name:
       - vainfo
