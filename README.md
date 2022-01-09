@@ -42,6 +42,7 @@ The playbook is mostly being developed for personal use, so stuff is going to be
 * [Watchtower](https://hub.docker.com/r/containrrr/watchtower) (An automated updater for Docker images)
 * [DuckDNS](https://hub.docker.com/r/linuxserver/duckdns/) (A dynamic DNS client for DuckDNS)
 * [SWAG](https://hub.docker.com/r/linuxserver/swag) (A reverse proxy with built-in support for dynamic DNS, Certbot and fail2ban)
+* [bunkerized-nginx](https://github.com/bunkerity/bunkerized-nginx) (A NGINX-based web server focused on security)
 
 #### Home Automation
 * [Home Assistant](https://hub.docker.com/r/homeassistant/home-assistant) (A FOSS smart home hub)
@@ -50,7 +51,9 @@ The playbook is mostly being developed for personal use, so stuff is going to be
 ## Other features:
 * MergerFS with Snapraid
 * Samba
-* Fail2Ban for Nextcloud and Vaultwarden with Cloudflare support
+* Fail2Ban for Nextcloud, Vaultwarden and endlessh with Cloudflare support
+* CrowdSec with the iptables bouncer
+* endlessh
 
 ## Usage
 Install Ansible (macOS):
