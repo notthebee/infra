@@ -72,7 +72,7 @@
   cron:
     name: Scan the PhotoPrism library
     hour: "1"
-    job: "/usr/bin/docker exec -it photoprism /photoprism/bin/photoprism index"
+    job: "/usr/bin/docker exec photoprism /photoprism/bin/photoprism index"
 
 - name: Add {{ container_name }} to the SWAG network (reverse-proxy)
   docker_network:

@@ -69,6 +69,7 @@
 - name: Suppress login messages
   file:
     name: /home/{{ username }}/.hushlogin
+    mode: 0644
     state: touch
     modification_time: preserve
     access_time: preserve

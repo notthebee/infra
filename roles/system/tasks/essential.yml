@@ -47,12 +47,12 @@
 - name: Reboot if required
   reboot:
     msg: Rebooting due to a kernel update
-  when: reboot_required_file.stat.exists == true
+  when: reboot_required_file.stat.exists
 
 - name: Install extra packages
   package: 
     name: "{{ extra_packages }}" 
-    state: latest 
+    state: present 
   
 - name: Clone the latest dotfiles repo
   git:
@@ -94,11 +94,16 @@
   file:
     name: /home/{{ username }}/.hushlogin
     state: touch
+    mode: 0664
     modification_time: preserve
     access_time: preserve
 
 - name: Disable cron e-mail notifications
   cron:
     name: MAILTO
+    user: "{{ item }}"
     env: yes
     job: ""
+  with_items:
+    - root
+    - "{{ username }}"
