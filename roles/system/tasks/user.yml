@@ -13,7 +13,6 @@
       - users
     state: present
     append: true
-    update_password: on_create
  
 - name: Ensure group "{{ username }}" exists
   become: yes
@@ -79,7 +78,6 @@
     cmd: "chown -R {{ username }}:{{ username}} /home/{{ username }}"
   register: chown_status
   changed_when: chown_status.stdout != ""
-
 
 - name: Create additional users (no login)
   become: yes

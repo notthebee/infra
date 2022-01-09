@@ -38,11 +38,14 @@
         - ntp
 
 
+    #
     # Security
+    #
     - role: security/fail2ban
       tags:
       - fail2ban
 
+    # TODO: Write my own role
     - role: ../ansible-role-crowdsec
       tags:
       - crowdsec
@@ -121,10 +124,10 @@
         - containers
         - ikev2 
 
+
     #
     # Filesystems
     #
-
     - role: filesystems/mergerfs
       become: yes
       tags:
@@ -154,6 +157,7 @@
       tags:
         - snapraid
       when: enable_nas_stuff | default(False)
+
     #
     # Homer
     # 

@@ -1,9 +1,0 @@
-- name: Chown and chmod the mounts
-  become: yes
-  file: 
-    path: "{{ docker_dir }}/{{ container_name }}"
-    state: directory
-    recurse: yes
-    owner: root
-    group: 101
-    mode: 0770
