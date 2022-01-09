@@ -159,6 +159,8 @@ enable_vaultwarden: true
 
 enable_swag: true
 
+enable_bunkerized_nginx: false
+
 # DDNS
 
 enable_duckdns: false

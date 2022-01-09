@@ -67,6 +67,12 @@
         - containers
       when: enable_swag | default(False)
 
+    - role: network/bunkerized-nginx
+      become: no
+      tags: 
+        - bunkerized-nginx
+        - containers
+      when: enable_bunkerized_nginx | default(False)
 
     - role: network/wireguard
       become: no
