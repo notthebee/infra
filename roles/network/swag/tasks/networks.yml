@@ -1,0 +1,17 @@
+- name: Create an internal macvlan network
+  docker_network:
+    name: swag_macvlan
+    driver: macvlan
+    driver_options:
+      parent: enp2s0
+    ipam_config:
+      - subnet: "{{ lan_network }}"
+        gateway: "{{ ansible_default_ipv4.gateway }}"
+
+- name: Create an internal network
+  docker_network:
+    name: swag_internal_network
+
+- name: Create a public network
+  docker_network:
+    name: swag_network

@@ -1,4 +1,5 @@
 - name: restart endlessh
-  service:
+  systemd:  
     name: endlessh
+    daemon_reload: true
     state: restarted

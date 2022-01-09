@@ -190,7 +190,6 @@ enable_pihole: true
 enable_watchtower: true
 
 enable_endlessh: false
-
 #
 # Time Machine
 #
@@ -335,6 +334,15 @@ snapraid_config_excludes:
 # SMART error reporting
 #
 smartd_default_mail_recipients: [ "{{ email }}" ]
+
+#
+# CrowdSec
+#
+crowdsec_whitelist:
+  enabled: false
+
+enable_crowdsec: false
+
 ### BEGIN Secret variables (encrypt and put into vault.yml)
 cloudflare_dns_token: ''
 cloudflare_firewall_token: ''

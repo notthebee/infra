@@ -2,4 +2,5 @@
 - include_tasks: list_services.yml
 - include_tasks: install_configs.yml
 - include_tasks: cloudflare_real_ips.yml
+- include_tasks: networks.yml
 - include_tasks: docker.yml

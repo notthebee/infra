@@ -25,15 +25,6 @@
       tags: 
         - docker
 
-    - role: security/fail2ban
-      tags:
-      - fail2ban
-
-    - role: security/endlessh
-      tags:
-      - endlessh
-      when: enable_endlessh | default(False)
-
     - role: chriswayg.msmtp-mailer
       tags: 
         - msmtp
@@ -46,6 +37,22 @@
       tags: 
         - ntp
 
+
+    # Security
+    - role: security/fail2ban
+      tags:
+      - fail2ban
+
+    - role: ../ansible-role-crowdsec
+      tags:
+      - crowdsec
+      when: enable_crowdsec
+
+    - role: security/endlessh
+      tags:
+      - endlessh
+      when: enable_endlessh | default(False)
+
     - role: geerlingguy.security
       tags: 
         - security
@@ -53,6 +60,14 @@
     #
     # Network
     #
+    - role: network/swag
+      become: no
+      tags: 
+        - swag
+        - containers
+      when: enable_swag | default(False)
+
+
     - role: network/wireguard
       become: no
       tags: 
@@ -103,6 +118,7 @@
     #
     # Filesystems
     #
+
     - role: filesystems/mergerfs
       become: yes
       tags:
@@ -132,7 +148,6 @@
       tags:
         - snapraid
       when: enable_nas_stuff | default(False)
-
     #
     # Homer
     # 

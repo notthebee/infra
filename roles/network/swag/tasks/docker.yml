@@ -1,15 +1,4 @@
 ---
-- name: Create a macvlan network (Ansible's docker_network can't do macvlan)
-  shell:
-    cmd: "docker network create -d macvlan \
-             --subnet={{ lan_network }} \
-             --gateway={{ ansible_default_ipv4.gateway }} \
-             -o parent=enp2s0 swag_macvlan || /bin/true"
-  ignore_errors: yes
-  register: result
-  failed_when: "'FAILED' in result.stderr and 'already exists' not in result.stderr"
-  changed_when: "'already exists' not in result.stderr"
-
 - name: Make sure the swag_internal container is created and running
   docker_container:
     name: "swag_internal"
