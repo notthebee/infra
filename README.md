@@ -85,8 +85,7 @@ The `pass.sh` script will extract the Ansible Vault password from your Keychain 
 
 Create an encrypted `secret.yml` file and adjust the variables:
 ```
-touch host_vars/YOUR_HOSTNAME/secret.yml
-ansible-vault encrypt host_vars/YOUR_HOSTNAME/secret.yml
+ansible-vault create host_vars/YOUR_HOSTNAME/secret.yml
 ansible-vault edit host_vars/YOUR_HOSTNAME/secret.yml
 ```
 
