@@ -1,7 +1,7 @@
 - name: Install endlessh
   package:
     name: endlessh
-    state: latest
+    state: present
 
 - name: Copy the config file
   copy:

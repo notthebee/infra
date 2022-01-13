@@ -24,6 +24,7 @@
     owner: "{{ username }}"
     group: "{{ username }}"
     modification_time: preserve
+    mode: 0644
 
 - name: Make sure the {{ container_name }} container is created and running
   docker_container:
@@ -33,7 +34,7 @@
     pull: yes
     state: 'started'
     env:
-      DNS_SERVERS: "{{ ansible_default_ipv4.address }}"
+      DNS_SERVERS: "{{ ', '.join(dns_nameservers) }}"
       VPNHOST: "{{ vpn_host }}"
       EMAILADDR:  "{{ email }}"
       VPNUSERNAME:  "{{ username }}"
@@ -47,7 +48,6 @@
       - "{{ docker_dir }}/{{ container_name }}/config:/config"
       - "{{ docker_dir }}/{{ container_name }}/letsencrypt:/etc/letsencrypt"
     ports:
-      - 80:80/tcp
       - 4500:4500/udp
       - 500:500/udp
     restart_policy: unless-stopped

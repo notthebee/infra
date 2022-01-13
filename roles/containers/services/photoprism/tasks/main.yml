@@ -30,8 +30,8 @@
     state: 'started'
     shm_size: 2G
     env:
-      "UID": "{{ guid }}"
-      "GID": "{{ guid }}"
+      "PUID": "{{ guid }}"
+      "PGID": "{{ guid }}"
       "PHOTOPRISM_GID": "{{ guid }}"
       "PHOTOPRISM_UID": "{{ guid }}"
       "TZ": "{{ timezone }}"

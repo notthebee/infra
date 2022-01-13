@@ -46,7 +46,7 @@
       - fail2ban
 
     # TODO: Write my own role
-    - role: ../ansible-role-crowdsec
+    - role: security/crowdsec
       tags:
       - crowdsec
       when: enable_crowdsec

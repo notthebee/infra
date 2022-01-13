@@ -24,6 +24,12 @@
   with_items: "{{ containers.files }}"
   no_log: true
 
+- name: Empty the variables (In case the task is called twice)
+  set_fact:
+    web_applications: []
+    swag_urls: {}
+  when: web_applications is defined and swag_urls is defined
+
 - name: Populate the dictionary of all containers
   set_fact:
     web_applications: "{{ web_applications | default([]) + [{ 'logo': '/assets/tools/homer-icons/' + item.path.split('/')[-1] + '.png', 'name': lookup('vars', item.path.split('/')[-1])['dashboard_name'] | default(item.path.split('/')[-1] | title), 'url' : lookup('vars', item.path.split('/')[-1])['dashboard_url'] | default(''), 'endpoint': lookup('vars', item.path.split('/')[-1])['health_url'] | default(''), 'category': lookup('vars', item.path.split('/')[-1])['homer_category'] | default ('') }] }}"
