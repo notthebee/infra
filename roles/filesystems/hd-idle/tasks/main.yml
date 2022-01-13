@@ -1,6 +1,6 @@
 ---
 - name: Check if hd-idle is installed
-  shell:
+  command:
     cmd: which hd-idle
   ignore_errors: true
   register: hdidle
@@ -14,6 +14,9 @@
     file:
       path: /tmp/hd-idle
       state: directory
+      owner: root
+      group: root
+      mode: 0644
   
   - name: Install github3 module
     pip:
@@ -39,6 +42,9 @@
   template: 
     src: hd-idle.default.j2
     dest: /etc/default/hd-idle
+    owner: root
+    group: root
+    mode: 0644
 
 - name: Make sure that hd-idle is started and enabled on boot
   systemd:

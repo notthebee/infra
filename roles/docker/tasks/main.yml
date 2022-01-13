@@ -1,10 +1,9 @@
 ---
 - name: Include OS-specific variables
   include_vars: "{{ ansible_facts['os_family'] }}.yml"
-
 - name: Install required system packages
   package: 
-    state: latest
+    state: present
     name: "{{ docker_deps }}"
 
 - name: Install Docker (Ubuntu)
@@ -19,7 +18,6 @@
     apt_repository:
       repo: deb https://download.docker.com/linux/ubuntu bionic stable
       state: present
-
 - name: Install Docker (Raspbian)
   when: ansible_facts['distribution'] == 'Debian'
   block:
@@ -149,13 +147,17 @@
       state: directory
       owner: "{{ username }}"
       group: "{{ username }}"
+      mode: 0644
       recurse: yes
-    when: persistent_data.stat.exists == false
+    when: ! persistent_data.stat.exists
 
   - name: Restore the "{{ docker_dir }}" folder from the MergerFS array
-    shell:
-      cmd: "rsync -avz --delete {{ mergerfs_root }}/docker_data/data/ {{ docker_dir }}/"
-    when: persistent_data_find.matched < 20 or persistent_data.stat.exists == false
+    synchronize:
+      src: "{{ mergerfs_root }}/docker_data/data"
+      dest: "{{ docker_dir }}/"
+      delete: true
+      recurse: yes
+    when: persistent_data_find.matched < 20 or ! persistent_data.stat.exists
 
   - name: Chmod the data folder
     become: yes

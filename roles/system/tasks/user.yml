@@ -4,7 +4,6 @@
     sudo_group: sudo
    
 - name: Create a login user
-  become: yes
   user:
     name: "{{ username }}"
     password: "{{ password | password_hash('sha512') }}"
@@ -15,21 +14,18 @@
     append: true
  
 - name: Ensure group "{{ username }}" exists
-  become: yes
   group:
     name: "{{ username }}"
     state: present
 
 - name: Ensure group "sambashare" exists
   when: enable_samba | default(False) 
-  become: yes
   group:
     name: "sambashare"
     state: present
  
 - name: Append the samba group
   when: enable_samba | default(False) 
-  become: yes
   user:
     name: "{{ username }}"
     groups: 
@@ -37,7 +33,6 @@
     append: true
 
 - name: Allow 'sudo' group to have passwordless sudo
-  become: yes
   lineinfile:
     path: /etc/sudoers
     state: present
@@ -46,27 +41,31 @@
     validate: '/usr/sbin/visudo -cf %s'
 
 - name: Copy the public SSH key 
-  become: yes
+  become: no
   authorized_key:
     user: "{{ username }}"
     state: present
     key: "{{ ssh_public_key }}"
 
 - name: Set the default shell
+  become: no
   user: 
     name: "{{ username }}"
     shell: "{{ shell }}"
 
 - name: Disable fish greeting
+  become: no
   lineinfile:
     path: /home/{{ username }}/.config/fish/fish_variables
     state: present
     regexp: 'fish_greeting:.+'
     line: 'SETUVAR fish_greeting:'
+    create: true
+    mode: 0644
   when: '"fish" in shell'
-  ignore_errors: true
 
 - name: Suppress login messages
+  become: no
   file:
     name: /home/{{ username }}/.hushlogin
     mode: 0644
@@ -74,14 +73,7 @@
     modification_time: preserve
     access_time: preserve
 
-- name: Set the correct ownership for the user's home folder (not using ansible.builtin.file because of idempotency)
-  shell:
-    cmd: "chown -R {{ username }}:{{ username}} /home/{{ username }}"
-  register: chown_status
-  changed_when: chown_status.stdout != ""
-
 - name: Create additional users (no login)
-  become: yes
   user:
     name: "{{ item.name }}"
     groups: "{{ item.groups }}"
