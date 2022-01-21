@@ -4,6 +4,8 @@
     name: "nextcloud-mariadb"
     image: "mariadb:latest"
     pull: yes
+    networks:
+      - name: swag_public_macvlan
     command: "--transaction-isolation=READ-COMMITTED --binlog-format=ROW --skip-innodb-read-only-compressed --innodb-read-only-compressed=OFF"
     state: 'started'
     labels:
@@ -26,6 +28,8 @@
 - name: Make sure the Redis container is created and running
   docker_container:
     name: "nextcloud-redis"
+    networks:
+      - name: swag_public_macvlan
     image: "redis:alpine"
     pull: yes
     state: 'started'
@@ -36,6 +40,8 @@
     name: "{{ container_name }}"
     image: "ghcr.io/linuxserver/nextcloud:php8"
     pull: yes
+    networks:
+      - name: swag_public_macvlan
     state: 'started'
     env:
       "PUID": "{{ guid }}"
@@ -46,17 +52,6 @@
       - "{{ docker_dir }}/{{ container_name }}/data:/data"
       - "{{ mergerfs_root }}/Nextcloud/{{ username }}:/data/{{ username }}"
     restart_policy: unless-stopped
-
-- name: Add {{ container_name }} to the SWAG network (reverse-proxy)
-  docker_network:
-    name: swag_network
-    connected:
-      - "{{ container_name }}"
-      - nextcloud-mariadb
-      - nextcloud-redis
-    appends: yes
-  when: enable_swag
-
 
 - name: Schedule a Nextcloud library scan at midnight every day
   cron:

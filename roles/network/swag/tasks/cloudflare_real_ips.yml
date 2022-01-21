@@ -4,6 +4,7 @@
     state: directory
     owner: "{{ username }}"
     group: "{{ username }}"
+    mode: 0755
 
 - name: Download the real IP list for Cloudflare
   get_url:
@@ -17,6 +18,9 @@
   assemble:
     src: "{{ docker_dir }}/swag/public/cloudflare"
     dest: "{{ docker_dir }}/swag/public/nginx/cf_real_ip.conf"
+    mode: 0644
+    owner: "{{ username }}"
+    group: "{{ username }}"
   notify:
     - test nginx
     - restart swag
@@ -36,7 +40,7 @@
     block: |
       real_ip_header X-Forwarded-For;
       real_ip_recursive on;
-      include /config/nginx/cf_real_ip.conf; 
+      include /config/nginx/cf_real_ip.conf;
     insertafter: "^.*include /config/nginx/resolver.conf.*$"
   notify:
     - test nginx

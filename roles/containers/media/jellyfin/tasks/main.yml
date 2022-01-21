@@ -1,12 +1,11 @@
 ---
 - name: Make sure that QuickSync packages are installed
   become: yes
-  apt:
+  package:
     name:
       - vainfo
       - intel-media-va-driver-non-free
-    state: latest
-    update_cache: yes
+    state: present
 
 - name: Make sure the {{ container_name }} container is created and running
   docker_container:

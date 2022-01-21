@@ -4,19 +4,18 @@
   when: ansible_facts['distribution'] == 'Ubuntu'
   block:
   - name: Remove cloud-config to avoid boot delay
-    apt: 
+    apt:
       name: cloud-config
       state: absent
 
   - name: Make sure iSCSId and Open-iSCSId services are disabled
-    service: 
+    service:
       name: "{{ item }}"
-      state: stopped 
+      state: stopped
       enabled: no
-    with_items: 
+    with_items:
       - iscsid
       - open-iscsi
-    ignore_errors: yes
 
   - name: Install the apt mirror list
     template:
@@ -37,6 +36,7 @@
   when: ansible_os_family == 'Debian'
   apt:
     upgrade: yes
+    autoremove: yes
     update_cache: yes
 
 - name: Check if reboot required
@@ -50,32 +50,9 @@
   when: reboot_required_file.stat.exists
 
 - name: Install extra packages
-  package: 
-    name: "{{ extra_packages }}" 
-    state: present 
-  
-- name: Clone the latest dotfiles repo
-  git:
-    repo: "{{ dotfiles_repo }}"
-    dest: /home/{{ username }}/dotfiles
-    recursive: no
-    force: yes
-
-- name: Stow the dotfiles
-  shell: cd /home/{{ username }}/dotfiles && stow -v */
-  register: stow_result
-  changed_when: stow_result.stdout != ""
-
-- name: Set the default shell
-  user: 
-    name: "{{ username }}"
-    shell: "{{ shell }}"
-
-- name: Set the correct ownership for the user's home folder (not using ansible.builtin.file because of idempotency)
-  shell:
-    cmd: "chown -R {{ username }}:{{ username}} /home/{{ username }}"
-  register: chown_status
-  changed_when: chown_status.stdout != ""
+  package:
+    name: "{{ extra_packages }}"
+    state: present
 
 - name: Set the hostname
   hostname:
@@ -88,15 +65,7 @@
     line: "127.0.0.1 {{ inventory_hostname }}"
     owner: root
     group: root
-    mode: '0644' 
-
-- name: Suppress login messages
-  file:
-    name: /home/{{ username }}/.hushlogin
-    state: touch
-    mode: 0664
-    modification_time: preserve
-    access_time: preserve
+    mode: '0644'
 
 - name: Disable cron e-mail notifications
   cron:

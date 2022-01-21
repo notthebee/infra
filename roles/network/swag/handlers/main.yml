@@ -1,5 +1,6 @@
 - name: test nginx
-  shell: "docker exec -it {{ item }} /usr/sbin/nginx -c /config/nginx/nginx.conf -t"
+  command:
+    cmd: "docker exec -it {{ item }} /usr/sbin/nginx -c /config/nginx/nginx.conf -t"
   register: swag_nginx_test
   changed_when: swag_nginx_test is not search("test is successful")
   failed_when: swag_nginx_test is not search("test is successful")

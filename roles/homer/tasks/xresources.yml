@@ -11,14 +11,16 @@
 - name: Install the Xresources file
   copy:
     dest: "/home/{{ username }}/.Xresources"
-    src: "files/colorschemes/{{colorscheme | lower }}"
+    src: "files/colorschemes/{{ colorscheme | lower }}"
     owner: "{{ username }}"
     group: "{{ username }}"
+    mode: 0644
 
 - name: Parse the Xresources file
-  shell: 
+  shell:
     cmd: "python3 -c 'import xrp; import json; result = xrp.parse_file(\"/home/{{ username }}/.Xresources\", encoding=\"utf8\"); print(json.dumps(dict(result.resources), indent = 4).replace(\"*.\", \"\").replace(\"*\", \"\"))'"
   register: xresources
+  changed_when: false
 
 - name: Save variables
   set_fact:

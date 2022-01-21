@@ -3,22 +3,27 @@
   file:
     path: "{{ docker_dir }}/{{ container_name }}/tools/homer-icons"
     state: directory
-  
+    mode: 0755
+    owner: "{{ username }}"
+    group: "{{ username }}"
+
 - name: Copy the icons
   copy:
     src: "files/icons/{{ item.path.split('/')[-1] }}.png"
-    dest: "{{ docker_dir }}/{{ container_name}}/tools/homer-icons"
+    dest: "{{ docker_dir }}/{{ container_name }}/tools/homer-icons"
     owner: "{{ username }}"
     group: "{{ username }}"
+    mode: 0644
   when: lookup('vars', 'enable_' + item.path.split('/')[-1]) | default(False) and lookup('vars', item.path.split('/')[-1])['dashboard_url'] is defined
   with_items: "{{ containers.files }}"
 
 - name: Copy the logo
   copy:
     src: "files/icons/logo.jpg"
-    dest: "{{ docker_dir }}/{{ container_name}}/tools/homer-icons"
+    dest: "{{ docker_dir }}/{{ container_name }}/tools/homer-icons"
     owner: "{{ username }}"
     group: "{{ username }}"
+    mode: 0644
 
 - name: Copy the custom stylesheet
   copy:
@@ -26,10 +31,12 @@
     dest: "{{ docker_dir }}/{{ container_name }}"
     owner: "{{ username }}"
     group: "{{ username }}"
+    mode: 0644
 
 - name: Generate the Homer config file
   template:
     src: config.yml.j2
-    dest: "{{ docker_dir }}/{{ container_name}}/config.yml"
+    dest: "{{ docker_dir }}/{{ container_name }}/config.yml"
     owner: "{{ username }}"
     group: "{{ username }}"
+    mode: 0644

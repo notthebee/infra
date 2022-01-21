@@ -4,8 +4,9 @@
     name: "{{ container_name }}"
     image: "homeassistant/home-assistant:stable"
     pull: yes
+    networks:
+      - name: swag_internal_network
     state: 'started'
-    network_mode: host
     labels:
       "flame.type": "application"
       "flame.name": "{{ dashboard_name }}"
@@ -13,6 +14,8 @@
       "flame.icon": "custom"
     env:
       "TZ": "{{ timezone }}"
+    ports:
+      8123:8123
     volumes:
       - "{{ docker_dir }}/{{ container_name }}:/config"
     restart_policy: unless-stopped

@@ -2,15 +2,11 @@
 # Moves files away from the cache drive after they haven't been accessed for 5 days
 # Or when the cache drive is 85% full
 
-CACHE={{ cache_disks[0].path }}
+CACHE={{ cache_root }}
 BACKING={{ mergerfs_root }}_slow
-PERCENTAGE=85
-N=5
+PERCENTAGE=75
 
 set -o errexit
-find "${CACHE}" -type f -atime +${N} -printf '%P\n' | \
-  rsync --files-from=- -axqHAXWES --preallocate --remove-source-files "${CACHE}/" "${BACKING}/"
-
 while [ $(df --output=pcent "${CACHE}" | grep -v Use | cut -d'%' -f1) -gt ${PERCENTAGE} ]
 do
     FILE=$(find "${CACHE}" -type f -printf '%A@ %P\n' | \

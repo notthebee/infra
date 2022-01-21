@@ -1,9 +1,8 @@
 ---
 - name: Install required system packages
-  apt: 
+  package:
     name: avahi-daemon
-    state: latest 
-    update_cache: yes
+    state: present
 
 - name: Copy the main Avahi config
   template:
@@ -20,9 +19,9 @@
     owner: root
     group: root
     mode: 0775
-  
+
 - name: Make sure the Avahi service is running and enabled
-  service: 
+  service:
     name: avahi-daemon
-    state: started 
+    state: started
     enabled: yes

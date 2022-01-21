@@ -30,9 +30,8 @@
     name: "swag_public"
     image: "ghcr.io/linuxserver/swag"
     pull: yes
-    network_mode: swag_network
     networks:
-      - name: swag_network
+      - name: swag_public_macvlan
     capabilities: 
       - net_admin
     state: 'started'

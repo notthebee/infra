@@ -4,6 +4,8 @@
   docker_container:
     name: 'vaultwarden'
     image: "vaultwarden/server"
+    networks:
+      - name: swag_public_macvlan
     pull: true
     state: 'started'
     labels:
@@ -15,18 +17,9 @@
       WEBSOCKET_ENABLED: "true"
       INVITATIONS_ALLOWED: "false"
       SIGNUPS_ALLOWED: "false"
-      DOMAIN: "{{ dashboard_url }}"
+      DOMAIN: "https://{{ subdomains['vaultwarden'] }}.{{ host }}"
       LOG_FILE: "/data/vaultwarden.log"
       TZ: "{{ timezone }}"
     volumes:
       - "{{ docker_dir }}/{{ container_name }}:/data"
     restart_policy: unless-stopped
-
-
-- name: Add {{ container_name }} to the SWAG network (reverse-proxy)
-  docker_network:
-    name: swag_network
-    connected:
-      - vaultwarden
-    appends: yes
-  when: enable_swag

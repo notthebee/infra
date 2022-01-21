@@ -18,15 +18,15 @@
     # Basics
     #
     - role: system
-      tags: 
+      tags:
         - system
 
     - role: docker
-      tags: 
+      tags:
         - docker
 
     - role: chriswayg.msmtp-mailer
-      tags: 
+      tags:
         - msmtp
 
     - role: oefenweb.dns
@@ -34,7 +34,7 @@
         - dns
 
     - role: geerlingguy.ntp
-      tags: 
+      tags:
         - ntp
 
 
@@ -45,7 +45,11 @@
       tags:
       - fail2ban
 
-    # TODO: Write my own role
+    - role: security/iptables
+      tags:
+      - iptables
+      when: enable_iptables
+
     - role: security/crowdsec
       tags:
       - crowdsec
@@ -57,7 +61,7 @@
       when: enable_endlessh | default(False)
 
     - role: geerlingguy.security
-      tags: 
+      tags:
         - security
 
     #
@@ -65,28 +69,28 @@
     #
     - role: network/swag
       become: no
-      tags: 
+      tags:
         - swag
         - containers
       when: enable_swag | default(False)
 
     - role: network/bunkerized-nginx
       become: no
-      tags: 
+      tags:
         - bunkerized-nginx
         - containers
       when: enable_bunkerized_nginx | default(False)
 
     - role: network/wireguard
       become: no
-      tags: 
+      tags:
         - wireguard
         - containers
       when: enable_wireguard | default(False)
 
     - role: network/ikev2
       become: no
-      tags: 
+      tags:
         - ikev2
         - containers
       when: enable_ikev2 | default(False)
@@ -101,20 +105,20 @@
       become: no
       when: enable_duckdns | default(False)
       tags:
-        - duckdns 
+        - duckdns
 
     - role: network/cloudflare-ddns
       become: no
-      tags: 
+      tags:
         - cloudflare-ddns
         - containers
-      when: enable_cloudflare | default(False)
+      when: enable_cloudflare_ddns | default(False)
 
     - role: network/pihole
       become: no
       when: enable_pihole | default(False)
       tags:
-        - pihole 
+        - pihole
         - containers
 
     - role: network/ikev2
@@ -122,7 +126,7 @@
       when: enable_ikev2 | default(False)
       tags:
         - containers
-        - ikev2 
+        - ikev2
 
 
     #
@@ -133,7 +137,7 @@
       tags:
         - mergerfs
       when: enable_nas_stuff | default(False)
-      
+
     - role: filesystems/mounts
       become: yes
       tags:
@@ -160,10 +164,10 @@
 
     #
     # Homer
-    # 
+    #
     - role: homer
       become: no
-      tags: 
+      tags:
         - homer
         - containers
       when: enable_homer | default(False)
@@ -173,7 +177,7 @@
     #
     - role: containers/system/jackett
       become: no
-      tags: 
+      tags:
         - jackett
         - containers
       when: enable_jackett | default(False)
@@ -203,49 +207,49 @@
     #
     - role: containers/media/deluge
       become: no
-      tags: 
+      tags:
         - deluge
         - containers
       when: enable_deluge | default(False)
 
     - role: containers/media/sonarr
       become: no
-      tags: 
+      tags:
         - sonarr
         - containers
       when: enable_sonarr | default(False)
 
     - role: containers/media/radarr
       become: no
-      tags: 
+      tags:
         - radarr
         - containers
       when: enable_radarr | default(False)
 
     - role: containers/media/booksonic
       become: no
-      tags: 
+      tags:
         - booksonic
         - containers
       when: enable_booksonic | default(False)
 
     - role: containers/media/plex
       become: no
-      tags: 
+      tags:
         - plex
         - containers
       when: enable_plex | default(False)
 
     - role: containers/media/jellyfin
       become: no
-      tags: 
+      tags:
         - jellyfin
         - containers
       when: enable_jellyfin | default(False)
 
     - role: containers/media/openbooks
       become: no
-      tags: 
+      tags:
         - openbooks
         - containers
       when: enable_openbooks | default(False)
@@ -255,14 +259,14 @@
     #
     - role: containers/services/photoprism
       become: no
-      tags: 
+      tags:
         - photoprism
         - containers
       when: enable_photoprism | default(False)
 
     - role: containers/services/nextcloud
       become: no
-      tags: 
+      tags:
         - nextcloud
         - containers
       when: enable_nextcloud | default(False)
@@ -273,13 +277,13 @@
         - vaultwarden
         - containers
       when: enable_vaultwarden | default(False)
- 
+
     #
     # Home automation
     #
     - role: containers/homeautomation/deconz
       become: no
-      tags: 
+      tags:
         - deconz
         - smarthome
         - containers
@@ -287,7 +291,7 @@
 
     - role: containers/homeautomation/homeassistant
       become: no
-      tags: 
+      tags:
         - homeassistant
         - smarthome
         - containers
@@ -298,6 +302,6 @@
     #
     - role: bertvv.samba
       become: yes
-      tags: 
+      tags:
         - samba
       when: enable_nas_stuff | default(False)

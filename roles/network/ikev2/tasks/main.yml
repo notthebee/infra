@@ -17,7 +17,7 @@
     group: "{{ username }}"
     recurse: yes
 
-- name: Create charon.log 
+- name: Create charon.log
   file:
     path: "{{ docker_dir }}/{{ container_name }}/log/charon.log"
     state: touch
@@ -52,9 +52,15 @@
       - 500:500/udp
     restart_policy: unless-stopped
 
+- name: Wait for the mobileconfig file to be generated
+  stat:
+    path: "{{ docker_dir }}/{{ container_name }}/config/{{ vpn_host }}.mobileconfig"
+  register: mobileconfig
+  until: mobileconfig.stat.exists
+  retries: 10
+  delay: 5
 
-- name: Copy the mobileconfig to the local host (might fail on the first run)
-  ignore_errors: true
+- name: Copy the mobileconfig to the local host
   synchronize:
     mode: pull
     delete: yes

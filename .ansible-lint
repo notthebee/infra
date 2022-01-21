@@ -1,0 +1,8 @@
+---
+skip_list:
+  - git-latest
+  - package-latest
+
+warn_list:
+  - load-failure
+  - yaml

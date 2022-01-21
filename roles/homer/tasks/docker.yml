@@ -6,8 +6,8 @@
     pull: true
     state: 'started'
     env:
-      "PUID": "{{ guid }}"
-      "PGID": "{{ guid }}"
+      "UID": "{{ guid }}"
+      "GID": "{{ guid }}"
       "TZ": "{{ timezone }}"
     volumes:
       - "{{ docker_dir }}/{{ container_name }}:/www/assets"

@@ -6,12 +6,20 @@
       parent: enp2s0
     ipam_config:
       - subnet: "{{ lan_network }}"
-        gateway: "{{ ansible_default_ipv4.gateway }}"
+        gateway: "{{ lan_gateway }}"
 
 - name: Create an internal network
   docker_network:
     name: swag_internal_network
+    ipam_config:
+      - subnet: "172.20.0.0/16"
 
-- name: Create a public network
+- name: Create a public macvlan network
   docker_network:
-    name: swag_network
+    name: swag_public_macvlan
+    driver: macvlan
+    driver_options:
+      parent: enp5s0
+    ipam_config:
+      - subnet: "{{ dmz_network }}"
+        gateway: "{{ dmz_gateway }}"

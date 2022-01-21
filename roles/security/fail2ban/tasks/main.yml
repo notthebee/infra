@@ -1,13 +1,16 @@
 - name: Install fail2ban
   package:
     name: fail2ban
-    state: latest
+    state: present
 
 - name: Copy custom fail2ban rules
   copy:
     src: "{{ item }}"
     dest: "/etc/fail2ban/filter.d"
-  with_fileglob: 
+    mode: 0644
+    owner: root
+    group: root
+  with_fileglob:
     - "files/filter.d/*.conf"
   when: lookup('vars', 'enable_' + (item | basename).split('.')[0].split('-')[0]) | default(False)
   register: copied_rules
@@ -18,12 +21,15 @@
   copy:
     src: "files/action.d/sendmail-common.local"
     dest: "/etc/fail2ban/action.d/sendmail-common.local"
+    mode: 0644
+    owner: root
+    group: root
   notify:
     - Restart fail2ban
 
 - name: Create a list of rule files that were deployed
   set_fact:
-    installed_configs: "{{ installed_configs | default([]) + [ item.dest.split('/')[-1].split('.')[0] ] }}" 
+    installed_configs: "{{ installed_configs | default([]) + [ item.dest.split('/')[-1].split('.')[0] ] }}"
   with_items: "{{ copied_rules.results }}"
   when: item.skipped is not defined
   notify:
@@ -33,6 +39,9 @@
   template:
     src: "jail.local.j2"
     dest: "/etc/fail2ban/jail.local"
+    mode: 0644
+    owner: root
+    group: root
   notify:
     - Restart fail2ban
 
@@ -40,6 +49,9 @@
   template:
     src: "paths-overrides.local.j2"
     dest: "/etc/fail2ban/paths-overrides.local"
+    mode: 0644
+    owner: root
+    group: root
   notify:
     - Restart fail2ban
 

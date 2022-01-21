@@ -47,6 +47,15 @@
     state: mounted
   when: disks[0] is defined
 
+- name: Mount the mergerfs cache only array
+  mount:
+    name: "{{ cache_root }}"
+    src: /mnt/cache*
+    opts: direct_io,defaults,allow_other,fsname=mergerfs_cache,category.create=mfs
+    fstype: fuse.mergerfs
+    state: mounted
+  when: cache_disks[0] is defined
+
 - name: Mount the Time Machine drive
   mount:
     name: "{{ timemachine_root }}"

@@ -6,14 +6,18 @@
     recurse: yes
     owner: "{{ username }}"
     group: "{{ username }}"
+    mode: 0755
   with_items:
     - internal
     - public
- 
+
 - name: Install the SWAG config files
   template:
     src: "{{ item }}"
     dest: "{{ docker_dir }}/swag/{{ item.split('/')[-2] }}/nginx/proxy-confs/{{ item | basename | regex_replace('.j2$', '') }}"
+    owner: "{{ username }}"
+    group: "{{ username }}"
+    mode: 0644
   when: lookup('vars', 'enable_' + (item | basename).split('.')[0]) | default(False)
   with_fileglob:
     - templates/internal/*.j2
@@ -25,13 +29,13 @@
 
 - name: Create a list of variables files that were deployed
   set_fact:
-    installed_templates: "{{installed_templates | default([]) + [ item.dest ]}}" 
+    installed_templates: "{{ installed_templates | default([]) + [ item.dest ] }}"
   with_items: "{{ swag_config.results }}"
   when: item.skipped is not defined
 
 - name: List all config files in the target folder
   find:
-    paths: 
+    paths:
       - "{{ docker_dir }}/swag/internal/nginx/proxy-confs/"
       - "{{ docker_dir }}/swag/public/nginx/proxy-confs/"
     patterns:
@@ -44,7 +48,7 @@
     var: found_files
 
 - name: Remove config files for disabled services
-  file: 
+  file:
     path: "{{ item.path }}"
     state: absent
   when: item.path not in installed_templates
@@ -60,10 +64,15 @@
     recurse: yes
     owner: "{{ username }}"
     group: "{{ username }}"
- 
+    mode: 0755
+
 - name: Install the DNS config file
   template:
     src: "dns-conf/cloudflare.ini.j2"
     dest: "{{ docker_dir }}/swag/dns-conf/cloudflare.ini"
+    owner: "{{ username }}"
+    group: "{{ username }}"
+    mode: 0644
+
   notify:
     - restart swag

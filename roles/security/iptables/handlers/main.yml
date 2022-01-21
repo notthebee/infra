@@ -1,0 +1,17 @@
+- name: restart relevant services
+  service:
+    name: "{{ item }}"
+    state: restarted
+  with_items:
+    - netfilter-persistent
+    - docker
+    - crowdsec
+    - crowdsec-firewall-bouncer
+  register: result
+  until: result is succeeded
+  retries: 2
+
+- name: remove the default rules
+  file:
+    path: /etc/iptables/rules.v4
+    state: absent

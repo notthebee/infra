@@ -7,14 +7,18 @@
   copy:
     src: files/config
     dest: /etc/endlessh/config
+    owner: root
+    group: root
+    mode: 0644
   notify:
     - restart endlessh
 
 - name: Add the net_bind_capability to the executable (for running on port 22)
-  shell:
-    cmd: "setcap 'cap_net_bind_service=+ep' $(which endlessh)"
+  command:
+    cmd: "setcap 'cap_net_bind_service=+ep' /usr/bin/endlessh"
   notify:
     - restart endlessh
+  changed_when: false
 
 - name: Add the net_bind_capability to the systemd service (for running on port 22)
   lineinfile:

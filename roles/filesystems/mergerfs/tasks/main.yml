@@ -1,8 +1,8 @@
 ---
 - name: Install required system packages
-  apt: 
-    name: "mergerfs"
-    state: latest 
+  apt:
+    name: mergerfs
+    state: present
     update_cache: yes
 
 - name: Install the uncaching script
