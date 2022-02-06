@@ -1,8 +1,6 @@
 ---
 container_name: jellyfin
 
-dashboard_url: "http://jellyfin.{{ host_local }}"
+dashboard_url: "https://jellyfin.{{ host_local }}"
 
 homer_category: media
-
-health_url: "http://{{ ansible_default_ipv4.address }}:3000/http://jellyfin:8096"

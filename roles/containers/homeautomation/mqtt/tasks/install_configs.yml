@@ -1,0 +1,40 @@
+- name: Create the config folder
+  become: yes
+  file:
+    path: "{{ docker_dir }}/{{ container_name }}/config"
+    state: directory
+    mode: 0755
+    owner: 1883
+    group: 1883
+
+- name: Copy mosquitto.conf 
+  become: yes
+  copy:
+    src: files/mosquitto.conf
+    dest: "{{ docker_dir }}/{{ container_name }}/config/mosquitto.conf"
+    mode: 0644
+    owner: 1883
+    group: 1883
+
+- name: Create mosquitto.passwd 
+  become: yes
+  file:
+    path: "{{ docker_dir }}/{{ container_name }}/config/mosquitto.passwd"
+    state: touch
+    access_time: preserve
+    modification_time: preserve
+    mode: 0644
+    owner: 1883
+    group: 1883
+
+- name: Check if mosquitto.passwd is populated
+  become: yes
+  lineinfile:
+    path: "{{ docker_dir }}/{{ container_name }}/config/mosquitto.passwd"
+    regexp: "^mosquitto.*$"
+    state: absent
+  register: mosquitto_passwd_present
+  changed_when: not mosquitto_passwd_present.changed
+  check_mode: yes
+  notify:
+    - Generate the password

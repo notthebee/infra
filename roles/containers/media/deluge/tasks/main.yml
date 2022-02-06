@@ -12,12 +12,10 @@
     name: "{{ container_name }}"
     image: "binhex/arch-delugevpn:latest"
     pull: yes
+    networks:
+      - name: swag_internal_macvlan
+        ipv4_address: 10.0.0.10
     privileged: yes
-    labels:
-      "flame.type": "application"
-      "flame.name": "{{ container_name | title }}"
-      "flame.url": "{{ dashboard_url }}"
-      "flame.icon": "custom"
     sysctls:
       "net.ipv4.conf.all.src_valid_mark": "1"
     capabilities: 
@@ -37,21 +35,11 @@
       "PUID": "{{ guid }}"
       "PGID": "{{ guid }}"
       "TZ": "{{ timezone }}"
-    ports:
-      - "8112:8112"
-      - "58846:58846"
     volumes:
       - "{{ docker_dir }}/{{ container_name }}/data:/data"
       - "{{ docker_dir }}/{{ container_name }}/config:/config"
       - "{{ docker_dir }}/{{ container_name }}/iptable.sh:/root/iptable.sh"
       - "{{ mergerfs_root }}/Downloads:/home/nobody/Downloads"
+      - "{{ mergerfs_root }}/Backups/Linux:/.linux"
       - "/etc/localtime:/etc/localtime:ro"
     restart_policy: unless-stopped
-
-- name: Add {{ container_name }} to the SWAG network (reverse-proxy)
-  docker_network:
-    name: swag_internal_network
-    connected:
-      - deluge
-    appends: yes
-  when: enable_swag

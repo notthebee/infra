@@ -1,9 +1,7 @@
 ---
 container_name: openbooks
 
-dashboard_url: "http://openbooks.{{ host_local }}/"
-
-health_url: "http://{{ ansible_default_ipv4.address }}:3000/http://openbooks.{{ host_local }}"
+dashboard_url: "https://openbooks.{{ host_local }}/"
 
 homer_category: media
 

@@ -1,6 +1,6 @@
 container_name: photoprism
 
-dashboard_url: "http://photoprism.{{ host_local }}"
+dashboard_url: "https://photoprism.{{ host_local }}"
 
 homer_category: services
 

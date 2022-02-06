@@ -25,6 +25,10 @@
       tags:
         - docker
 
+    - role: network/avahi
+      tags:
+        - avahi
+
     - role: chriswayg.msmtp-mailer
       tags:
         - msmtp
@@ -172,8 +176,9 @@
         - containers
       when: enable_homer | default(False)
 
+
     #
-    # Services
+    # System
     #
     - role: containers/system/jackett
       become: no
@@ -281,6 +286,15 @@
     #
     # Home automation
     #
+    - role: containers/homeautomation/homeassistant
+      become: no
+      tags:
+        - homeassistant
+        - smarthome
+        - containers
+      when: enable_homeassistant | default(False)
+
+
     - role: containers/homeautomation/deconz
       become: no
       tags:
@@ -289,10 +303,10 @@
         - containers
       when: enable_deconz | default(False)
 
-    - role: containers/homeautomation/homeassistant
+    - role: containers/homeautomation/mqtt
       become: no
       tags:
-        - homeassistant
+        - mqtt
         - smarthome
         - containers
       when: enable_homeassistant | default(False)

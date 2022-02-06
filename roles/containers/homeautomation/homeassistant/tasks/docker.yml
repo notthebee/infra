@@ -1,0 +1,41 @@
+---
+- name: Create an "{{ container_name }}" network
+  docker_network:
+    name: hass_network
+
+- name: Make sure the Home Assistant MariaDB container is created and running
+  docker_container:
+    name: "ha-mariadb"
+    image: "mariadb:latest"
+    pull: yes
+    networks:
+      - name: hass_network
+    command: "--transaction-isolation=READ-COMMITTED --binlog-format=ROW --skip-innodb-read-only-compressed --innodb-read-only-compressed=OFF"
+    state: 'started'
+    env:
+      "PUID": "{{ guid }}"
+      "PGID": "{{ guid }}"
+      "TZ": "{{ timezone }}"
+      "MYSQL_ROOT_PASSWORD": "{{ ha_mysql_root_password }}"
+      "MYSQL_DATABASE": "{{ ha_mysql_db }}"
+      "MYSQL_USER": "{{ ha_mysql_user }}"
+      "MYSQL_PASSWORD": "{{ ha_mysql_password }}"
+    volumes:
+      - "{{ docker_dir }}/{{ container_name }}/mariadb/mysql:/var/lib/mysql"
+    restart_policy: unless-stopped
+ 
+- name: Make sure the {{ container_name }} container is created and running
+  docker_container:
+    name: "{{ container_name }}"
+    image: "homeassistant/home-assistant:stable"
+    networks:
+      - name: swag_internal_macvlan
+        ipv4_address: 10.0.0.12
+      - name: hass_network
+    pull: yes
+    state: 'started'
+    env:
+      "TZ": "{{ timezone }}"
+    volumes:
+      - "{{ docker_dir }}/{{ container_name }}/config:/config"
+    restart_policy: unless-stopped

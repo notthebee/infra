@@ -5,8 +5,8 @@
     image: "ghcr.io/linuxserver/swag"
     pull: yes
     networks:
-      - name: swag_macvlan
-      - name: swag_internal_network
+      - name: swag_internal_macvlan
+        ipv4_address: 10.0.0.24
     capabilities: 
       - net_admin
     state: 'started'
@@ -27,11 +27,12 @@
 
 - name: Make sure the swag_public container is created and running
   docker_container:
-    name: "swag_public"
+    name: "swag_public" 
     image: "ghcr.io/linuxserver/swag"
     pull: yes
     networks:
       - name: swag_public_macvlan
+        ipv4_address: "{{ '.'.join(dmz_gateway.split('.')[0:3]) }}.44"
     capabilities: 
       - net_admin
     state: 'started'

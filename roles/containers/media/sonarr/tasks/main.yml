@@ -4,6 +4,9 @@
     name: "{{ container_name }}"
     image: "ghcr.io/linuxserver/sonarr"
     pull: yes
+    networks:
+      - name: swag_internal_macvlan
+        ipv4_address: 10.0.0.16
     labels:
       "flame.type": "application"
       "flame.name": "{{ container_name | title }}"
@@ -22,11 +25,3 @@
     restart_policy: unless-stopped
     ports:
       - 8989:8989
-
-- name: Add {{ container_name }} to the SWAG network (reverse-proxy)
-  docker_network:
-    name: swag_internal_network
-    connected:
-      - "{{ container_name }}"
-    appends: yes
-  when: enable_swag

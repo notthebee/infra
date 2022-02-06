@@ -1,6 +1,6 @@
 ---
 container_name: plex
 
-dashboard_url: "http://{{ ansible_default_ipv4.address }}:32400/web"
+dashboard_url: "http://{{ lan_address }}:32400/web"
 
 homer_category: media

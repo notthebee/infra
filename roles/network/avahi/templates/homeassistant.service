@@ -1,0 +1,17 @@
+<service-group>
+  <name>Home Assistant Bridge</name>
+  <service>
+    <type>_hap._tcp</type>
+    <port>21065</port>
+    <txt-record>md=hass bridge</txt-record>
+
+    <txt-record>pv=1.1</txt-record>
+    <txt-record>id=70:96:A1:BA:5C:E2</txt-record>
+    <txt-record>c#=2</txt-record>
+    <txt-record>s#=1</txt-record>
+    <txt-record>ff=0</txt-record>
+    <txt-record>ci=2</txt-record>
+    <txt-record>sf=1</txt-record>
+    <txt-record>sh=LnhiOw==</txt-record>
+  </service>
+</service-group>

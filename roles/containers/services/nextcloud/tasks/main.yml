@@ -1,4 +1,8 @@
 ---
+- name: Create a nextcloud network
+  docker_network:
+    name: nextcloud_network
+
 - name: Make sure the MariaDB container is created and running
   docker_container:
     name: "nextcloud-mariadb"
@@ -6,13 +10,9 @@
     pull: yes
     networks:
       - name: swag_public_macvlan
+      - name: nextcloud_network
     command: "--transaction-isolation=READ-COMMITTED --binlog-format=ROW --skip-innodb-read-only-compressed --innodb-read-only-compressed=OFF"
     state: 'started'
-    labels:
-      "flame.type": "application"
-      "flame.name": "{{ container_name | title }}"
-      "flame.url": "{{ dashboard_url }}"
-      "flame.icon": "custom"
     env:
       "PUID": "{{ guid }}"
       "PGID": "{{ guid }}"
@@ -29,7 +29,7 @@
   docker_container:
     name: "nextcloud-redis"
     networks:
-      - name: swag_public_macvlan
+      - name: nextcloud_network
     image: "redis:alpine"
     pull: yes
     state: 'started'
@@ -42,6 +42,7 @@
     pull: yes
     networks:
       - name: swag_public_macvlan
+      - name: nextcloud_network
     state: 'started'
     env:
       "PUID": "{{ guid }}"

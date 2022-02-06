@@ -1,9 +1,15 @@
 ---
+- name: Create a photoprism network
+  docker_network:
+    name: photoprism_network
+
 - name: Make sure the PhotoPrism MariaDB container is created and running
   docker_container:
     name: "photoprism-mariadb"
     image: "mariadb:latest"
     pull: yes
+    networks:
+      - name: photoprism_network
     command: "mysqld --transaction-isolation=READ-COMMITTED --character-set-server=utf8mb4 --collation-server=utf8mb4_unicode_ci --max-connections=512 --innodb-rollback-on-timeout=OFF --innodb-lock-wait-timeout=120"
     state: 'started'
     env:
@@ -21,9 +27,11 @@
   docker_container:
     name: "{{ container_name }}"
     image: photoprism/photoprism:latest
+    networks:
+      - name: photoprism_network
+      - name: swag_internal_macvlan
+        ipv4_address: 10.0.0.4
     pull: yes
-    expose: 
-      - "2342"
     security_opts:
       - seccomp:unconfined
       - apparmor:unconfined
@@ -36,7 +44,7 @@
       "PHOTOPRISM_UID": "{{ guid }}"
       "TZ": "{{ timezone }}"
       "PHOTOPRISM_ADMIN_PASSWORD": "{{ photoprism_password }}"
-      "PHOTOPRISM_SITE_URL": "http://{{ ansible_default_ipv4.address }}:2342/"
+      "PHOTOPRISM_SITE_URL": "http://{{ lan_address }}:2342/"
       "PHOTOPRISM_EXPERIMENTAL": "false"
       "PHOTOPRISM_HTTP_HOST": "0.0.0.0"
       "PHOTOPRISM_HTTP_PORT": "2342"
@@ -48,7 +56,7 @@
       "PHOTOPRISM_DATABASE_PASSWORD": "{{ mysql_password }}"
       "PHOTOPRISM_DISABLE_CHOWN": "false"              
       "PHOTOPRISM_DISABLE_BACKUPS": "true"            
-      "PHOTOPRISM_DISABLE_WEBDAV": "true"             
+      "PHOTOPRISM_DISABLE_WEBDAV": "false"             
       "PHOTOPRISM_DETECT_NSFW": "true"
       "PHOTOPRISM_UPLOAD_NSFW": "false"
       "PHOTOPRISM_THUMB_FILTER": "lanczos"
@@ -73,12 +81,3 @@
     name: Scan the PhotoPrism library
     hour: "1"
     job: "/usr/bin/docker exec photoprism /photoprism/bin/photoprism index"
-
-- name: Add {{ container_name }} to the SWAG network (reverse-proxy)
-  docker_network:
-    name: swag_internal_network
-    connected:
-      - "{{ container_name }}"
-      - photoprism-mariadb
-    appends: yes
-  when: enable_swag

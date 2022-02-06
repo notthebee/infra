@@ -5,6 +5,32 @@
 #
 
 #
+# Networks
+#
+vpn_network: "10.1.1.0/24"
+
+lan_network: "192.168.2.0/24"
+
+swag_network: "10.0.0.0/27"
+
+swag_gateway: "{{ '.'.join(swag_network.split('.')[0:3]) }}.1"
+
+lan_address: "{{ '.'.join(lan_network.split('.')[0:3]) }}.230"
+
+lan_gateway: "{{ '.'.join(lan_network.split('.')[0:3]) }}.1"
+
+macvlan_address: "{{ '.'.join(lan_gateway.split('.')[0:3]) }}.2"
+
+dmz_network: "{{ '.'.join(lan_gateway.split('.')[0:2]) }}.44.0/24"
+
+dmz_gateway: "{{ '.'.join(dmz_network.split('.')[0:3]) }}.1"
+
+iot_network: "{{ '.'.join(lan_gateway.split('.')[0:2]) }}.32.0/24"
+
+hass_ip: 192.168.32.168
+
+
+#
 # Misc
 #
 hostname: "{{ inventory_hostname }}"
@@ -16,16 +42,6 @@ dot_nameservers: [185.95.218.42@853#dns.digitale-gesellschaft.ch, 94.140.15.140@
 ntp_timezone: "{{ timezone }}"
 
 locale: en_US.UTF-8
-
-lan_network: "192.168.2.0/24"
-
-vpn_network: "10.1.1.0/24"
-
-lan_gateway: "192.168.2.1"
-
-dmz_network: "192.168.44.0/24"
-
-dmz_gateway: "192.168.44.1"
 
 dns_nameservers: ["1.1.1.1", "1.0.0.1"]
 
@@ -140,6 +156,8 @@ enable_deconz: true
 
 enable_homeassistant: true
 
+enable_mqtt: false
+
 # Media
 
 enable_plex: false
@@ -153,6 +171,8 @@ enable_booksonic: true
 # Yo-ho-ho
 
 enable_deluge: true
+
+enable_qbittorrent: true
 
 enable_sonarr: true
 

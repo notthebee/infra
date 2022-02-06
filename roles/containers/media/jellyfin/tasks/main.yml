@@ -11,13 +11,11 @@
   docker_container:
     name: "{{ container_name }}"
     image: "ghcr.io/linuxserver/jellyfin"
+    networks:
+      - name: swag_internal_macvlan
+        ipv4_address: 10.0.0.5
     pull: yes
     privileged: yes
-    labels:
-      "flame.type": "application"
-      "flame.name": "{{ dashboard_name }}"
-      "flame.url": "{{ dashboard_url }}"
-      "flame.icon": "custom"
     devices:
       - "/dev/dri/renderD128:/dev/dri/renderD128"
     state: 'started'
@@ -36,11 +34,3 @@
       - "{{ mergerfs_root }}/Media/Movies:/data/Movies"
       - "/etc/localtime:/etc/localtime:ro"
     restart_policy: unless-stopped
-
-- name: Add {{ container_name }} to the SWAG network (reverse-proxy)
-  docker_network:
-    name: swag_internal_network
-    connected:
-      - "{{ container_name }}"
-    appends: yes
-  when: enable_swag

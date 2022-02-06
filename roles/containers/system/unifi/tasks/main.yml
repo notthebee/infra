@@ -4,28 +4,13 @@
     name: '{{ container_name }}'
     image: "ghcr.io/linuxserver/unifi-controller"
     pull: true
-    labels:
-      "flame.type": "application"
-      "flame.name": "{{ dashboard_name }}"
-      "flame.url": "{{ dashboard_url }}"
-      "flame.icon": "custom"
+    networks:
+      - name: swag_internal_macvlan
+        ipv4_address: 10.0.0.7
     state: 'started'
     env:
       PUID: "{{ guid }}"
       PGID: "{{ guid }}"
     volumes:
       - "{{ docker_dir }}/{{ container_name }}:/config"
-    ports:
-      - 3478:3478/udp
-      - 10001:10001/udp
-      - 8081:8080
-      - 8443:8443
     restart_policy: unless-stopped
-
-- name: Add {{ container_name }} to the SWAG network (reverse-proxy)
-  docker_network:
-    name: swag_internal_network
-    connected:
-      - "{{ container_name }}"
-    appends: yes
-  when: enable_swag

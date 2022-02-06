@@ -1,0 +1,13 @@
+- name: Get infos on SWAG container
+  docker_container_info:
+    name: swag_internal
+  register: result
+
+- name: Update the SWAG DNS record to Cloudflare
+  uri:
+    url: "https://api.cloudflare.com/client/v4/zones/{{ cloudflare_zone }}/dns_records/{{ cloudflare_dns_record }}"
+    body: '{"type":"A","name":"{{ host_local }}","content":"{{ result.container.NetworkSettings.Networks.swag_internal_macvlan.IPAddress }}","ttl":3600,"priority":10,"proxied":false}'
+    body_format: json
+    method: PUT
+    headers: 
+      "Authorization": "Bearer {{ cloudflare_dns_token }}"

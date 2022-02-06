@@ -4,11 +4,9 @@
     name: "{{ container_name }}"
     image: "ghcr.io/linuxserver/{{ container_name }}"
     pull: yes
-    labels:
-      "flame.type": "application"
-      "flame.name": "{{ container_name | title }}"
-      "flame.url": "{{ dashboard_url }}"
-      "flame.icon": "custom"
+    networks:
+      - name: swag_internal_macvlan
+        ipv4_address: 10.0.0.14
     state: 'started'
     env:
       "PUID": "{{ guid }}"
@@ -20,11 +18,3 @@
       - "{{ mergerfs_root }}/Media/Audiobooks:/audiobooks"
       - "{{ mergerfs_root }}/Media/Podcasts:/podcasts"
     restart_policy: unless-stopped
-
-- name: Add {{ container_name }} to the SWAG network (reverse-proxy)
-  docker_network:
-    name: swag_internal_network
-    connected:
-      - "{{ container_name }}"
-    appends: yes
-  when: enable_swag

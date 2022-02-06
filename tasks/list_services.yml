@@ -21,9 +21,14 @@
     dir: "{{ playbook_dir }}/{{ item.path }}/defaults"
     files_matching: main.yml
     name: "{{ item.path.split('/')[-1] }}"
+  when: lookup('vars', 'enable_' + item.path.split('/')[-1]) | default(False)
   with_items: "{{ containers.files }}"
-  no_log: true
-
+   
+- name: Include the external services vars
+  include_vars: 
+    file: "host_vars/{{ inventory_hostname }}/external_services.yml"
+    name: external_services
+    
 - name: Empty the variables (In case the task is called twice)
   set_fact:
     web_applications: []
@@ -32,7 +37,7 @@
 
 - name: Populate the dictionary of all containers
   set_fact:
-    web_applications: "{{ web_applications | default([]) + [{ 'logo': '/assets/tools/homer-icons/' + item.path.split('/')[-1] + '.png', 'name': lookup('vars', item.path.split('/')[-1])['dashboard_name'] | default(item.path.split('/')[-1] | title), 'url' : lookup('vars', item.path.split('/')[-1])['dashboard_url'] | default(''), 'endpoint': lookup('vars', item.path.split('/')[-1])['health_url'] | default(''), 'category': lookup('vars', item.path.split('/')[-1])['homer_category'] | default ('') }] }}"
+    web_applications: "{{ web_applications | default([]) + [{ 'logo': '/assets/tools/homer-icons/' + item.path.split('/')[-1] + '.png', 'name': lookup('vars', item.path.split('/')[-1])['dashboard_name'] | default(item.path.split('/')[-1] | title), 'url' : lookup('vars', item.path.split('/')[-1])['dashboard_url'] | default(''), 'category': lookup('vars', item.path.split('/')[-1])['homer_category'] | default ('') }] }}"
   when: lookup('vars', 'enable_' + item.path.split('/')[-1]) | default(False)
   with_items: "{{ containers.files }}"
 
@@ -41,3 +46,13 @@
     swag_urls: "{{ swag_urls | default({}) | combine({ item.path.split('/')[-1] : lookup('vars', item.path.split('/')[-1])['dashboard_url'] | default('') | regex_replace('https?://|/*', '') }) }}"
   when: lookup('vars', 'enable_' + item.path.split('/')[-1]) | default(False)
   with_items: "{{ containers.files }}"
+
+- name: Populate the dictionary of external services
+  set_fact:
+    web_applications: "{{ web_applications | default([]) + [item.value] }}"
+  with_items: "{{ external_services | dict2items }}"
+
+- name: Populate the URL dictionary of the external services
+  set_fact:
+    swag_urls: "{{ swag_urls | default({}) | combine({item.key : (item.value.url | regex_replace('https?://|/*', ''))  }) }}"
+  with_items: "{{ external_services | dict2items }}"

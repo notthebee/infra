@@ -7,4 +7,4 @@ homer_category: services
 
 dashboard_name: Vaultwarden
 
-health_url: "http://{{ ansible_default_ipv4.address }}:3000/https://{{ subdomains['vaultwarden'] }}.{{ host }}"
+health_url: "http://{{ lan_address }}:3000/https://{{ subdomains['vaultwarden'] }}.{{ host }}"

@@ -1,18 +1,12 @@
 - name: Create an internal macvlan network
   docker_network:
-    name: swag_macvlan
+    name: swag_internal_macvlan
     driver: macvlan
     driver_options:
-      parent: enp2s0
+      parent: enp2s0.4
     ipam_config:
-      - subnet: "{{ lan_network }}"
-        gateway: "{{ lan_gateway }}"
-
-- name: Create an internal network
-  docker_network:
-    name: swag_internal_network
-    ipam_config:
-      - subnet: "172.20.0.0/16"
+      - subnet: "{{ swag_network }}"
+        gateway: "{{ swag_gateway }}"
 
 - name: Create a public macvlan network
   docker_network:

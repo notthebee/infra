@@ -7,4 +7,4 @@ homer_category: smarthome
 
 dashboard_name: "Home Assistant"
 
-health_url: "http://{{ ansible_default_ipv4.address }}:3000/http://{{ ansible_default_ipv4.address }}:8123"
+health_url: "http://{{ lan_address }}:3000/http://homeassistant.{{ host_local }}"

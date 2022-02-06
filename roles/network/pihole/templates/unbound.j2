@@ -60,7 +60,7 @@ server:
     so-rcvbuf: 1m
 
     # Ensure privacy of local IP ranges
-    private-address: {{ '.'.join(ansible_default_ipv4.address.split('.')[0:3]) }}.0/24
+    private-address: {{ '.'.join(lan_address.split('.')[0:3]) }}.0/24
 
 forward-zone:
     # forward all queries to these DNS servers:

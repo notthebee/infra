@@ -1,0 +1,3 @@
+- name: Generate the password
+  command:
+    cmd: "docker exec mqtt mosquitto_passwd -b -c /mosquitto/config/mosquitto.passwd mosquitto {{ mqtt_password }} && docker restart mqtt"

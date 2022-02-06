@@ -10,7 +10,7 @@
     dest: /etc/avahi/avahi-daemon.conf
     owner: root
     group: root
-    mode: 0775
+    mode: 0644
 
 - name: Copy the Samba config
   template:
@@ -18,7 +18,18 @@
     dest: /etc/avahi/services/samba.service
     owner: root
     group: root
-    mode: 0775
+    mode: 0644
+  when: enable_nas_stuff | default(False)
+
+
+- name: Copy the HomeKit config
+  template:
+    src: homeassistant.service
+    dest: /etc/avahi/services/homeassistant.service
+    owner: root
+    group: root
+    mode: 0644
+  when: enable_homeassistant | default(False)
 
 - name: Make sure the Avahi service is running and enabled
   service:

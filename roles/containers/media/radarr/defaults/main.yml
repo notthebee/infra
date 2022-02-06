@@ -1,6 +1,6 @@
 ---
 container_name: radarr
 
-dashboard_url: "http://radarr.{{ host_local }}/"
+dashboard_url: "https://radarr.{{ host_local }}/"
 
 homer_category: media

@@ -24,13 +24,13 @@
     pull: false
     state: 'started'
     env:
-      "ServerIP": "{{ ansible_default_ipv4.address }}"
+      "ServerIP": "{{ lan_address }}"
       "TZ": "{{ timezone }}"
       "WEBPASSWORD": "{{ pihole_password }}"
       "REV_SERVER": "true"
       "REV_SERVER_DOMAIN": "box"
-      "REV_SERVER_TARGET": "{{ ansible_default_ipv4.gateway }}"
-      "REV_SERVER_CIDR": "{{ '.'.join(ansible_default_ipv4.address.split('.')[0:3]) }}.0/24"
+      "REV_SERVER_TARGET": "{{ lan_gateway }}"
+      "REV_SERVER_CIDR": "{{ lan_network }}"
       "DNS1": "127.0.0.1#5335" # Hardcoded to our Unbound server
       "DNS2": "127.0.0.1#5335" # Hardcoded to our Unbound server
       "DNSSEC": "true" # Enable DNSSEC
@@ -41,6 +41,6 @@
       - "{{ docker_dir }}/{{ container_name }}/unbound.conf.d/pi-hole.conf:/etc/unbound/unbound.conf.d/pi-hole.conf"
     ports:
       - "81:80/tcp"
-      - "{{ ansible_default_ipv4.address }}:53:53/tcp"
-      - "{{ ansible_default_ipv4.address }}:53:53/udp"
+      - "{{ lan_address }}:53:53/tcp"
+      - "{{ lan_address }}:53:53/udp"
     restart_policy: unless-stopped

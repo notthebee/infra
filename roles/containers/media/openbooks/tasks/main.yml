@@ -4,19 +4,10 @@
     name: "{{ container_name }}"
     image: "evanbuss/openbooks"
     pull: yes
+    networks:
+      - name: swag_internal_macvlan
+        ipv4_address: 10.0.0.9
     state: 'started'
-    labels:
-      "flame.type": "application"
-      "flame.name": "{{ dashboard_name }}"
-      "flame.url": "{{ dashboard_url }}"
-      "flame.icon": "custom"
     env:
       "TZ": "{{ timezone }}"
     restart_policy: unless-stopped
-
-- name: Add {{ container_name }} to the internal network
-  docker_network:
-    name: swag_internal_network
-    connected:
-      - "{{ container_name }}"
-    appends: yes

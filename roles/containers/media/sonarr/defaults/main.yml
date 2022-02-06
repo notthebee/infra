@@ -1,6 +1,6 @@
 ---
 container_name: sonarr
 
-dashboard_url: "http://sonarr.{{ host_local }}"
+dashboard_url: "https://sonarr.{{ host_local }}"
 
 homer_category: media

@@ -4,7 +4,7 @@
     paths:
       - "/dev"
     patterns:
-      - "ttyACM*"
+      - "ttyACM*" 
     file_type:
       any
   register: zigbee_dev 
@@ -15,19 +15,14 @@
     image: "deconzcommunity/deconz:stable"
     pull: yes
     networks:
-      - name: swag_internal_network
-        ipv4_address: 172.20.0.14
+      - name: swag_internal_macvlan
+        ipv4_address: 10.0.0.6
     state: 'started'
     labels:
       "flame.type": "application"
       "flame.name": "{{ dashboard_name }}"
       "flame.url": "{{ dashboard_url }}"
       "flame.icon": "custom"
-    ports:
-      - "4043:4043"
-      - "8085:8085"
-      - "5900:5900"
-      - "6080:6080"
     volumes:
       - "{{ docker_dir }}/{{ container_name }}:/opt/deCONZ"
     devices:
@@ -35,9 +30,6 @@
     env:
       "TZ": "{{ timezone }}"
       "DECONZ_WEB_PORT": "8085"
-      "DECONZ_VNC_PORT": "5900"
-      "DECONZ_NOVNC_PORT": "6080"
-      "DECONZ_VNC_MODE": "1"
       "DECONZ_WS_PORT": "4043"
       "DEBUG_INFO": "1"
       "DEBUG_APS": "0"
