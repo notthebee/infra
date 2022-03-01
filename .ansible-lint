@@ -2,7 +2,7 @@
 skip_list:
   - git-latest
   - package-latest
+  - yaml
 
 warn_list:
   - load-failure
-  - yaml

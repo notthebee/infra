@@ -55,7 +55,7 @@
     state: absent
 
 
-- name: Remove build files for kernel module
+- name: Remove build files for kernel module file
   file:
     path: /home/pi/raspbee2-rtc-master
     state: absent
@@ -85,7 +85,8 @@
     name: hciuart
     state: stopped
     enabled: no
-  ignore_errors: True
+  register: hciuart_result
+  failed_when: hciuart_result.changed == 'false' and 'Could not find the requested service' not in hciuart_result.msg
 
 - name: Stop bluetooth.service
   systemd:
@@ -93,6 +94,8 @@
     state: stopped
     enabled: no
   ignore_errors: True
+  register: bluetooth_result
+  failed_when: bluetooth_result.changed == 'false' and 'Could not find the requested service' not in bluetooth_result.msg
 
 
 
