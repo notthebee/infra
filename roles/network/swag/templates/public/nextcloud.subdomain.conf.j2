@@ -2,7 +2,7 @@ server {
     listen 443 ssl;
     listen [::]:443 ssl;
 
-    server_name {{ swag_urls['nextcloud'] }};
+    server_name {{ web_applications['nextcloud']['url'] }};
     {% include "nginx/params.j2" %}
 
     include /config/nginx/ssl.conf;

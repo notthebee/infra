@@ -13,7 +13,7 @@
     image: "ghcr.io/linuxserver/jellyfin"
     networks:
       - name: swag_internal_macvlan
-        ipv4_address: 10.0.0.5
+        ipv4_address: "{{ ip_address }}"
     pull: yes
     privileged: yes
     devices:

@@ -1,0 +1,22 @@
+---
+- name: List the current configs
+  find:
+    paths: /etc/netplan
+    file_type: file
+    excludes:
+      - 00-ansible-managed.yaml
+  register: previous_config
+
+- name: Install the netplan config
+  copy:
+    content: '{{ netplan_config }}'
+    dest: '/etc/netplan/00-ansible-managed.yaml'
+    owner: root
+    group: root
+    mode: 0644
+  notify: netplan apply
+
+- name: Delete the irrelevant configs
+  file:
+    path: "{{ item.path }}"
+  with_items: "{{ previous_config['files'] }}"

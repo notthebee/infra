@@ -1,7 +1,15 @@
 - include_tasks: check_status.yml
+
 - include_tasks: list_services.yml
+
 - include_tasks: install_configs.yml
+
 - include_tasks: cloudflare_real_ips.yml
+  when: enable_swag_public | default(False)
+
 - include_tasks: networks.yml
+
 - include_tasks: docker.yml
+
 - include_tasks: cloudflare_internal_dns.yml
+  when: enable_swag_internal | default(False)

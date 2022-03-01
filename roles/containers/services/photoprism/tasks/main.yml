@@ -30,7 +30,7 @@
     networks:
       - name: photoprism_network
       - name: swag_internal_macvlan
-        ipv4_address: 10.0.0.4
+        ipv4_address: "{{ ip_address }}"
     pull: yes
     security_opts:
       - seccomp:unconfined

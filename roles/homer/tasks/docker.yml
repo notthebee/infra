@@ -11,7 +11,7 @@
     networks:
       - name: homer_network
       - name: swag_internal_macvlan
-        ipv4_address: 10.0.0.3
+        ipv4_address: "{{ ip_address }}"
     pull: true
     state: 'started'
     env:

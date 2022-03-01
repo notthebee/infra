@@ -70,9 +70,6 @@
 - name: Disable cron e-mail notifications
   cron:
     name: MAILTO
-    user: "{{ item }}"
+    user: root
     env: yes
     job: ""
-  with_items:
-    - root
-    - "{{ username }}"

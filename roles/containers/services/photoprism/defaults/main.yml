@@ -1,7 +1,9 @@
 container_name: photoprism
 
-dashboard_url: "https://photoprism.{{ host_local }}"
+url: "photoprism.{{ host_local }}"
 
 homer_category: services
 
 dashboard_name: "PhotoPrism"
+
+ip_address: "{{ swag_base }}.4"

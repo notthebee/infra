@@ -22,8 +22,8 @@
     owner: "{{ username }}"
     group: "{{ username }}"
   notify:
-    - test nginx
-    - restart swag
+    - test nginx public
+    - restart swag public
 
 - name: Add "set_real_ip_from" to every line
   replace:
@@ -31,8 +31,8 @@
     regexp: "(^.*$)"
     replace: 'set_real_ip_from \1;'
   notify:
-    - test nginx
-    - restart swag
+    - test nginx public
+    - restart swag public
 
 - name: Add to nginx.conf
   blockinfile:
@@ -43,5 +43,5 @@
       include /config/nginx/cf_real_ip.conf;
     insertafter: "^.*include /config/nginx/resolver.conf.*$"
   notify:
-    - test nginx
-    - restart swag
+    - test nginx public
+    - restart swag public

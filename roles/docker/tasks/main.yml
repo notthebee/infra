@@ -1,10 +1,11 @@
 ---
 - name: Include OS-specific variables
-  include_vars: "{{ ansible_facts['os_family'] }}.yml"
+  include_vars: "{{ ansible_facts['distribution'] }}.yml"
 - name: Install required system packages
   package:
     state: present
     name: "{{ docker_deps }}"
+
 - name: Install Docker (Ubuntu)
   when: ansible_facts['distribution'] == 'Ubuntu'
   block:
@@ -17,6 +18,7 @@
     apt_repository:
       repo: deb https://download.docker.com/linux/ubuntu bionic stable
       state: present
+
 - name: Install Docker (Raspbian)
   when: ansible_facts['distribution'] == 'Debian'
   block:
@@ -27,27 +29,8 @@
 
   - name: Add Docker Repository
     apt_repository:
-      repo: deb https://download.docker.com/linux/raspbian buster stable
+      repo: "deb [arch=arm64] https://download.docker.com/linux/raspbian bullseye stable"
       state: present
-
-  - name: Add buster-backports GPG key (for libseccomp2)
-    apt_key:
-      keyserver: keyserver.ubuntu.com
-      id: "{{ item }}"
-    loop:
-      - 04EE7237B7D453EC
-      - 648ACFD622F3D138
-
-  - name: Add buster-backports repository
-    apt_repository:
-      repo: deb http://deb.debian.org/debian buster-backports main contrib non-free
-
-  - name: Update to the latest version of libseccomp2
-    apt:
-      update_cache: yes
-      name: libseccomp2
-      default_release: buster-backports
-      state: latest
 
   - name: Switch to iptables-legacy
     alternatives:
@@ -70,7 +53,6 @@
       name: python
       link: /usr/bin/python
       path: /usr/bin/python3
-
 
 - name: Update apt and install docker-ce
   when: ansible_facts['os_family'] == 'Debian'
@@ -159,11 +141,11 @@
     delegate_to: "{{ inventory_hostname }}"
     when: persistent_data_find.matched < 20 or not persistent_data.stat.exists
 
-  - name: Chmod the data folder
-    become: yes
-    file:
-      dest: "{{ docker_dir }}"
-      state: directory
-      owner: "{{ username }}"
-      group: "{{ username }}"
-      recurse: yes
+- name: Chmod the data folder
+  become: yes
+  file:
+    dest: "{{ docker_dir }}"
+    state: directory
+    owner: "{{ username }}"
+    group: "{{ username }}"
+    recurse: yes

@@ -2,11 +2,16 @@
 - name: Make sure the Plex container is created and running
   docker_container:
     name: "{{ container_name }}"
-    image: "ghcr.io/linuxserver/plex"
+    image: "lscr.io/linuxserver/plex"
     pull: yes
+    labels:
+      "flame.type": "application"
+      "flame.name": "{{ dashboard_name }}"
+      "flame.url": "{{ url }}"
+      "flame.icon": "custom"
     networks:
       - name: swag_internal_macvlan
-        ipv4_address: 10.0.0.11
+        ipv4_address: "{{ ip_address }}"
     devices:
       - "/dev/dri:/dev/dri"
     state: 'started'
@@ -16,8 +21,7 @@
       "TZ": "{{ timezone }}"
       "VERSION": "latest"
     volumes:
-      - "{{ docker_dir }}/{{ container_name }}/config:/config"
+      - "{{ docker_dir }}/{{ container_name }}:/config"
       - "{{ mergerfs_root }}/Media/TV:/tv"
       - "{{ mergerfs_root }}/Media/Movies:/movies"
-      - "/etc/localtime:/etc/localtime:ro"
     restart_policy: unless-stopped

@@ -6,7 +6,7 @@
     pull: yes
     networks:
       - name: swag_internal_macvlan
-        ipv4_address: 10.0.0.15
+        ipv4_address: "{{ ip_address }}"
     state: 'started'
     env:
       "PUID": "{{ guid }}"

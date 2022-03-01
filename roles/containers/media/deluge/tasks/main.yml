@@ -14,7 +14,7 @@
     pull: yes
     networks:
       - name: swag_internal_macvlan
-        ipv4_address: 10.0.0.10
+        ipv4_address: "{{ ip_address }}"
     privileged: yes
     sysctls:
       "net.ipv4.conf.all.src_valid_mark": "1"

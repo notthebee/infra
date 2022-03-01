@@ -1,14 +1,15 @@
 server {
     {% include "nginx/internal.j2" %}
     {% include "nginx/params.j2" %}
-    server_name {{ swag_urls['jackett'] }};
+
+    server_name {{ web_applications['jackett']['url'] }};
 
     location / {
         {% include "nginx/cors.j2" %}
         add_header 'Access-Control-Allow-Methods' 'GET, POST, OPTIONS, HEAD';
         include /config/nginx/proxy.conf;
         include /config/nginx/resolver.conf;
-        set $upstream_app jackett;
+        set $upstream_app {{ web_applications['jackett']['ip_address'] }};
         set $upstream_port 9117;
         set $upstream_proto http;
         proxy_pass $upstream_proto://$upstream_app:$upstream_port;
@@ -18,8 +19,8 @@ server {
     location ~ (/jackett)?/api {
         include /config/nginx/proxy.conf;
         include /config/nginx/resolver.conf;
-        set $upstream_app jackett;
         set $upstream_port 9117;
+        set $upstream_app {{ web_applications['jackett']['ip_address'] }};
         set $upstream_proto http;
         proxy_pass $upstream_proto://$upstream_app:$upstream_port;
 
@@ -28,8 +29,8 @@ server {
     location ~ (/jackett)?/dl {
         include /config/nginx/proxy.conf;
         include /config/nginx/resolver.conf;
-        set $upstream_app jackett;
         set $upstream_port 9117;
+        set $upstream_app {{ web_applications['jackett']['ip_address'] }};
         set $upstream_proto http;
         proxy_pass $upstream_proto://$upstream_app:$upstream_port;
 

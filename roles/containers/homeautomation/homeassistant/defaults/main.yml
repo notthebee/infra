@@ -1,10 +1,10 @@
 ---
 container_name: homeassistant
 
-dashboard_url: "https://homeassistant.{{ host_local }}"
+url: "homeassistant.{{ host_local }}"
+
+ip_address: "{{ iot_base }}.168"
 
 homer_category: smarthome
 
 dashboard_name: "Home Assistant"
-
-health_url: "http://{{ lan_address }}:3000/http://homeassistant.{{ host_local }}"

@@ -1,6 +1,9 @@
 ---
 container_name: booksonic
 
-dashboard_url: "https://booksonic.{{ host_local }}"
+url: "booksonic.{{ host_local }}"
+
+ip_address: "{{ swag_base }}.14"
 
 homer_category: media
+

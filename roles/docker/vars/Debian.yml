@@ -2,6 +2,7 @@
 docker_deps:
   - 'apt-transport-https'
   - 'ca-certificates'
+  - 'gnupg2'
   - 'curl'
   - 'software-properties-common'
   - 'python3-pip'
@@ -10,5 +11,5 @@ docker_deps:
   - 'docker-compose'
 
 docker_packages:
-  - 'docker-ce'
-  - 'docker-compose'
+  - 'docker.io'
+  - 'docker-registry'

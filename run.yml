@@ -21,6 +21,14 @@
       tags:
         - system
 
+    - role: neovim
+      tags:
+        - neovim
+
+    - role: geerlingguy.security
+      tags:
+        - security
+
     - role: docker
       tags:
         - docker
@@ -48,25 +56,22 @@
     - role: security/fail2ban
       tags:
       - fail2ban
+      when: enable_fail2ban | default(False)
 
     - role: security/iptables
       tags:
       - iptables
-      when: enable_iptables
+      when: enable_iptables | default(False)
 
     - role: security/crowdsec
       tags:
       - crowdsec
-      when: enable_crowdsec
+      when: enable_crowdsec | default(False)
 
     - role: security/endlessh
       tags:
       - endlessh
       when: enable_endlessh | default(False)
-
-    - role: geerlingguy.security
-      tags:
-        - security
 
     #
     # Network
@@ -76,7 +81,7 @@
       tags:
         - swag
         - containers
-      when: enable_swag | default(False)
+      when: enable_swag_public | default(False) or enable_swag_internal | default(False)
 
     - role: network/bunkerized-nginx
       become: no
@@ -175,6 +180,18 @@
         - homer
         - containers
       when: enable_homer | default(False)
+
+
+    #
+    # Flame
+    #
+    - role: containers/system/flame
+      become: no
+      tags:
+        - flame
+        - containers
+      when: enable_flame | default(False)
+
 
 
     #
@@ -286,6 +303,13 @@
     #
     # Home automation
     #
+    - role: containers/homeautomation/deconz
+      tags:
+        - deconz
+        - smarthome
+        - containers
+      when: enable_deconz | default(False)
+
     - role: containers/homeautomation/homeassistant
       become: no
       tags:
@@ -295,13 +319,6 @@
       when: enable_homeassistant | default(False)
 
 
-    - role: containers/homeautomation/deconz
-      become: no
-      tags:
-        - deconz
-        - smarthome
-        - containers
-      when: enable_deconz | default(False)
 
     - role: containers/homeautomation/mqtt
       become: no

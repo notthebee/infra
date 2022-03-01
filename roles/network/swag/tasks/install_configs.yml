@@ -7,7 +7,7 @@
     owner: "{{ username }}"
     group: "{{ username }}"
     mode: 0755
-  with_items:
+  with_items: 
     - internal
     - public
 
@@ -18,44 +18,16 @@
     owner: "{{ username }}"
     group: "{{ username }}"
     mode: 0644
-  when: (item | basename).split('.')[0] in swag_urls or lookup('vars', 'enable_' + (item | basename).split('.')[0]) | default(False)
+  when: (item | basename).split('.')[0] in web_applications
   with_fileglob:
     - templates/internal/*.j2
     - templates/public/*.j2
   notify:
-    - restart swag
-    - test nginx
+    - restart swag internal
+    - restart swag public
+    - test nginx internal
+    - test nginx public
   register: swag_config
-
-- name: Create a list of variables files that were deployed
-  set_fact:
-    installed_templates: "{{ installed_templates | default([]) + [ item.dest ] }}"
-  with_items: "{{ swag_config.results }}"
-  when: item.skipped is not defined
-
-- name: List all config files in the target folder
-  find:
-    paths:
-      - "{{ docker_dir }}/swag/internal/nginx/proxy-confs/"
-      - "{{ docker_dir }}/swag/public/nginx/proxy-confs/"
-    patterns:
-      - ".*\\.conf(?!\\.sample)"
-    use_regex: yes
-  register: found_files
-
-- name: Print out
-  debug:
-    var: found_files
-
-- name: Remove config files for disabled services
-  file:
-    path: "{{ item.path }}"
-    state: absent
-  when: item.path not in installed_templates
-  with_items: "{{ found_files['files'] }}"
-  notify:
-    - restart swag
-    - test nginx
 
 - name: Create the DNS conf folder
   file:
@@ -65,6 +37,7 @@
     owner: "{{ username }}"
     group: "{{ username }}"
     mode: 0755
+  when: enable_swag_public | default(False)
 
 - name: Install the DNS config file
   template:
@@ -73,6 +46,6 @@
     owner: "{{ username }}"
     group: "{{ username }}"
     mode: 0644
-
   notify:
-    - restart swag
+    - restart swag public
+    - restart swag internal

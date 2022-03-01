@@ -1,14 +1,14 @@
 server {
     {% include "nginx/internal.j2" %}
     {% include "nginx/params.j2" %}
-    server_name {{ swag_urls['homeassistant'] }};
+    server_name {{ web_applications['homeassistant']['url'] }};
 
     location / {
         {% include "nginx/cors.j2" %}
         add_header 'Access-Control-Allow-Methods' 'GET, POST, OPTIONS, HEAD';
         include /config/nginx/proxy.conf;
         include /config/nginx/resolver.conf;
-        set $upstream_app {{ hass_ip }};
+        set $upstream_app {{ web_applications['homeassistant']['ip_address'] }};
         set $upstream_port 8123;
         set $upstream_proto http;
         proxy_pass $upstream_proto://$upstream_app:$upstream_port;
@@ -18,7 +18,7 @@ server {
     location ~ ^/(api|local|media)/ {
         include /config/nginx/proxy.conf;
         include /config/nginx/resolver.conf;
-        set $upstream_app {{ hass_ip }};
+        set $upstream_app {{ web_applications['homeassistant']['ip_address'] }};
         set $upstream_port 8123;
         set $upstream_proto http;
         proxy_pass $upstream_proto://$upstream_app:$upstream_port;

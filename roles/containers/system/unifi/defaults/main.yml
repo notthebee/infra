@@ -1,10 +1,12 @@
 ---
 container_name: unifi
 
-dashboard_url: "https://unifi.{{ host_local }}"
+url: "unifi.{{ host_local }}"
 
 homer_category: system
 
 dashboard_name: "UniFi Controller"
 
 upstream_port: "8443"
+
+ip_address: "{{ swag_base }}.7"

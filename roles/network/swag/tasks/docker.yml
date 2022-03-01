@@ -1,5 +1,6 @@
 ---
 - name: Make sure the swag_internal container is created and running
+  when: enable_swag_internal | default(False)
   docker_container:
     name: "swag_internal"
     image: "ghcr.io/linuxserver/swag"
@@ -26,6 +27,7 @@
     restart_policy: unless-stopped
 
 - name: Make sure the swag_public container is created and running
+  when: enable_swag_public | default(False)
   docker_container:
     name: "swag_public" 
     image: "ghcr.io/linuxserver/swag"

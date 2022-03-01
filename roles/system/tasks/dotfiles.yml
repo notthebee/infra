@@ -1,16 +1,20 @@
 ---
 - name: Clone the latest dotfiles repo
-  become: no
+  become_user: "{{ username }}"
   git:
     repo: "{{ dotfiles_repo }}"
     dest: "/home/{{ username }}/dotfiles"
     recursive: no
     force: yes
+  notify:
+    - install and update nvim plugins
 
 - name: Stow the dotfiles
-  become: no
+  become_user: "{{ username }}"
   shell:
     cmd: stow -v */
     chdir: "/home/{{ username }}/dotfiles"
   register: stow_result
+  notify:
+    - install and update nvim plugins
   changed_when: stow_result.stdout != ""

@@ -1,19 +1,35 @@
-- name: test nginx
+- name: test nginx internal
   command:
     cmd: "docker exec -it {{ item }} /usr/sbin/nginx -c /config/nginx/nginx.conf -t"
   register: swag_nginx_test
   changed_when: swag_nginx_test is not search("test is successful")
   failed_when: swag_nginx_test is not search("test is successful")
+  when: enable_swag_public | default(False) and existing is defined and running is defined
   with_items:
-    - swag_internal
     - swag_public
 
-- name: restart swag
-  docker_container:
-    name: "{{ item }}"
-    state: started
-    restart: yes
+- name: test nginx public
+  command:
+    cmd: "docker exec -it {{ item }} /usr/sbin/nginx -c /config/nginx/nginx.conf -t"
+  register: swag_nginx_test
+  changed_when: swag_nginx_test is not search("test is successful")
+  failed_when: swag_nginx_test is not search("test is successful")
+  when: enable_swag_internal | default(False) and existing is defined and running is defined
   with_items:
     - swag_internal
-    - swag_public
-  when: existing is defined and running is defined
+
+
+
+- name: restart swag internal
+  docker_container:
+    name: "swag_internal"
+    state: started
+    restart: yes
+  when: enable_swag_internal | default(False) and existing is defined and running is defined
+
+- name: restart swag public
+  docker_container:
+    name: "swag_public"
+    state: started
+    restart: yes
+  when: enable_swag_public | default(False) and existing is defined and running is defined

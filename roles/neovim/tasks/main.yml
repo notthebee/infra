@@ -1,0 +1,99 @@
+---
+- name: Check if neovim is installed
+  command:
+    cmd: which nvim
+  register: nvim
+  changed_when: False
+  failed_when: False
+
+- name: Check the nvim version if installed
+  shell:
+    cmd: "nvim --version | head -n 1 | cut -c 6-"
+  register: neovim_version
+  when: nvim.rc == 0
+  changed_when: False
+
+- name: Set current neovim version to 0
+  set_fact:
+    neovim_version:
+      stdout: 0
+  when: nvim.rc == 1
+
+- name: Install github3 module
+  pip:
+    name: github3.py
+
+- name: Check latest neovim release
+  github_release:
+    user: neovim
+    repo: neovim
+    action: latest_release
+    token: "{{ github_token }}"
+  register: neovim_release
+  changed_when: neovim_release.tag != neovim_version.stdout
+
+- name: Install neovim
+  when: neovim_release.tag != neovim_version.stdout
+  block:
+  - name: Check if the node repo is present
+    stat:
+      path: "/etc/apt/sources.list.d/nodesource.list"
+    register: nodesource
+
+  - name: Add the node repo
+    shell:
+      cmd: "curl -sL https://deb.nodesource.com/setup_16.x | bash -"
+    when: not nodesource.stat.exists
+    tags:
+      - skip_ansible_lint
+
+  - name: Add the yarn key
+    apt_key:
+      url: https://dl.yarnpkg.com/debian/pubkey.gpg 
+      state: present
+
+  - name: Add the yarn repo
+    apt_repository:
+      repo: "deb https://dl.yarnpkg.com/debian/ stable main"
+      state: present
+      filename: yarn
+
+  - name: Install the dependencies
+    package:
+      name:
+        - golang
+        - python3
+        - python3-pip
+        - ninja-build 
+        - gettext 
+        - libtool 
+        - libtool-bin 
+        - autoconf 
+        - automake 
+        - cmake 
+        - g++ 
+        - pkg-config 
+        - unzip 
+        - curl 
+        - doxygen
+        - yarn
+      state: present
+
+  - name: Grab the latest release source
+    unarchive: 
+      src: "https://github.com/neovim/neovim/archive/{{ neovim_release['tag'] }}.tar.gz"
+      dest: /tmp
+      remote_src: true 
+
+  - name: Get the neovim folder
+    find:
+      paths: /tmp
+      patterns: "^neovim.*$"
+      use_regex: yes
+      file_type: directory
+      recurse: no
+    register: neovim_source
+
+  - name: Compile and install neovim
+    shell:
+      cmd: cd {{ neovim_source.files[0].path }} && make install

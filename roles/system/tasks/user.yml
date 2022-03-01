@@ -6,13 +6,13 @@
 - name: Create a login user
   user:
     name: "{{ username }}"
-    password: "{{ password | password_hash('sha512') }}"
+    password: "{{ password | password_hash('sha512') }}" 
     groups: 
       - "{{ sudo_group }}"
       - users
     state: present
     append: true
- 
+
 - name: Ensure group "{{ username }}" exists
   group:
     name: "{{ username }}"
@@ -32,6 +32,15 @@
       - sambashare
     append: true
 
+- name: Chmod the user home directory
+  file:
+    path: "/home/{{ username }}"
+    state: directory
+    mode: 0755
+    owner: "{{ username }}"
+    group: "{{ username }}"
+    recurse: yes
+
 - name: Allow 'sudo' group to have passwordless sudo
   lineinfile:
     path: /etc/sudoers
@@ -41,37 +50,46 @@
     validate: '/usr/sbin/visudo -cf %s'
 
 - name: Copy the public SSH key 
-  become: no
   authorized_key:
     user: "{{ username }}"
     state: present
     key: "{{ ssh_public_key }}"
+  notify:
+    - remove default user
 
 - name: Set the default shell
-  become: no
   user: 
     name: "{{ username }}"
     shell: "{{ shell }}"
 
 - name: Disable fish greeting
-  become: no
   lineinfile:
     path: /home/{{ username }}/.config/fish/fish_variables
     state: present
     regexp: 'fish_greeting:.+'
     line: 'SETUVAR fish_greeting:'
     create: true
+    owner: "{{ username }}"
+    group: "{{ username }}"
     mode: 0644
   when: '"fish" in shell'
 
 - name: Suppress login messages
-  become: no
   file:
     name: /home/{{ username }}/.hushlogin
     mode: 0644
     state: touch
+    owner: "{{ username }}"
+    group: "{{ username }}"
     modification_time: preserve
     access_time: preserve
+
+- name: Disable cron e-mail notifications
+  cron:
+    name: MAILTO
+    user: "{{ username }}"
+    env: yes
+    job: ""
 
 - name: Create additional users (no login)
   user:

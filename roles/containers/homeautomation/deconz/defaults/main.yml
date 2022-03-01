@@ -1,8 +1,10 @@
 ---
 container_name: deconz
 
-dashboard_url: "http://deconz.{{ host_local }}/"
+url: "deconz.{{ host_local }}"
+
+ip_address: "{{ swag_base }}.25"
 
 homer_category: smarthome
 
-dashboard_name: "Phoscon-GW"
+dashboard_name: "deCONZ"

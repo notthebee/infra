@@ -1,0 +1,28 @@
+---
+- name: Check if the ZigBee device exists
+  find:
+    paths:
+      - "/dev"
+    patterns:
+      - "ttyAMA*" 
+    file_type:
+      any
+  register: zigbee_dev 
+
+- name: Make sure the {{ container_name }} container is created and running
+  docker_container:
+    name: "{{ container_name }}"
+    image: "deconzcommunity/deconz:stable"
+    networks:
+      - name: swag_internal_macvlan
+        ipv4_address: "{{ ip_address }}"
+    pull: yes
+    state: 'started'
+    env:
+      "TZ": "{{ timezone }}"
+      "DECONZ_VNC_MODE": "1"
+    volumes:
+      - "{{ docker_dir }}/{{ container_name }}:/opt/deCONZ"
+    devices:
+      - /dev/ttyAMA0
+    restart_policy: unless-stopped

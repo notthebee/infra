@@ -6,12 +6,10 @@
     pull: yes
     networks:
       - name: swag_internal_macvlan
-        ipv4_address: 10.0.0.13
+        ipv4_address: "{{ ip_address }}"
     state: 'started'
     volumes:
       - "{{ docker_dir }}/{{ container_name }}/config:/mosquitto/config"
       - "{{ docker_dir }}/{{ container_name }}/data:/mosquitto/data"
       - "{{ docker_dir }}/{{ container_name }}/logo:/mosquitto/log"
     restart_policy: unless-stopped
-    ports:
-      1883:1883

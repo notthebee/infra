@@ -1,8 +1,10 @@
 ---
 container_name: jackett
 
-dashboard_url: "https://jackett.{{ host_local }}/"
+url: "jackett.{{ host_local }}"
 
 homer_category: system
 
 dashboard_name: Jackett
+
+ip_address: "{{ swag_base }}.8"

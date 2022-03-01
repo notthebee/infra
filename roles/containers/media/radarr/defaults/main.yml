@@ -1,6 +1,8 @@
 ---
 container_name: radarr
 
-dashboard_url: "https://radarr.{{ host_local }}/"
+url: "radarr.{{ host_local }}"
 
 homer_category: media
+
+ip_address: "{{ swag_base }}.15"

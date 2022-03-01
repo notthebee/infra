@@ -1,0 +1,12 @@
+- name: netplan apply
+  command:
+    cmd: netplan apply
+
+- name: remove default user
+  user:
+    name: ubuntu
+    state: absent
+
+- name: install and update nvim plugins
+  command:
+    cmd: "nvim +PlugInstall! +qall"

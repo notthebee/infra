@@ -1,8 +1,10 @@
 ---
 container_name: openbooks
 
-dashboard_url: "https://openbooks.{{ host_local }}/"
+url: "openbooks.{{ host_local }}"
 
 homer_category: media
 
 dashboard_name: "OpenBooks"
+
+ip_address: "{{ swag_base }}.9"

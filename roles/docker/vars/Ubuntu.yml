@@ -1,0 +1,16 @@
+---
+docker_deps:
+  - 'apt-transport-https'
+  - 'ca-certificates'
+  - 'gnupg2'
+  - 'curl'
+  - 'software-properties-common'
+  - 'python3-pip'
+  - 'virtualenv'
+  - 'python3-setuptools'
+  - 'docker-compose'
+
+docker_packages:
+  - 'docker-ce'
+  - 'docker-compose'
+  - 'cgroupfs-mount'

@@ -1,40 +1,4 @@
----
-- name: Check if the ZigBee device exists
-  find:
-    paths:
-      - "/dev"
-    patterns:
-      - "ttyACM*" 
-    file_type:
-      any
-  register: zigbee_dev 
+- include_tasks: raspbee.yml
+  when: ansible_facts['distribution'] == 'Debian'
 
-- name: Make sure the {{ container_name }} container is created and running if there's a Zigbee device
-  docker_container:
-    name: "{{ container_name }}"
-    image: "deconzcommunity/deconz:stable"
-    pull: yes
-    networks:
-      - name: swag_internal_macvlan
-        ipv4_address: 10.0.0.6
-    state: 'started'
-    labels:
-      "flame.type": "application"
-      "flame.name": "{{ dashboard_name }}"
-      "flame.url": "{{ dashboard_url }}"
-      "flame.icon": "custom"
-    volumes:
-      - "{{ docker_dir }}/{{ container_name }}:/opt/deCONZ"
-    devices:
-      - "{{ zigbee_dev.files[0].path }}"
-    env:
-      "TZ": "{{ timezone }}"
-      "DECONZ_WEB_PORT": "8085"
-      "DECONZ_WS_PORT": "4043"
-      "DEBUG_INFO": "1"
-      "DEBUG_APS": "0"
-      "DEBUG_ZCL": "0"
-      "DEBUG_ZDP": "0"
-      "DEBUG_OTAU": "0"
-    restart_policy: unless-stopped
-  when: zigbee_dev.files | length > 0
+- include_tasks: docker.yml

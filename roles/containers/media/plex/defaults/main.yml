@@ -1,6 +1,10 @@
 ---
 container_name: plex
 
-dashboard_url: "http://{{ lan_address }}:32400/web"
+url: "plex.{{ host_local }}"
 
 homer_category: media
+
+ip_address: "{{ swag_base }}.11"
+
+dashboard_name: Plex

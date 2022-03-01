@@ -13,7 +13,11 @@ lan_network: "192.168.2.0/24"
 
 swag_network: "10.0.0.0/27"
 
+swag_base: "{{ '.'.join(swag_network.split('.')[0:3]) }}"
+
 swag_gateway: "{{ '.'.join(swag_network.split('.')[0:3]) }}.1"
+
+swag_interface: vlan.4
 
 lan_address: "{{ '.'.join(lan_network.split('.')[0:3]) }}.230"
 
@@ -27,8 +31,11 @@ dmz_gateway: "{{ '.'.join(dmz_network.split('.')[0:3]) }}.1"
 
 iot_network: "{{ '.'.join(lan_gateway.split('.')[0:2]) }}.32.0/24"
 
-hass_ip: 192.168.32.168
+iot_gateway: "{{ '.'.join(iot_network.split('.')[0:3]) }}.1"
 
+iot_base: "{{ '.'.join(iot_network.split('.')[0:3]) }}"
+
+iot_interface: vlan.3
 
 #
 # Misc
@@ -93,14 +100,13 @@ extra_packages:
   - iotop
   - ncdu
   - hddtemp
-  - reptyr
 
 #
 # Apt mirrors
 #
 version: focal
 
-apt_mirror: http://ftp.uni-mainz.de/ubuntu/
+apt_mirror: http://de.ports.ubuntu.com
 
 
 #
@@ -188,7 +194,9 @@ enable_nextcloud: true
 
 enable_vaultwarden: true
 
-enable_swag: true
+enable_swag_public: false
+
+enable_swag_internal: false
 
 enable_bunkerized_nginx: false
 
@@ -208,7 +216,7 @@ enable_ikev2: true
 
 # Homepages
 
-enable_homer: true
+enable_homer: false
 
 enable_flame: false
 
@@ -237,6 +245,9 @@ enable_timemachine: true
 #
 ikev2_ondemand: true
 
+#
+# Samba
+#
 samba_server_string: "{{ hostname }}"
 
 samba_users:
@@ -249,7 +260,7 @@ samba_global_include: global-include.conf
 
 samba_apple_extensions: yes
 
-samba_mitigate_cve_2017_7494: false
+samba_mitigate_cve_2017_7494: true
 
 samba_server_max_protocol: "SMB3"
 

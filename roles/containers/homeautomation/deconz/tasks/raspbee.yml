@@ -1,0 +1,125 @@
+- name: Install build packages
+  apt:
+    name:
+      - i2c-tools
+      - build-essential
+      - raspberrypi-kernel-headers
+      - curl
+    state: present
+
+- name: Check if RTC kernel module is installed
+  stat:
+    path: "/lib/modules/{{ ansible_kernel }}/extra/rtc-pcf85063.ko"
+    get_attributes: no
+    get_checksum: no
+    get_mime: no
+  register: kernel_module
+
+- block:
+  - name: Download master.zip
+    get_url:
+      url: https://github.com/dresden-elektronik/raspbee2-rtc/archive/master.zip
+      dest: /home/pi/master.zip
+      owner: pi
+      group: pi
+      mode: 0440
+    register: download_master
+
+
+  - name: Unpack master.zip
+    unarchive:
+      src: /home/pi/master.zip
+      dest: /home/pi
+      remote_src: yes
+      owner: pi
+      group: pi
+      mode: 0770
+      creates: /home/pi/raspbee2-rtc-master
+
+
+  - name: Build kernel module
+    shell: cd /home/pi/raspbee2-rtc-master && make
+
+
+  - name: Install kernel module
+    shell: cd /home/pi/raspbee2-rtc-master && make install
+    notify:
+      - Reboot pi
+
+  when: kernel_module.stat.exists != True
+
+
+- name: Remove source file for kernel module
+  file:
+    path: /home/pi/master.zip
+    state: absent
+
+
+- name: Remove build files for kernel module
+  file:
+    path: /home/pi/raspbee2-rtc-master
+    state: absent
+
+
+- name: Retrieve /boot/cmdline.txt
+  slurp:
+    src: "/boot/cmdline.txt"
+  register: boot_cmdline_txt_retrieve
+
+
+- name: Extract /boot/cmdline.txt
+  set_fact:
+    boot_cmdline_txt: "{{ boot_cmdline_txt_retrieve.content | b64decode }}"
+
+
+- name: Enable hardware serial port
+  command: 
+    cmd: raspi-config nonint do_serial 2
+  notify:
+    - Reboot pi
+  when: boot_cmdline_txt is search("console=serial0") or boot_cmdline_txt is search("console=console=ttyAMA0")
+
+
+- name: Stop hciuart
+  systemd:
+    name: hciuart
+    state: stopped
+    enabled: no
+  ignore_errors: True
+
+- name: Stop bluetooth.service
+  systemd:
+    name: bluetooth.service
+    state: stopped
+    enabled: no
+  ignore_errors: True
+
+
+
+- name: Remove Bluetooth packages
+  apt:
+    name:
+      - pi-bluetooth
+      - bluez
+    state: absent
+    purge: yes
+
+
+- name: Update /boot/config.txt
+  lineinfile:
+    dest: /boot/config.txt
+    regexp: "{{ item.regexp }}"
+    line: "{{ item.line }}"
+    mode: 0644
+    owner: root
+    group: root
+    state: "{{ item.state }}"
+    create: yes
+  with_items:
+    - { regexp: '^#? *dtoverlay=pi3-disable-bt', line: 'dtoverlay=pi3-disable-bt', state: present }
+  notify:
+    - Reboot pi
+
+
+- name: Reboot Raspberry Pi
+  meta: flush_handlers

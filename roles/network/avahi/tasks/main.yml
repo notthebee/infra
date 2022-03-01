@@ -21,16 +21,6 @@
     mode: 0644
   when: enable_nas_stuff | default(False)
 
-
-- name: Copy the HomeKit config
-  template:
-    src: homeassistant.service
-    dest: /etc/avahi/services/homeassistant.service
-    owner: root
-    group: root
-    mode: 0644
-  when: enable_homeassistant | default(False)
-
 - name: Make sure the Avahi service is running and enabled
   service:
     name: avahi-daemon

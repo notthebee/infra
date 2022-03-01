@@ -1,6 +1,8 @@
 ---
 container_name: jellyfin
 
-dashboard_url: "https://jellyfin.{{ host_local }}"
+url: "jellyfin.{{ host_local }}"
 
 homer_category: media
+
+ip_address: "{{ swag_base }}.5"
