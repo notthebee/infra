@@ -1,4 +1,8 @@
 ---
+- name: Check if neovim is installed via the package manager
+  package_facts:
+    manager: auto
+
 - name: Check if neovim is installed
   command:
     cmd: which nvim
@@ -13,7 +17,7 @@
   when: nvim.rc == 0
   changed_when: False
 
-- name: Set current neovim version to 0
+- name: Set current neovim version to 0 if not installed
   set_fact:
     neovim_version:
       stdout: 0
@@ -21,7 +25,8 @@
 
 - name: Install github3 module
   pip:
-    name: github3.py
+    name: 
+      - github3.py
 
 - name: Check latest neovim release
   github_release:
@@ -31,6 +36,12 @@
     token: "{{ github_token }}"
   register: neovim_release
   changed_when: neovim_release.tag != neovim_version.stdout
+
+- name: Delete the old version of nvim via the package manager
+  package:
+    name: neovim
+    state: absent
+  when: "'neovim' in ansible_facts.packages and neovim_release.tag != neovim_version.stdout"
 
 - name: Install neovim
   when: neovim_release.tag != neovim_version.stdout
@@ -79,6 +90,12 @@
         - yarn
       state: present
 
+  - name: Install python modules
+    pip:
+      name: 
+        - setuptools
+        - pynvim
+
   - name: Grab the latest release source
     unarchive: 
       src: "https://github.com/neovim/neovim/archive/{{ neovim_release['tag'] }}.tar.gz"
@@ -97,3 +114,8 @@
   - name: Compile and install neovim
     shell:
       cmd: cd {{ neovim_source.files[0].path }} && make install
+  
+  - name: Clean up
+    file:
+      path: "{{ neovim_source.files[0].path }}"
+      state: absent
