@@ -33,7 +33,7 @@
   mount:
     name: "{{ mergerfs_root }}"
     src: /mnt/cache*:/mnt/data*
-    opts: category.create=lfs,direct_io,defaults,allow_other,moveonenospc=1,minfreespace=50G,fsname=mergerfs
+    opts: category.create=lfs,direct_io,defaults,allow_other,moveonenospc=1,minfreespace=50G,fsname=mergerfs,uid=1000,gid=1000
     fstype: fuse.mergerfs
     state: mounted
   when: disks[0] is defined
@@ -42,7 +42,7 @@
   mount:
     name: "{{ mergerfs_root }}_slow"
     src: /mnt/data*
-    opts: direct_io,defaults,allow_other,moveonenospc=1,minfreespace=500G,fsname=mergerfs_slow
+    opts: direct_io,defaults,allow_other,moveonenospc=1,minfreespace=500G,fsname=mergerfs_slow,uid=1000,gid=1000
     fstype: fuse.mergerfs
     state: mounted
   when: disks[0] is defined
