@@ -6,7 +6,7 @@
 
 - name: Add Crowdsec Repository
   apt_repository:
-    repo: "deb [arch=amd64] https://packagecloud.io/crowdsec/crowdsec/ubuntu focal main"
+    repo: "deb [arch={{ repo_arch }}] https://packagecloud.io/crowdsec/crowdsec/{{ ansible_facts['distribution'] | lower }} {{ ansible_lsb['codename'] }} main"
     state: present
     
 - name: Update apt and install Crowdsec and Prometheus
@@ -16,7 +16,7 @@
       - crowdsec
       - crowdsec-firewall-bouncer-iptables
       - prometheus
-    state: present
+    state: latest
 
 - name: cscli hub update
   command:

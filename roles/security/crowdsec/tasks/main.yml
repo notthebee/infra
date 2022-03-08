@@ -1,1 +1,2 @@
+- include_tasks: repo_arch.yml
 - include_tasks: crowdsec.yml

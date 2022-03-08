@@ -12,8 +12,8 @@
 
 - hosts: fleet
   become: yes
-  roles:
 
+  roles:
     #
     # Basics
     #

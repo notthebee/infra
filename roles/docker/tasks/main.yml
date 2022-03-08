@@ -1,4 +1,6 @@
 ---
+- include_tasks: repo_arch.yml
+
 - name: Include OS-specific variables
   include_vars: "{{ ansible_facts['distribution'] }}.yml"
 - name: Install required system packages
@@ -16,7 +18,7 @@
 
   - name: Add Docker Repository
     apt_repository:
-      repo: "deb [arch=amd64] https://download.docker.com/linux/ubuntu focal stable"
+      repo: "deb [arch={{ repo_arch }}] https://download.docker.com/linux/{{ ansible_facts['distribution'] | lower }} {{ ansible_lsb['codename'] }} stable"
       state: present
 
 - name: Install Docker (Raspbian)
