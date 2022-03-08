@@ -6,7 +6,7 @@
 
 - name: Add Crowdsec Repository
   apt_repository:
-    repo: "deb [arch=amd64] https://packagecloud.io/crowdsec/crowdsec/ubuntu focal stable"
+    repo: "deb [arch=amd64] https://packagecloud.io/crowdsec/crowdsec/ubuntu focal main"
     state: present
     
 - name: Update apt and install Crowdsec and Prometheus
