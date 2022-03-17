@@ -68,7 +68,7 @@ git clone https://github.com/notthebee/infra
 
 Create a host varialbe file and adjust the variables:
 ```
-cd infra/ansible
+cd infra/
 mkdir -p host_vars/YOUR_HOSTNAME
 vi host_vars/YOUR_HOSTNAME/vars.yml
 ```
