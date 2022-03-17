@@ -58,4 +58,5 @@
   cron:
     name: Scan the Nextcloud library
     hour: "0"
+    minute: "0"
     job: "docker exec nextcloud sudo -u abc php8 /config/www/nextcloud/occ files:scan --all"

@@ -80,4 +80,5 @@
   cron:
     name: Scan the PhotoPrism library
     hour: "1"
+    minute: "0"
     job: "/usr/bin/docker exec photoprism /photoprism/bin/photoprism index"
