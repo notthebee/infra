@@ -1,4 +1,4 @@
-#!/bin/bash
+#!/usr/bin/env bash
 
 # initialise arrays for incoming ports
 incoming_ports_ext_array=()
