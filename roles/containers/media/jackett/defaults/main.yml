@@ -3,7 +3,7 @@ container_name: jackett
 
 url: "jackett.{{ host_local }}"
 
-homer_category: system
+homer_category: media
 
 dashboard_name: Jackett
 

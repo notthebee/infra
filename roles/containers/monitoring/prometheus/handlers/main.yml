@@ -1,0 +1,14 @@
+---
+- name: restart prometheus
+  docker_container:
+    name: prometheus
+    restart: yes
+    state: started
+
+
+- name: systemd reload
+  systemd:
+    daemon_reload: true
+    state: restarted
+    enabled: true
+    service: blackbox_exporter

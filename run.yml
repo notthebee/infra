@@ -50,6 +50,13 @@
         - ntp
 
 
+    - role: linux-system-roles.cockpit
+      tags:
+        - cockpit
+      when: enable_cockpit | default(False)
+
+
+
     #
     # Security
     #
@@ -183,33 +190,14 @@
 
 
     #
-    # Flame
-    #
-    - role: containers/system/flame
-      become: no
-      tags:
-        - flame
-        - containers
-      when: enable_flame | default(False)
-
-
-
-    #
     # System
     #
-    - role: containers/system/jackett
+    - role: containers/media/jackett
       become: no
       tags:
         - jackett
         - containers
       when: enable_jackett | default(False)
-
-    - role: containers/system/authelia
-      become: no
-      tags:
-        - authelia
-        - containers
-      when: enable_authelia | default(False)
 
     - role: containers/system/watchtower
       become: no
@@ -277,6 +265,32 @@
       when: enable_openbooks | default(False)
 
     #
+    # Monitoring
+    #
+    - role: containers/monitoring/grafana
+      become: no
+      tags:
+        - grafana
+        - monitoring
+        - containers
+      when: enable_grafana | default(False)
+          
+    - role: containers/monitoring/prometheus
+      become: no
+      tags:
+        - prometheus
+        - monitoring
+        - containers
+      when: enable_prometheus | default(False)
+
+    - role: geerlingguy.node_exporter
+      tags:
+        - node_exporter
+        - monitoring
+        - containers
+      when: enable_node_exporter | default(False)
+
+    #
     # Services
     #
     - role: containers/services/photoprism
@@ -317,8 +331,6 @@
         - smarthome
         - containers
       when: enable_homeassistant | default(False)
-
-
 
     - role: containers/homeautomation/mqtt
       become: no

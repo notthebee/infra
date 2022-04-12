@@ -4,6 +4,6 @@ mysql_user: "nextcloud"
 
 container_name: nextcloud
 
-url: "https://{{ subdomains['nextcloud'] }}.{{ host }}"
+url: "{{ subdomains['nextcloud'] }}.{{ host }}"
 
 homer_category: services

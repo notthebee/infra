@@ -32,7 +32,7 @@
 - name: Mount the mergerfs cached array
   mount:
     name: "{{ mergerfs_root }}"
-    src: /mnt/cache*:/mnt/data*
+    src: /mnt/storage_cache:/mnt/storage_slow
     opts: category.create=lfs,direct_io,defaults,allow_other,moveonenospc=1,minfreespace=50G,fsname=mergerfs,uid=1000,gid=1000
     fstype: fuse.mergerfs
     state: mounted

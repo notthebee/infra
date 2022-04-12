@@ -1,10 +1,8 @@
 ---
 container_name: vaultwarden
 
-dashboard_url: "https://{{ subdomains['vaultwarden'] }}.{{ host }}"
+url: "{{ subdomains['vaultwarden'] }}.{{ host }}"
 
 homer_category: services
 
 dashboard_name: Vaultwarden
-
-health_url: "http://{{ lan_address }}:3000/https://{{ subdomains['vaultwarden'] }}.{{ host }}"

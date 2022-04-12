@@ -3,10 +3,10 @@
   docker_container:
     name: '{{ container_name }}'
     image: "ghcr.io/linuxserver/unifi-controller"
-    pull: true
     networks:
       - name: swag_internal_macvlan
         ipv4_address: "{{ ip_address }}"
+    pull: true
     state: 'started'
     env:
       PUID: "{{ guid }}"

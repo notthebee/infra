@@ -4,7 +4,6 @@ server {
 
     server_name {{ web_applications['vaultwarden']['url'] }};
 
-
     {% include "nginx/params.j2" %}
     include /config/nginx/ssl.conf;
 

@@ -1,0 +1,21 @@
+---
+- name: Create and chmod folders
+  file:
+    path: "{{ item }}"
+    owner: "{{ username }}"
+    group: "{{ username }}"
+    state: directory
+    mode: 0755
+    recurse: yes
+  with_items:
+    - "{{ docker_dir }}/{{ container_name }}/etc"
+    - "{{ docker_dir }}/{{ container_name }}/prometheus"
+
+- name: Install the Prometheus config
+  template:
+    src: files/prometheus.yml.j2
+    dest: "{{ docker_dir }}/{{ container_name }}/etc/prometheus.yml"
+    owner: "{{ username }}"
+    group: "{{ username }}"
+    mode: 0755
+  notify: restart prometheus

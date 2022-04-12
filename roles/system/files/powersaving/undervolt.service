@@ -1,0 +1,15 @@
+[Unit]
+Description=undervolt
+After=suspend.target
+After=hibernate.target
+After=hybrid-sleep.target
+
+[Service]
+Type=oneshot
+ExecStart=/usr/local/bin/undervolt --gpu -75 --core -100 --cache -100 --uncore -100 --analogio -100
+
+[Install]
+WantedBy=multi-user.target
+WantedBy=suspend.target
+WantedBy=hibernate.target
+WantedBy=hybrid-sleep.target

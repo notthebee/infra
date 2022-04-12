@@ -17,7 +17,7 @@ swag_base: "{{ '.'.join(swag_network.split('.')[0:3]) }}"
 
 swag_gateway: "{{ '.'.join(swag_network.split('.')[0:3]) }}.1"
 
-swag_interface: vlan.4
+swag_interface: eth1
 
 lan_address: "{{ '.'.join(lan_network.split('.')[0:3]) }}.230"
 
@@ -35,7 +35,7 @@ iot_gateway: "{{ '.'.join(iot_network.split('.')[0:3]) }}.1"
 
 iot_base: "{{ '.'.join(iot_network.split('.')[0:3]) }}"
 
-iot_interface: vlan.3
+iot_interface: eth 2
 
 #
 # Misc
@@ -68,7 +68,7 @@ dotfiles_repo: https://github.com/notthebee/dotfiles
 
 boot_drive_serial: ""
 
-enable_pikvm: true
+enable_pikvm: false
 
 pikvm_address: pikvm.box
 
@@ -158,9 +158,9 @@ enable_nas_stuff: false
 
 # Home automation
 
-enable_deconz: true
+enable_deconz: false
 
-enable_homeassistant: true
+enable_homeassistant: false
 
 enable_mqtt: false
 
@@ -168,31 +168,31 @@ enable_mqtt: false
 
 enable_plex: false
 
-enable_jellyfin: true
+enable_jellyfin: false
 
-enable_photoprism: true
+enable_photoprism: false
 
-enable_booksonic: true
+enable_booksonic: false
 
 # Yo-ho-ho
 
-enable_deluge: true
+enable_deluge: false
 
-enable_qbittorrent: true
+enable_qbittorrent: false
 
-enable_sonarr: true
+enable_sonarr: false
 
-enable_radarr: true
+enable_radarr: false
 
-enable_openbooks: true
+enable_openbooks: false
 
-enable_jackett: true
+enable_jackett: false
 
 # Public-facing services
 
-enable_nextcloud: true
+enable_nextcloud: false
 
-enable_vaultwarden: true
+enable_vaultwarden: false
 
 enable_swag_public: false
 
@@ -204,15 +204,15 @@ enable_bunkerized_nginx: false
 
 enable_duckdns: false
 
-enable_cloudflare_ddns: true
+enable_cloudflare_ddns: false
 
-enable_ddclient: true
+enable_ddclient: false
 
 # VPN
 
-enable_wireguard: true
+enable_wireguard: false
 
-enable_ikev2: true
+enable_ikev2: false
 
 # Homepages
 
@@ -220,15 +220,22 @@ enable_homer: false
 
 enable_flame: false
 
+# Monitoring
+#
+enable_grafana: false
+
+enable_prometheus: false
+
+enable_node_exporter: true
+
 # Misc
 
 enable_unifi: false
 
-enable_authelia: true
+enable_authelia: false
+enable_pihole: false
 
-enable_pihole: true
-
-enable_watchtower: true
+enable_watchtower: false
 
 enable_endlessh: false
 #
@@ -238,7 +245,7 @@ timemachine_root: /mnt/timemachine
 
 timemachine_drive: /dev/disk/by-label/TimeMachine
 
-enable_timemachine: true
+enable_timemachine: false
 
 #
 # IKEv2
@@ -260,7 +267,7 @@ samba_global_include: global-include.conf
 
 samba_apple_extensions: yes
 
-samba_mitigate_cve_2017_7494: true
+samba_mitigate_cve_2017_7494: false
 
 samba_server_max_protocol: "SMB3"
 
@@ -324,7 +331,7 @@ mergerfs_root: /mnt/storage
 
 cache_root: /mnt/storage_cache
 
-enable_mergerfs: yes
+enable_mergerfs: false
 
 disks:
   - { path: /mnt/data1, src: /dev/disk/by-label/Data1, content: true }
@@ -385,14 +392,18 @@ smartd_default_mail_recipients: [ "{{ email }}" ]
 #
 # Security
 #
-enable_crowdsec: true
+enable_crowdsec: false
 
-enable_iptables: true
+enable_iptables: false
 
-enable_fail2ban: true
+enable_fail2ban: false
 
 # We have our own f2b rules
 security_fail2ban_enabled: false
+
+# Powersaving (powertop, cpufreq)
+
+enable_powersaving: false
 
 ### BEGIN Secret variables (encrypt and put into vault.yml)
 cloudflare_dns_token: ''

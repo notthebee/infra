@@ -1,5 +1,48 @@
+- name: Manage swag internal network (maya)
+  when: swag_host is defined
+  become: yes
+  block:
+  - name: Check if the shim network exists 
+    command:
+      cmd: ip link show mynet-shim
+    failed_when: false
+    changed_when: "'does not exist' in shim.stderr"
+    register: shim
+
+  - name: Delete the previous shim network
+    when: not shim.changed
+    command:
+      cmd: ip link delete mynet-shim
+
+  - name: Create a shim network
+    when: shim.changed
+    shell:
+      cmd: |
+        ip link add mynet-shim link {{ swag_interface }} type macvlan mode bridge
+        ip addr add {{ swag_host }}/32 dev mynet-shim
+        ip link set mynet-shim up
+        ip route add 10.0.0.0/24 dev mynet-shim
+    notify:
+      - ip route add
+
+  - name: Create an internal macvlan network
+    docker_network:
+      name: swag_internal_macvlan
+      driver: macvlan
+      driver_options:
+        parent: "{{ swag_interface }}"
+      ipam_config:
+        - subnet: "{{ swag_network }}"
+          gateway: "{{ swag_gateway }}"
+          aux_addresses:
+            host: "{{ swag_host }}"
+    notify:
+      - restart swag internal
+      - ip route add
+
+
 - name: Create an internal macvlan network
-  when: enable_swag_internal | default(False)
+  when: swag_host is not defined
   docker_network:
     name: swag_internal_macvlan
     driver: macvlan
@@ -8,6 +51,8 @@
     ipam_config:
       - subnet: "{{ swag_network }}"
         gateway: "{{ swag_gateway }}"
+  notify:
+    - restart swag internal
 
 - name: Create a public macvlan network
   when: enable_swag_public | default(False)
@@ -15,7 +60,10 @@
     name: swag_public_macvlan
     driver: macvlan
     driver_options:
-      parent: enp5s0
+      parent: "{{ dmz_interface }}"
     ipam_config:
       - subnet: "{{ dmz_network }}"
         gateway: "{{ dmz_gateway }}"
+  notify:
+    - restart swag public
+

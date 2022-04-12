@@ -1,0 +1,47 @@
+---
+- name: Install the powersaving packages
+  package:
+    name:
+      - powertop 
+      - python3
+      - python3-pip
+      - "linux-tools-{{ ansible_kernel }}"
+    state: latest
+
+- name: Install undervolt
+  pip:
+    state: latest
+    name:
+      - undervolt
+
+- name: Install the systemd services
+  copy:
+    src: "{{ item }}"
+    dest: "/etc/systemd/system/{{ item | basename }}"
+    owner: root
+    group: root
+    mode: 0755
+  notify: 
+    - systemd reload
+  with_fileglob:
+    - files/powersaving/*.service
+    - files/powersaving/*.timer
+      
+- name: Start and enable the systemd services
+  systemd:
+    state: started
+    enabled: true
+    name: "{{ item }}"
+  with_items:
+    - powertop
+    - cpupower-min.timer
+    - undervolt.timer
+
+- name: Shut down every day (apart from Sunday) at 1:30 AM
+  cron:
+    name: "Power off at night to save energy"
+    minute: "30"
+    hour: "1"
+    weekday: "1-6"
+    job: "poweroff"
+

@@ -6,7 +6,7 @@
 - name: Create a login user
   user:
     name: "{{ username }}"
-    password: "{{ password | password_hash('sha512') }}" 
+    password: "{{ password | password_hash('sha512') }}"
     groups: 
       - "{{ sudo_group }}"
       - users
@@ -90,6 +90,7 @@
     user: "{{ username }}"
     env: yes
     job: ""
+
 
 - name: Create additional users (no login)
   user:

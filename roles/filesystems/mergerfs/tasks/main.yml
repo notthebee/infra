@@ -15,6 +15,6 @@
   cron:
     name: "uncache the mergerfs pool"
     minute: "0"
-    hour: "3"
+    hour: "7"
     weekday: "1-6"
     job: "/usr/local/bin/mergerfs-uncache"

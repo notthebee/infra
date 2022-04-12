@@ -1,0 +1,8 @@
+- include_tasks: target.yml
+  when: emily not in inventory_hostname
+
+- include_tasks: source.yml
+  when: emily in inventory_hostname
+
+- include_tasks: openwrt.yml
+- include_tasks: homeassistant.yml

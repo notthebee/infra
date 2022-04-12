@@ -1,35 +1,34 @@
 - name: test nginx internal
   command:
-    cmd: "docker exec -it {{ item }} /usr/sbin/nginx -c /config/nginx/nginx.conf -t"
+    cmd: "docker exec -it swag_internal /usr/sbin/nginx -c /config/nginx/nginx.conf -t"
   register: swag_nginx_test
   changed_when: swag_nginx_test is not search("test is successful")
   failed_when: swag_nginx_test is not search("test is successful")
-  when: enable_swag_public | default(False) and existing is defined and running is defined
-  with_items:
-    - swag_public
+  when: enable_swag_internal | default(False) and swag_internal_exists is defined and swag_internal_running is defined
 
 - name: test nginx public
   command:
-    cmd: "docker exec -it {{ item }} /usr/sbin/nginx -c /config/nginx/nginx.conf -t"
+    cmd: "docker exec -it swag_public /usr/sbin/nginx -c /config/nginx/nginx.conf -t"
   register: swag_nginx_test
   changed_when: swag_nginx_test is not search("test is successful")
   failed_when: swag_nginx_test is not search("test is successful")
-  when: enable_swag_internal | default(False) and existing is defined and running is defined
-  with_items:
-    - swag_internal
-
-
+  when: enable_swag_public | default(False) and swag_public_exists is defined and swag_public_running is defined
 
 - name: restart swag internal
   docker_container:
     name: "swag_internal"
     state: started
     restart: yes
-  when: enable_swag_internal | default(False) and existing is defined and running is defined
+  when: enable_swag_internal | default(False) and swag_internal_exists is defined and swag_internal_running is defined
 
 - name: restart swag public
   docker_container:
     name: "swag_public"
     state: started
     restart: yes
-  when: enable_swag_public | default(False) and existing is defined and running is defined
+  when: enable_swag_public | default(False) and swag_public_exists is defined and swag_public_running is defined
+
+- name: ip route add
+  become: yes
+  command:
+    cmd: ip route add {{ swag_network }} dev mynet-shim

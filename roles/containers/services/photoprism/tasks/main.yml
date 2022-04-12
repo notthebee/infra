@@ -44,7 +44,7 @@
       "PHOTOPRISM_UID": "{{ guid }}"
       "TZ": "{{ timezone }}"
       "PHOTOPRISM_ADMIN_PASSWORD": "{{ photoprism_password }}"
-      "PHOTOPRISM_SITE_URL": "http://{{ lan_address }}:2342/"
+      "PHOTOPRISM_SITE_URL": "https://{{ url }}:443"
       "PHOTOPRISM_EXPERIMENTAL": "false"
       "PHOTOPRISM_HTTP_HOST": "0.0.0.0"
       "PHOTOPRISM_HTTP_PORT": "2342"
@@ -67,10 +67,10 @@
       "PHOTOPRISM_JPEG_QUALITY": "92"
       "TF_CPP_MIN_LOG_LEVEL": "0" 
       "PHOTOPRISM_FFMPEG_ENCODER": "h264_qsv"        
-      "PHOTOPRISM_INIT": "intel-graphics tensorflow-amd64-avx2" 
+      "PHOTOPRISM_INIT": "tensorflow-amd64-avx2" 
+    working_dir: "/photoprism"
     devices:
       - "/dev/dri/renderD128:/dev/dri/renderD128" # Intel GPU
-    working_dir: "/photoprism"
     volumes:
       - "{{ mergerfs_root }}/Nextcloud/{{ username }}/files/Photos:/photoprism/originals"
       - "{{ docker_dir }}/{{ container_name }}/storage:/photoprism/storage"

@@ -1,0 +1,15 @@
+[Unit]
+Description=Set minimum CPU frequency
+After=suspend.target
+After=hibernate.target
+After=hybrid-sleep.target
+
+[Service]
+Type=oneshot
+ExecStart=/usr/bin/cpupower frequency-set -d 800Mhz -u 3.2Ghz
+
+[Install]
+WantedBy=multi-user.target
+WantedBy=suspend.target
+WantedBy=hibernate.target
+WantedBy=hybrid-sleep.target

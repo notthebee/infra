@@ -7,12 +7,22 @@
     - swag_internal
     - swag_public
 
-- name: Do containers even exist?
+- name: Does internal container exist?
   set_fact:
-    existing: yes
-  when: swag_docker_status.results[0].exists and swag_docker_status.results[1].exists
+    swag_internal_exists: yes
+  when: swag_docker_status.results[0].exists
 
-- name: Are containers running?
+- name: Does public container exist?
   set_fact:
-    running: yes
-  when: existing is defined and swag_docker_status.results[0].container['State']['Running'] and swag_docker_status.results[1].container['State']['Running']
+    swag_public_exists: yes
+  when: swag_docker_status.results[1].exists
+
+- name: Is internal container running?
+  set_fact:
+    swag_internal_running: yes
+  when: swag_internal_exists is defined and swag_docker_status.results[0].container['State']['Running'] 
+
+- name: Is public container running?
+  set_fact:
+    swag_internal_running: yes
+  when: swag_public_exists is defined and swag_docker_status.results[1].container['State']['Running'] 

@@ -1,4 +1,0 @@
----
-container_name: authelia
-
-dashboard_url: "http://authelia.{{ host_local }}"

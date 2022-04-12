@@ -4,8 +4,6 @@
     path: "{{ docker_dir }}/swag/{{ item }}/nginx/proxy-confs/"
     state: directory
     recurse: yes
-    owner: "{{ username }}"
-    group: "{{ username }}"
     mode: 0755
   with_items: 
     - internal
@@ -15,8 +13,6 @@
   template:
     src: "{{ item }}"
     dest: "{{ docker_dir }}/swag/{{ item.split('/')[-2] }}/nginx/proxy-confs/{{ item | basename | regex_replace('.j2$', '') }}"
-    owner: "{{ username }}"
-    group: "{{ username }}"
     mode: 0644
   when: (item | basename).split('.')[0] in web_applications
   with_fileglob:
@@ -34,17 +30,12 @@
     path: "{{ docker_dir }}/swag/dns-conf"
     state: directory
     recurse: yes
-    owner: "{{ username }}"
-    group: "{{ username }}"
     mode: 0755
-  when: enable_swag_public | default(False)
 
 - name: Install the DNS config file
   template:
     src: "dns-conf/cloudflare.ini.j2"
     dest: "{{ docker_dir }}/swag/dns-conf/cloudflare.ini"
-    owner: "{{ username }}"
-    group: "{{ username }}"
     mode: 0644
   notify:
     - restart swag public

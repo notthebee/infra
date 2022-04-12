@@ -1,0 +1,48 @@
+# vim: set ft=yaml:
+global:
+    scrape_interval: 5s
+    scrape_timeout: 5s
+
+scrape_configs:
+    - job_name: services
+      metrics_path: /metrics
+      static_configs:
+          - targets:
+                - 'localhost:9090'
+                - 'maya.lan:9100'
+                - 'maya.lan:9115'
+                - 'emily.lan:9100'
+                - 'emily.lan:9256'
+                - 'mona.lan:9100'
+                - 'mona.lan:9256'
+
+    - job_name: 'hass'
+      metrics_path: /api/prometheus
+      authorization:
+          credentials: '{{ hass_prometheus_token }}'
+      scheme: https
+      static_configs:
+          - targets:
+                - 'homeassistant.goose.party'
+
+    - job_name: 'blackbox'
+      metrics_path: /probe
+      params:
+          module: [icmp]
+      static_configs:
+          - targets:
+                - jackett.{{ host_local }}
+                - deluge.{{ host_local }}
+                - plex.{{ host_local }}
+                - sonarr.{{ host_local }}
+                - radarr.{{ host_local }}
+                - openbooks.{{ host_local }}
+                - photoprism.{{ host_local }}
+                - flame.{{ host_local }}
+      relabel_configs:
+          - source_labels: [__address__]
+            target_label: __param_target
+          - source_labels: [__param_target]
+            target_label: instance
+          - target_label: __address__
+            replacement: '{{ swag_host }}:9115'

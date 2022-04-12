@@ -1,0 +1,12 @@
+[Unit]
+Description=Apply undervolt settings
+
+[Timer]
+Unit=undervolt.service
+# Wait 2 minutes after boot before first applying
+OnBootSec=2min
+# Run every 30 seconds
+OnUnitActiveSec=30
+
+[Install]
+WantedBy=multi-user.target
