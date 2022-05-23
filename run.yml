@@ -168,7 +168,7 @@
             - smartd
         when: enable_nas_stuff | default(False)
 
-      - role: ironicbadger.ansible_role_snapraid
+      - role: ironicbadger.snapraid
         become: yes
         tags:
             - snapraid

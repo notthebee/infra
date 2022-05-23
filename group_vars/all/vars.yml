@@ -353,7 +353,7 @@ snapraid_parity_disks: '{{ parity_disks }}'
 
 snapraid_bin_path: /usr/bin/snapraid
 
-snapraid_runner_gmail_pass: '{{ email_password }}'
+snapraid_runner_email_pass: '{{ email_password }}'
 
 snapraid_runner_email_address: '{{ email }}'
 
