@@ -129,8 +129,8 @@
       dest: "{{ docker_dir }}"
       state: directory
       owner: "{{ username }}"
-      group: "{{ username }}"
-      mode: 0755
+      group: "users"
+      mode: "ug=rwx,o=rx,g+s"
       recurse: yes
     when: not persistent_data.stat.exists
 
@@ -149,5 +149,6 @@
     dest: "{{ docker_dir }}"
     state: directory
     owner: "{{ username }}"
-    group: "{{ username }}"
+    mode: "0775"
+    group: "users"
     recurse: yes

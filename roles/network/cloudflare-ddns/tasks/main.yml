@@ -14,3 +14,19 @@
       "PROXIED": "true"
       "SUBDOMAIN": "ddns"
     restart_policy: unless-stopped
+
+- name: Make sure the {{ container_name }} container is created and running
+  when: enable_wireguard | default(False)
+  docker_container:
+    name: "{{ container_name }}_vpn"
+    image: "oznu/cloudflare-ddns:latest"
+    pull: yes
+    state: 'started'
+    env:
+      "PUID": "{{ guid }}"
+      "PGID": "{{ guid }}"
+      "TZ": "{{ timezone }}"
+      "API_KEY": "{{ cloudflare_dns_token }}"
+      "ZONE": "{{ vpn_host }}"
+      "PROXIED": "false"
+    restart_policy: unless-stopped

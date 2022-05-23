@@ -46,7 +46,7 @@
       "PHOTOPRISM_ADMIN_PASSWORD": "{{ photoprism_password }}"
       "PHOTOPRISM_SITE_URL": "https://{{ url }}:443"
       "PHOTOPRISM_EXPERIMENTAL": "false"
-      "PHOTOPRISM_HTTP_HOST": "0.0.0.0"
+      "PHOTOPRISM_HTTP_HOST": "{{ ip_address }}"
       "PHOTOPRISM_HTTP_PORT": "2342"
       "PHOTOPRISM_HTTP_COMPRESSION": "gzip"
       "PHOTOPRISM_DATABASE_DRIVER": "mysql"

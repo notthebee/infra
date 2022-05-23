@@ -6,7 +6,7 @@ After=hybrid-sleep.target
 
 [Service]
 Type=oneshot
-ExecStart=/usr/bin/cpupower frequency-set -d 800Mhz -u 3.2Ghz
+ExecStart=/usr/bin/cpupower frequency-set -d 800Mhz -u 3.7Ghz -g powersave
 
 [Install]
 WantedBy=multi-user.target

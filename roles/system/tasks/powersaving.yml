@@ -3,16 +3,8 @@
   package:
     name:
       - powertop 
-      - python3
-      - python3-pip
       - "linux-tools-{{ ansible_kernel }}"
     state: latest
-
-- name: Install undervolt
-  pip:
-    state: latest
-    name:
-      - undervolt
 
 - name: Install the systemd services
   copy:
@@ -33,9 +25,8 @@
     enabled: true
     name: "{{ item }}"
   with_items:
-    - powertop
+    - powertop.timer
     - cpupower-min.timer
-    - undervolt.timer
 
 - name: Shut down every day (apart from Sunday) at 1:30 AM
   cron:
@@ -44,4 +35,3 @@
     hour: "1"
     weekday: "1-6"
     job: "poweroff"
-

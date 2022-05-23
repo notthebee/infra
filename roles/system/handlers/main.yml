@@ -19,10 +19,9 @@
     name: "{{ item }}"
   with_items:
     - powertop
+    - powertop.timer
     - cpupower-min
     - cpupower-min.timer
-    - undervolt
-    - undervolt.timer
 
 - name: monitoring systemd reload
   systemd:

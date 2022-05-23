@@ -2,9 +2,10 @@
 <!DOCTYPE service-group SYSTEM "avahi-service.dtd">
 
 <service-group>
-  <name replace-wildcards="yes">%h (Samba)</name>
+  <name replace-wildcards="yes">emily (Samba)</name>
   <service>
     <type>_smb._tcp</type>
+    <host-name>emily.local</host-name>
     <port>445</port>
 
   </service>

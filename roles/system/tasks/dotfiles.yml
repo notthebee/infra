@@ -1,36 +1,28 @@
 ---
-- name: Clone the latest dotfiles repo
-  git:
-    repo: "{{ dotfiles_repo }}"
-    dest: "/home/{{ username }}/dotfiles"
-    recursive: no
-    force: yes
-  notify:
-    - install and update nvim plugins
-
 - name: Chown the repo
   file:
-    path: "/home/{{ username }}/dotfiles"
-    recurse: yes
-    state: directory
-    owner: "{{ username }}"
-    group: "{{ username }}"
+      path: '/home/{{ username }}/dotfiles'
+      recurse: yes
+      state: directory
+      owner: '{{ username }}'
+      group: '{{ username }}'
+
+- name: Clone the latest dotfiles repo
+  become_user: '{{ username }}'
+  git:
+      repo: '{{ dotfiles_repo }}'
+      dest: '/home/{{ username }}/dotfiles'
+      recursive: no
+      force: yes
+  notify:
+      - install and update nvim plugins
 
 - name: Stow the dotfiles
-  become_user: "{{ username }}"
+  become_user: '{{ username }}'
   shell:
-    cmd: stow -v */
-    chdir: "/home/{{ username }}/dotfiles"
+      cmd: stow -v */
+      chdir: '/home/{{ username }}/dotfiles'
   register: stow_result
   notify:
-    - install and update nvim plugins
+      - install and update nvim plugins
   changed_when: stow_result.stdout != ""
-
-- name: Set fish prompt color
-  lineinfile:
-    line: "    set_color {{ fish_prompt_color }}"
-    path: "/home/{{ username }}/dotfiles/fish/.config/fish/functions/fish_prompt.fish"
-    insertafter: "function fish_prompt"
-    firstmatch: yes
-    regexp: "^.*set_color.*$"
-    state: present

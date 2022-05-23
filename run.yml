@@ -6,345 +6,340 @@
   gather_facts: no
 
   pre_tasks:
-    - import_tasks: tasks/ssh_juggle_port.yml
-      tags:
-        - port
+      - import_tasks: tasks/ssh_juggle_port.yml
+        tags:
+            - port
 
 - hosts: fleet
   become: yes
 
   roles:
-    #
-    # Basics
-    #
-    - role: system
-      tags:
-        - system
+      #
+      # Basics
+      #
+      - role: system
+        tags:
+            - system
 
-    - role: neovim
-      tags:
-        - neovim
+      - role: neovim
+        tags:
+            - neovim
 
-    - role: geerlingguy.security
-      tags:
-        - security
+      - role: geerlingguy.security
+        tags:
+            - security
 
-    - role: docker
-      tags:
-        - docker
+      - role: docker
+        tags:
+            - docker
 
-    - role: network/avahi
-      tags:
-        - avahi
+      - role: network/avahi
+        tags:
+            - avahi
+        when: enable_avahi | default(False)
 
-    - role: chriswayg.msmtp-mailer
-      tags:
-        - msmtp
+      - role: chriswayg.msmtp-mailer
+        tags:
+            - msmtp
 
-    - role: oefenweb.dns
-      tags:
-        - dns
+      - role: oefenweb.dns
+        tags:
+            - dns
 
-    - role: geerlingguy.ntp
-      tags:
-        - ntp
+      - role: geerlingguy.ntp
+        tags:
+            - ntp
 
+      - role: linux-system-roles.cockpit
+        tags:
+            - cockpit
+        when: enable_cockpit | default(False)
 
-    - role: linux-system-roles.cockpit
-      tags:
-        - cockpit
-      when: enable_cockpit | default(False)
+      #
+      # Security
+      #
+      - role: security/fail2ban
+        tags:
+            - fail2ban
+        when: enable_fail2ban | default(False)
 
+      - role: security/iptables
+        tags:
+            - iptables
+        when: enable_iptables | default(False)
 
+      - role: security/crowdsec
+        tags:
+            - crowdsec
+        when: enable_crowdsec | default(False)
 
-    #
-    # Security
-    #
-    - role: security/fail2ban
-      tags:
-      - fail2ban
-      when: enable_fail2ban | default(False)
+      - role: security/endlessh
+        tags:
+            - endlessh
+        when: enable_endlessh | default(False)
 
-    - role: security/iptables
-      tags:
-      - iptables
-      when: enable_iptables | default(False)
+      #
+      # Network
+      #
+      - role: network/swag
+        become: no
+        tags:
+            - swag
+            - containers
 
-    - role: security/crowdsec
-      tags:
-      - crowdsec
-      when: enable_crowdsec | default(False)
+      - role: network/bunkerized-nginx
+        become: no
+        tags:
+            - bunkerized-nginx
+            - containers
+        when: enable_bunkerized_nginx | default(False)
 
-    - role: security/endlessh
-      tags:
-      - endlessh
-      when: enable_endlessh | default(False)
+      - role: network/wireguard
+        become: no
+        tags:
+            - wireguard
+            - containers
+        when: enable_wireguard | default(False)
 
-    #
-    # Network
-    #
-    - role: network/swag
-      become: no
-      tags:
-        - swag
-        - containers
-      when: enable_swag_public | default(False) or enable_swag_internal | default(False)
+      - role: network/ikev2
+        become: no
+        tags:
+            - ikev2
+            - containers
+        when: enable_ikev2 | default(False)
 
-    - role: network/bunkerized-nginx
-      become: no
-      tags:
-        - bunkerized-nginx
-        - containers
-      when: enable_bunkerized_nginx | default(False)
+      - role: network/ddclient
+        become: yes
+        when: enable_ddclient | default(False)
+        tags:
+            - ddclient
 
-    - role: network/wireguard
-      become: no
-      tags:
-        - wireguard
-        - containers
-      when: enable_wireguard | default(False)
+      - role: network/duckdns
+        become: no
+        when: enable_duckdns | default(False)
+        tags:
+            - duckdns
 
-    - role: network/ikev2
-      become: no
-      tags:
-        - ikev2
-        - containers
-      when: enable_ikev2 | default(False)
+      - role: network/cloudflare-ddns
+        become: no
+        tags:
+            - cloudflare-ddns
+            - containers
+        when: enable_cloudflare_ddns | default(False)
 
-    - role: network/ddclient
-      become: yes
-      when: enable_ddclient | default(False)
-      tags:
-        - ddclient
+      - role: network/adguard
+        become: no
+        tags:
+            - adguard
+            - containers
+        when: enable_adguard | default(False)
 
-    - role: network/duckdns
-      become: no
-      when: enable_duckdns | default(False)
-      tags:
-        - duckdns
+      - role: network/ikev2
+        become: no
+        when: enable_ikev2 | default(False)
+        tags:
+            - containers
+            - ikev2
 
-    - role: network/cloudflare-ddns
-      become: no
-      tags:
-        - cloudflare-ddns
-        - containers
-      when: enable_cloudflare_ddns | default(False)
+      #
+      # Filesystems
+      #
+      - role: filesystems/mergerfs
+        become: yes
+        tags:
+            - mergerfs
+        when: enable_nas_stuff | default(False)
 
-    - role: network/pihole
-      become: no
-      when: enable_pihole | default(False)
-      tags:
-        - pihole
-        - containers
+      - role: filesystems/mounts
+        become: yes
+        tags:
+            - mounts
+        when: enable_nas_stuff | default(False)
 
-    - role: network/ikev2
-      become: no
-      when: enable_ikev2 | default(False)
-      tags:
-        - containers
-        - ikev2
+      - role: filesystems/hd-idle
+        become: yes
+        tags:
+            - hd-idle
+        when: enable_nas_stuff | default(False)
 
+      - role: stuvusit.smartd
+        become: yes
+        tags:
+            - smartd
+        when: enable_nas_stuff | default(False)
 
-    #
-    # Filesystems
-    #
-    - role: filesystems/mergerfs
-      become: yes
-      tags:
-        - mergerfs
-      when: enable_nas_stuff | default(False)
+      - role: ironicbadger.ansible_role_snapraid
+        become: yes
+        tags:
+            - snapraid
+        when: enable_nas_stuff | default(False)
 
-    - role: filesystems/mounts
-      become: yes
-      tags:
-        - mounts
-      when: enable_nas_stuff | default(False)
+      #
+      # Flame
+      #
+      - role: containers/services/flame
+        become: no
+        tags:
+            - flame
+            - containers
+        when: enable_flame | default(False)
 
-    - role: filesystems/hd-idle
-      become: yes
-      tags:
-        - hd-idle
-      when: enable_nas_stuff | default(False)
+      #
+      # System
+      #
+      - role: containers/media/jackett
+        become: no
+        tags:
+            - jackett
+            - containers
+        when: enable_jackett | default(False)
 
-    - role: stuvusit.smartd
-      become: yes
-      tags:
-        - smartd
-      when: enable_nas_stuff | default(False)
+      - role: containers/system/watchtower
+        become: no
+        tags:
+            - watchtower
+            - containers
 
-    - role: ironicbadger.ansible_role_snapraid
-      become: yes
-      tags:
-        - snapraid
-      when: enable_nas_stuff | default(False)
+      - role: containers/system/unifi
+        become: no
+        tags:
+            - unifi
+            - containers
+        when: enable_unifi | default(False)
 
-    #
-    # Homer
-    #
-    - role: homer
-      become: no
-      tags:
-        - homer
-        - containers
-      when: enable_homer | default(False)
+      #
+      # Media
+      #
+      - role: containers/media/deluge
+        become: no
+        tags:
+            - deluge
+            - containers
+        when: enable_deluge | default(False)
 
+      - role: containers/media/sonarr
+        become: no
+        tags:
+            - sonarr
+            - containers
+        when: enable_sonarr | default(False)
 
-    #
-    # System
-    #
-    - role: containers/media/jackett
-      become: no
-      tags:
-        - jackett
-        - containers
-      when: enable_jackett | default(False)
+      - role: containers/media/radarr
+        become: no
+        tags:
+            - radarr
+            - containers
+        when: enable_radarr | default(False)
 
-    - role: containers/system/watchtower
-      become: no
-      tags:
-        - watchtower
-        - containers
+      - role: containers/media/booksonic
+        become: no
+        tags:
+            - booksonic
+            - containers
+        when: enable_booksonic | default(False)
 
-    - role: containers/system/unifi
-      become: no
-      tags:
-        - unifi
-        - containers
-      when: enable_unifi | default(False)
+      - role: containers/media/plex
+        become: no
+        tags:
+            - plex
+            - containers
+        when: enable_plex | default(False)
 
-    #
-    # Media
-    #
-    - role: containers/media/deluge
-      become: no
-      tags:
-        - deluge
-        - containers
-      when: enable_deluge | default(False)
+      - role: containers/media/jellyfin
+        become: no
+        tags:
+            - jellyfin
+            - containers
+        when: enable_jellyfin | default(False)
 
-    - role: containers/media/sonarr
-      become: no
-      tags:
-        - sonarr
-        - containers
-      when: enable_sonarr | default(False)
+      - role: containers/media/openbooks
+        become: no
+        tags:
+            - openbooks
+            - containers
+        when: enable_openbooks | default(False)
 
-    - role: containers/media/radarr
-      become: no
-      tags:
-        - radarr
-        - containers
-      when: enable_radarr | default(False)
+      #
+      # Monitoring
+      #
+      - role: containers/monitoring/grafana
+        become: no
+        tags:
+            - grafana
+            - monitoring
+            - containers
+        when: enable_grafana | default(False)
 
-    - role: containers/media/booksonic
-      become: no
-      tags:
-        - booksonic
-        - containers
-      when: enable_booksonic | default(False)
+      - role: containers/monitoring/prometheus
+        become: no
+        tags:
+            - prometheus
+            - monitoring
+            - containers
+        when: enable_prometheus | default(False)
 
-    - role: containers/media/plex
-      become: no
-      tags:
-        - plex
-        - containers
-      when: enable_plex | default(False)
+      - role: geerlingguy.node_exporter
+        tags:
+            - node_exporter
+            - monitoring
+            - containers
+        when: enable_node_exporter | default(False)
 
-    - role: containers/media/jellyfin
-      become: no
-      tags:
-        - jellyfin
-        - containers
-      when: enable_jellyfin | default(False)
+      #
+      # Services
+      #
+      - role: containers/services/photoprism
+        become: no
+        tags:
+            - photoprism
+            - containers
+        when: enable_photoprism | default(False)
 
-    - role: containers/media/openbooks
-      become: no
-      tags:
-        - openbooks
-        - containers
-      when: enable_openbooks | default(False)
+      - role: containers/services/nextcloud
+        become: no
+        tags:
+            - nextcloud
+            - containers
+        when: enable_nextcloud | default(False)
 
-    #
-    # Monitoring
-    #
-    - role: containers/monitoring/grafana
-      become: no
-      tags:
-        - grafana
-        - monitoring
-        - containers
-      when: enable_grafana | default(False)
-          
-    - role: containers/monitoring/prometheus
-      become: no
-      tags:
-        - prometheus
-        - monitoring
-        - containers
-      when: enable_prometheus | default(False)
+      - role: containers/services/vaultwarden
+        become: no
+        tags:
+            - vaultwarden
+            - containers
+        when: enable_vaultwarden | default(False)
 
-    - role: geerlingguy.node_exporter
-      tags:
-        - node_exporter
-        - monitoring
-        - containers
-      when: enable_node_exporter | default(False)
+      #
+      # Home automation
+      #
+      - role: containers/homeautomation/deconz
+        tags:
+            - deconz
+            - smarthome
+            - containers
+        when: enable_deconz | default(False)
 
-    #
-    # Services
-    #
-    - role: containers/services/photoprism
-      become: no
-      tags:
-        - photoprism
-        - containers
-      when: enable_photoprism | default(False)
+      - role: containers/homeautomation/homeassistant
+        become: no
+        tags:
+            - homeassistant
+            - smarthome
+            - containers
+        when: enable_homeassistant | default(False)
 
-    - role: containers/services/nextcloud
-      become: no
-      tags:
-        - nextcloud
-        - containers
-      when: enable_nextcloud | default(False)
+      - role: containers/homeautomation/mqtt
+        become: no
+        tags:
+            - mqtt
+            - smarthome
+            - containers
+        when: enable_homeassistant | default(False)
 
-    - role: containers/services/vaultwarden
-      become: no
-      tags:
-        - vaultwarden
-        - containers
-      when: enable_vaultwarden | default(False)
-
-    #
-    # Home automation
-    #
-    - role: containers/homeautomation/deconz
-      tags:
-        - deconz
-        - smarthome
-        - containers
-      when: enable_deconz | default(False)
-
-    - role: containers/homeautomation/homeassistant
-      become: no
-      tags:
-        - homeassistant
-        - smarthome
-        - containers
-      when: enable_homeassistant | default(False)
-
-    - role: containers/homeautomation/mqtt
-      become: no
-      tags:
-        - mqtt
-        - smarthome
-        - containers
-      when: enable_homeassistant | default(False)
-
-    #
-    # Samba
-    #
-    - role: bertvv.samba
-      become: yes
-      tags:
-        - samba
-      when: enable_nas_stuff | default(False)
+      #
+      # Samba
+      #
+      - role: bertvv.samba
+        become: yes
+        tags:
+            - samba
+        when: enable_nas_stuff | default(False)

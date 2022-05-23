@@ -1,0 +1,23 @@
+---
+- name: Create the adguard macvlan network
+  docker_network:
+      name: adguard_macvlan
+      driver: macvlan
+      driver_options:
+          parent: '{{ eth }}'
+      ipam_config:
+          - subnet: '{{ lan_network }}'
+            gateway: '{{ lan_gateway }}'
+
+- name: Make sure the {{ container_name }} container is created and running
+  docker_container:
+      image: adguard/adguardhome
+      name: adguard
+      state: 'started'
+      networks:
+          - name: adguard_macvlan
+            ipv4_address: '{{ ip_address }}'
+      volumes:
+          - '{{ docker_dir }}/{{ container_name }}/adguard/work:/opt/adguardhome/work'
+          - '{{ docker_dir }}/{{ container_name }}/adguard/conf:/opt/adguardhome/conf'
+      restart_policy: unless-stopped

@@ -4,11 +4,6 @@
     name: "{{ container_name }}"
     image: "lscr.io/linuxserver/plex"
     pull: yes
-    labels:
-      "flame.type": "application"
-      "flame.name": "{{ dashboard_name }}"
-      "flame.url": "{{ url }}"
-      "flame.icon": "custom"
     networks:
       - name: swag_internal_macvlan
         ipv4_address: "{{ ip_address }}"

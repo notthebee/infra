@@ -1,8 +1,0 @@
-- name: Create a backup directory
-  when: emily in inventory_hostname
-  file:
-    path: "{{ mergerfs_root }}/Backup"
-    state: directory
-    owner: "{{ username }}"
-    group: "{{ username }}"
-    mode: 0755

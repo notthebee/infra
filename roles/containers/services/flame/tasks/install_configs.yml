@@ -1,0 +1,33 @@
+---
+- name: Chmod the flame directory
+  become: true
+  file:
+      path: '{{ docker_dir }}/flame'
+      owner: '{{ username }}'
+      group: '{{ username }}'
+      mode: 0755
+      recurse: yes
+      state: directory
+
+- name: Create a font directory
+  file:
+      path: '{{ docker_dir }}/flame/fonts'
+      state: directory
+      recurse: yes
+      owner: '{{ username }}'
+      group: '{{ username }}'
+      mode: '0755'
+
+- name: Install fonts
+  copy:
+      src: fonts
+      dest: '{{ docker_dir }}/flame'
+      owner: '{{ username }}'
+      group: '{{ username }}'
+      mode: '0755'
+
+- name: Install custom CSS
+  template:
+      src: custom.css.j2
+      dest: '{{ docker_dir }}/{{ container_name }}/custom.css'
+      mode: '0755'

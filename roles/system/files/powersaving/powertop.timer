@@ -1,8 +1,8 @@
 [Unit]
-Description=Apply undervolt settings
+Description=Powertop auto-tune (timer)
 
 [Timer]
-Unit=undervolt.service
+Unit=powertop.service
 # Wait 2 minutes after boot before first applying
 OnBootSec=2min
 # Run every 30 seconds

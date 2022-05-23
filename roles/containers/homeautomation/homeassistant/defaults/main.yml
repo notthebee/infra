@@ -1,10 +1,10 @@
 ---
 container_name: homeassistant
 
-url: "homeassistant.{{ host_local }}"
+url: 'homeassistant.{{ host_local }}'
 
-ip_address: "{{ iot_base }}.168"
+ip_address: '{{ swag_base }}.18'
 
 homer_category: smarthome
 
-dashboard_name: "Home Assistant"
+dashboard_name: 'Home Assistant'

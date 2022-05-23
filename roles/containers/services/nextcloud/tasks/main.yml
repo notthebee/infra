@@ -1,62 +1,66 @@
 ---
 - name: Create a nextcloud network
   docker_network:
-    name: nextcloud_network
+      name: nextcloud_network
 
 - name: Make sure the MariaDB container is created and running
   docker_container:
-    name: "nextcloud-mariadb"
-    image: "mariadb:latest"
-    pull: yes
-    networks:
-      - name: swag_public_macvlan
-      - name: nextcloud_network
-    command: "--transaction-isolation=READ-COMMITTED --binlog-format=ROW --skip-innodb-read-only-compressed --innodb-read-only-compressed=OFF"
-    state: 'started'
-    env:
-      "PUID": "{{ guid }}"
-      "PGID": "{{ guid }}"
-      "TZ": "{{ timezone }}"
-      "MYSQL_ROOT_PASSWORD": "{{ mysql_root_password }}"
-      "MYSQL_DATABASE": "{{ mysql_db }}"
-      "MYSQL_USER": "{{ mysql_user }}"
-      "MYSQL_PASSWORD": "{{ mysql_password }}"
-    volumes:
-      - "{{ docker_dir }}/{{ container_name }}/mariadb/mysql:/var/lib/mysql"
-    restart_policy: unless-stopped
-    
+      name: 'nextcloud-mariadb'
+      image: 'mariadb:latest'
+      pull: yes
+      networks:
+          - name: swag_public_macvlan
+          - name: nextcloud_network
+      command: '--transaction-isolation=READ-COMMITTED --binlog-format=ROW --skip-innodb-read-only-compressed --innodb-read-only-compressed=OFF'
+      state: 'started'
+      env:
+          'PUID': '{{ guid }}'
+          'PGID': '{{ guid }}'
+          'TZ': '{{ timezone }}'
+          'MYSQL_ROOT_PASSWORD': '{{ mysql_root_password }}'
+          'MYSQL_DATABASE': '{{ mysql_db }}'
+          'MYSQL_USER': '{{ mysql_user }}'
+          'MYSQL_PASSWORD': '{{ mysql_password }}'
+      volumes:
+          - '{{ docker_dir }}/{{ container_name }}/mariadb/mysql:/var/lib/mysql'
+      restart_policy: unless-stopped
+
 - name: Make sure the Redis container is created and running
   docker_container:
-    name: "nextcloud-redis"
-    networks:
-      - name: nextcloud_network
-    image: "redis:alpine"
-    pull: yes
-    state: 'started'
-    restart_policy: unless-stopped
- 
+      name: 'nextcloud-redis'
+      networks:
+          - name: nextcloud_network
+      image: 'redis:alpine'
+      pull: yes
+      state: 'started'
+      restart_policy: unless-stopped
+
 - name: Make sure the Nextcloud container is created and running
   docker_container:
-    name: "{{ container_name }}"
-    image: "ghcr.io/linuxserver/nextcloud:php8"
-    pull: yes
-    networks:
-      - name: swag_public_macvlan
-      - name: nextcloud_network
-    state: 'started'
-    env:
-      "PUID": "{{ guid }}"
-      "PGID": "{{ guid }}"
-      "TZ": "{{ timezone }}"
-    volumes:
-      - "{{ docker_dir }}/{{ container_name }}/config:/config"
-      - "{{ docker_dir }}/{{ container_name }}/data:/data"
-      - "{{ mergerfs_root }}/Nextcloud/{{ username }}:/data/{{ username }}"
-    restart_policy: unless-stopped
+      name: '{{ container_name }}'
+      image: 'nextcloud:stable-apache'
+      pull: yes
+      networks:
+          - name: swag_public_macvlan
+          - name: nextcloud_network
+      state: 'started'
+      env:
+          'PUID': '{{ guid }}'
+          'PGID': '{{ guid }}'
+          'TZ': '{{ timezone }}'
+          'MYSQL_DATABASE': '{{ mysql_db }}'
+          'MYSQL_USER': '{{ mysql_user }}'
+          'MYSQL_PASSWORD': '{{ mysql_password }}'
+          'MYSQL_HOST': 'nextcloud-mariadb'
+      volumes:
+          - '{{ docker_dir }}/{{ container_name }}/data:/var/www/html'
+          #- '{{ mergerfs_root }}/Nextcloud/{{ username }}:/data/{{ username }}'
+      restart_policy: unless-stopped
 
 - name: Schedule a Nextcloud library scan at midnight every day
   cron:
-    name: Scan the Nextcloud library
-    hour: "0"
-    minute: "0"
-    job: "docker exec nextcloud sudo -u abc php8 /config/www/nextcloud/occ files:scan --all"
+      name: Scan the Nextcloud library
+      hour: '0'
+      minute: '0'
+      job: 'docker exec nextcloud sudo -u abc php8 /config/www/nextcloud/occ files:scan --all'
+

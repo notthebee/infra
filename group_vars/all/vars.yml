@@ -7,11 +7,11 @@
 #
 # Networks
 #
-vpn_network: "10.1.1.0/24"
+vpn_network: '10.13.13.0/24'
 
-lan_network: "192.168.2.0/24"
+lan_network: '192.168.3.0/24'
 
-swag_network: "10.0.0.0/27"
+swag_network: '10.0.0.0/27'
 
 swag_base: "{{ '.'.join(swag_network.split('.')[0:3]) }}"
 
@@ -20,6 +20,8 @@ swag_gateway: "{{ '.'.join(swag_network.split('.')[0:3]) }}.1"
 swag_interface: eth1
 
 lan_address: "{{ '.'.join(lan_network.split('.')[0:3]) }}.230"
+
+lan_base: "{{ '.'.join(lan_network.split('.')[0:3]) }}"
 
 lan_gateway: "{{ '.'.join(lan_network.split('.')[0:3]) }}.1"
 
@@ -40,17 +42,21 @@ iot_interface: eth 2
 #
 # Misc
 #
-hostname: "{{ inventory_hostname }}"
+hostname: '{{ inventory_hostname }}'
 
 timezone: Europe/Amsterdam
 
-dot_nameservers: [185.95.218.42@853#dns.digitale-gesellschaft.ch, 94.140.15.140@853#dns-unfiltered.adguard.com]
+dot_nameservers:
+    [
+        185.95.218.42@853#dns.digitale-gesellschaft.ch,
+        94.140.15.140@853#dns-unfiltered.adguard.com,
+    ]
 
-ntp_timezone: "{{ timezone }}"
+ntp_timezone: '{{ timezone }}'
 
 locale: en_US.UTF-8
 
-dns_nameservers: ["1.1.1.1", "1.0.0.1"]
+dns_nameservers: ['1.1.1.1', '1.0.0.1']
 
 fish_prompt_color: blue
 
@@ -58,7 +64,7 @@ keyboard_layout: us
 
 username: notthebee
 
-guid: "1000"
+guid: '1000'
 
 shell: /usr/bin/fish
 
@@ -66,7 +72,7 @@ docker_dir: /opt/docker/data
 
 dotfiles_repo: https://github.com/notthebee/dotfiles
 
-boot_drive_serial: ""
+boot_drive_serial: ''
 
 enable_pikvm: false
 
@@ -76,38 +82,34 @@ spindown_time: 600 # in seconds
 
 colorscheme: nord
 
-subdomains: {
-      'nextcloud': 'nextcloud',
-      'vaultwarden': 'vaultwarden',
-}
+subdomains: { 'nextcloud': 'nextcloud', 'vaultwarden': 'vaultwarden' }
 
 #
 # Packages
 #
 extra_packages:
-  - fish
-  - iperf3
-  - speedtest-cli
-  - htop
-  - stow
-  - git
-  - neofetch
-  - neovim
-  - tmux
-  - mosh
-  - rsync
-  - lm-sensors
-  - iotop
-  - ncdu
-  - hddtemp
+    - fish
+    - iperf3
+    - speedtest-cli
+    - htop
+    - stow
+    - git
+    - neofetch
+    - neovim
+    - tmux
+    - mosh
+    - rsync
+    - lm-sensors
+    - iotop
+    - ncdu
+    - hddtemp
 
 #
 # Apt mirrors
 #
-version: focal
+version: jammy
 
 apt_mirror: http://de.ports.ubuntu.com
-
 
 #
 # Email credentials (for SMART and Snapraid error reporting)
@@ -115,7 +117,7 @@ apt_mirror: http://de.ports.ubuntu.com
 
 email: moe@notthebe.ee
 
-email_login: "{{ email }}"
+email_login: '{{ email }}'
 
 email_smtp_host: smtp.mailbox.org
 
@@ -125,31 +127,32 @@ email_smtp_port_startls: 587
 
 # MSMTP
 msmtp_accounts:
-- account:   mailbox
-  host:      "{{ email_smtp_host }}"
-  port:      "{{ email_smtp_port_startls }}"
-  auth:      "on"
-  from:      "{{ email }}"
-  user:      "{{ email }}"
-  password:  "{{ email_password }}"
+    - account: mailbox
+      host: '{{ email_smtp_host }}'
+      port: '{{ email_smtp_port_startls }}'
+      auth: 'on'
+      from: '{{ email }}'
+      user: '{{ email }}'
+      password: '{{ email_password }}'
 
-msmtp_default_account: "mailbox"
+msmtp_default_account: 'mailbox'
 
-msmtp_alias_default : "{{ email }}"
+msmtp_alias_default: '{{ email }}'
 
 #
 # SSH (geerlingguy.security)
 #
 security_ssh_port: 69
 
-security_sudoers_passwordless: [ "{{ username }}" ]
+security_sudoers_passwordless: ['{{ username }}']
 
-security_autoupdate_reboot: "true"
+security_autoupdate_reboot: true
 
-security_autoupdate_mail_to: "{{ email }}"
+security_autoupdate_mail_to: '{{ email }}'
 
-security_autoupdate_mail_on_error: true
+security_autoupdate_reboot_time: '23:00'
 
+security_autoupdate_mail_on_error: false
 
 #
 # Enable/disable functionality
@@ -216,8 +219,6 @@ enable_ikev2: false
 
 # Homepages
 
-enable_homer: false
-
 enable_flame: false
 
 # Monitoring
@@ -233,7 +234,8 @@ enable_node_exporter: true
 enable_unifi: false
 
 enable_authelia: false
-enable_pihole: false
+
+enable_adguard: false
 
 enable_watchtower: false
 
@@ -255,13 +257,13 @@ ikev2_ondemand: true
 #
 # Samba
 #
-samba_server_string: "{{ hostname }}"
+samba_server_string: '{{ hostname }}'
 
 samba_users:
-  - name: "{{ username }}"
-    password: "{{ password }}"
-  - name: "{{ additional_users[0].name }}"
-    password: "{{ password2 }}"
+    - name: '{{ username }}'
+      password: '{{ password }}'
+    - name: '{{ additional_users[0].name }}'
+      password: '{{ password2 }}'
 
 samba_global_include: global-include.conf
 
@@ -269,60 +271,60 @@ samba_apple_extensions: yes
 
 samba_mitigate_cve_2017_7494: false
 
-samba_server_max_protocol: "SMB3"
+samba_server_max_protocol: 'SMB3'
 
-samba_server_min_protocol: "SMB3"
+samba_server_min_protocol: 'SMB3'
 
 samba_shares:
-  - name: Trash
-    guest_ok: no
-    public: no
-    read_only: no
-    writable: yes
-    owner: "{{ username }}"
-    browseable: yes
-    path: "{{ mergerfs_root }}"
-    valid_users: "{{ username }}"
-    write_list: "{{ username }}"
+    - name: Trash
+      guest_ok: no
+      public: no
+      read_only: no
+      writable: yes
+      owner: '{{ username }}'
+      browseable: yes
+      path: '{{ mergerfs_root }}'
+      valid_users: '{{ username }}, {{ additional_users[0].name }}'
+      write_list: '{{ username }}, {{ additional_users[0].name }}'
 
-  - name: Downloads
-    guest_ok: no
-    public: no
-    read_only: no
-    writable: yes
-    browseable: yes
-    owner: "{{ username }}"
-    path: "{{ mergerfs_root }}/Downloads"
-    valid_users: "{{ username }}, {{ additional_users[0].name }}"
-    write_list: "{{ username }}, {{ additional_users[0].name }}"
+    - name: Downloads
+      guest_ok: no
+      public: no
+      read_only: no
+      writable: yes
+      browseable: yes
+      owner: '{{ username }}'
+      path: '{{ mergerfs_root }}/Downloads'
+      valid_users: '{{ username }}, {{ additional_users[0].name }}'
+      write_list: '{{ username }}, {{ additional_users[0].name }}'
 
-  - name: Media
-    guest_ok: no
-    public: no
-    read_only: no
-    writable: yes
-    browseable: yes
-    owner: "{{ username }}"
-    path: "{{ mergerfs_root }}/Media"
-    valid_users: "{{ username }}, {{ additional_users[0].name }}"
-    write_list: "{{ username }}, {{ additional_users[0].name }}"
+    - name: Media
+      guest_ok: no
+      public: no
+      read_only: no
+      writable: yes
+      browseable: yes
+      owner: '{{ username }}'
+      path: '{{ mergerfs_root }}/Media'
+      valid_users: '{{ username }}, {{ additional_users[0].name }}'
+      write_list: '{{ username }}, {{ additional_users[0].name }}'
 
-  - name: TimeMachine
-    guest_ok: no
-    public: no
-    read_only: no
-    owner: "{{ username }}"
-    vfs_objects:
-      - name: fruit
-        options:
-        - name: time machine
-          value: 'yes'
-      - name: streams_xattr
-    writable: yes
-    browseable: yes
-    path: "{{ timemachine_root }}"
-    valid_users: "{{ username }}"
-    write_list: "{{ username }}"
+    - name: TimeMachine
+      guest_ok: no
+      public: no
+      read_only: no
+      owner: '{{ username }}'
+      vfs_objects:
+          - name: fruit
+            options:
+                - name: time machine
+                  value: 'yes'
+          - name: streams_xattr
+      writable: yes
+      browseable: yes
+      path: '{{ timemachine_root }}'
+      valid_users: '{{ username }}'
+      write_list: '{{ username }}'
 
 #
 # Snapraid and MergerFS
@@ -334,60 +336,67 @@ cache_root: /mnt/storage_cache
 enable_mergerfs: false
 
 disks:
-  - { path: /mnt/data1, src: /dev/disk/by-label/Data1, content: true }
-  - { path: /mnt/data2, src: /dev/disk/by-label/Data2, content: true }
-  - { path: /mnt/data3, src: /dev/disk/by-label/Data3, content: true }
+    - { path: /mnt/data1, src: /dev/disk/by-label/Data1, content: true }
+    - { path: /mnt/data2, src: /dev/disk/by-label/Data2, content: true }
+    - { path: /mnt/data3, src: /dev/disk/by-label/Data3, content: true }
 
 cache_disks:
-  - { path: /mnt/cache1, src: /dev/disk/by-label/Cache1, content: true }
-  - { path: /mnt/cache2, src: /dev/disk/by-label/Cache2, content: true }
+    - { path: /mnt/cache1, src: /dev/disk/by-label/Cache1, content: true }
+    - { path: /mnt/cache2, src: /dev/disk/by-label/Cache2, content: true }
 
 parity_disks:
-  - { path: /mnt/parity1, src: /dev/disk/by-label/Parity1, content: true }
+    - { path: /mnt/parity1, src: /dev/disk/by-label/Parity1, content: true }
 
-snapraid_data_disks: "{{ disks }}"
+snapraid_data_disks: '{{ disks }}'
 
-snapraid_parity_disks: "{{ parity_disks }}"
+snapraid_parity_disks: '{{ parity_disks }}'
 
-snapraid_runner_gmail_pass: "{{ email_password }}"
+snapraid_bin_path: /usr/bin/snapraid
 
-snapraid_runner_email_address: "{{ email }}"
+snapraid_runner_gmail_pass: '{{ email_password }}'
 
-snapraid_runner_email_address_from: "{{ snapraid_runner_email_address }}"
+snapraid_runner_email_address: '{{ email }}'
 
-snapraid_runner_email_address_to: "{{ snapraid_runner_email_address }}"
+snapraid_runner_email_address_from: '{{ snapraid_runner_email_address }}'
 
-snapraid_runner_smtp_host: "{{ email_smtp_host }}"
+snapraid_runner_email_address_to: '{{ snapraid_runner_email_address }}'
 
-snapraid_runner_smtp_port: "{{ email_smtp_port }}"
+snapraid_runner_smtp_host: '{{ email_smtp_host }}'
 
-snapraid_runner_command: "python3 {{ snapraid_runner_bin }} -c {{ snapraid_runner_conf }}"
+snapraid_runner_smtp_port: '{{ email_smtp_port }}'
+
+snapraid_runner_command: 'python3 {{ snapraid_runner_bin }} -c {{ snapraid_runner_conf }}'
 
 # Stop all the docker containers, backup the {{ docker_dir }} to the MergerFS pool, execute the snapraid runner and start the containers back up
 # Stopping the containers is necessary – backing up the data folder with the containers running will result in corrputed database files and no files can be changed during the Snapraid sync
 snapraid_runner_cron_jobs:
-  - { job: 'docker stop $(docker ps -q); rsync -avz --delete --exclude cache {{ docker_dir }} {{ mergerfs_root }}/docker_data; docker start $(docker ps -a -q) && {{ snapraid_runner_command }} ', name: 'snapraid_runner', weekday: '0', hour: '3' }
+    - {
+          job: 'docker stop $(docker ps -q); rsync -avz --delete --exclude cache {{ docker_dir }} {{ mergerfs_root }}/docker_data; docker start $(docker ps -a -q) && {{ snapraid_runner_command }} ',
+          name: 'snapraid_runner',
+          weekday: '0',
+          hour: '3',
+      }
 
 snapraid_runner_delete_threshold: 999999
 
-snapraid_runner_email_sendon: "error"
+snapraid_runner_email_sendon: 'error'
 
 snapraid_runner_use_ssl: true
 
 snapraid_content_files:
-  - /var/snapraid.content
+    - /var/snapraid.content
 
 snapraid_config_excludes:
-  - "*.unrecoverable"
-  - /lost+found/
-  - "*.!sync"
-  - /tmp/
-  - "/Downloads/*"
+    - '*.unrecoverable'
+    - /lost+found/
+    - '*.!sync'
+    - /tmp/
+    - '/Downloads/*'
 
 #
 # SMART error reporting
 #
-smartd_default_mail_recipients: [ "{{ email }}" ]
+smartd_default_mail_recipients: ['{{ email }}']
 
 #
 # Security
@@ -404,24 +413,3 @@ security_fail2ban_enabled: false
 # Powersaving (powertop, cpufreq)
 
 enable_powersaving: false
-
-### BEGIN Secret variables (encrypt and put into vault.yml)
-cloudflare_dns_token: ''
-cloudflare_firewall_token: ''
-email_password: ''
-host: ''
-host_local: ''
-ikev2_excludedssids: ''
-namecheap_host: ''
-namecheap_token: ''
-password: ''
-photoprism_password: ''
-pihole_password: ''
-pikvm_password: ''
-piped_postgresql_password: ''
-ssh_public_key: ''
-swag_htpasswd_password: ''
-swag_htpasswd_user: ''
-vpn_host: ''
-vpn_password: ''
-### END Secret variables (encrypt and put into vault.yml)

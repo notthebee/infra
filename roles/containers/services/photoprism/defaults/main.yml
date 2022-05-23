@@ -6,4 +6,4 @@ homer_category: services
 
 dashboard_name: "PhotoPrism"
 
-ip_address: "{{ swag_base }}.4"
+ip_address: "{{ swag_base }}.29"

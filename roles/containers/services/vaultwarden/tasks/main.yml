@@ -8,11 +8,6 @@
       - name: swag_public_macvlan
     pull: true
     state: 'started'
-    labels:
-      "flame.type": "application"
-      "flame.name": "{{ container_name | title }}"
-      "flame.url": "{{ dashboard_url }}"
-      "flame.icon": "custom"
     env:
       WEBSOCKET_ENABLED: "true"
       INVITATIONS_ALLOWED: "false"

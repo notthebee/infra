@@ -11,7 +11,7 @@
 - name: Make sure the Grafana container is created and running
   docker_container:
     name: "{{ container_name }}"
-    image: "grafana/grafana"
+    image: "grafana/grafana:main"
     pull: yes
     networks:
       - name: swag_internal_macvlan
