@@ -1,7 +1,8 @@
 # notthebee/infra
 
 
-**I don't use this playbook to configure my system anymore, since I switched to Unraid**
+### WARNING: I don't use this playbook to configure my system anymore, since I switched to Unraid
+
 
 An Ansible playbook that sets up an Ubuntu-based home media server/NAS with reasonable security, auto-updates, e-mail notifications for S.M.A.R.T. and Snapraid errors and dynamic DNS. 
 
