@@ -1,4 +1,0 @@
----
-container_name: mqtt
-
-ip_address: "{{ swag_base }}.13"

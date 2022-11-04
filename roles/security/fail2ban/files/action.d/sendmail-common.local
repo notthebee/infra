@@ -1,4 +1,0 @@
-# Disables e-mail notifications on starting/stopping fail2ban
-[Definition]
-actionstop =
-actionstart =

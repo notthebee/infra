@@ -1,0 +1,33 @@
+---
+- name: Install Python and python3-pip
+  package:
+    name:
+      - python3
+      - python3-pip
+    state: present
+
+- name: Install docker module for Python
+  pip:
+    name: 
+      - docker
+      - docker-compose
+
+- name: Make sure that the docker folders exists
+  ansible.builtin.file:
+    path: "{{ item }}"
+    owner: "{{ username }}"
+    group: "{{ username }}"
+    state: directory
+  loop:
+    - "{{ docker_compose_dir }}"
+    - "{{ docker_dir }}"
+
+- name: Copy the compose file
+  template: 
+    src: templates/compose.yaml
+    dest: "{{ docker_compose_dir }}/compose.yaml"
+
+- name: Docker-compose up
+  community.docker.docker_compose:
+    project_src: "{{ docker_compose_dir }}"
+

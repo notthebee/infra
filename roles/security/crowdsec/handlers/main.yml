@@ -1,9 +1,0 @@
-- name: Restart crowdsec
-  service:
-    name: crowdsec
-    state: restarted
-
-- name: Restart prometheus
-  service:
-    name: prometheus
-    state: restarted

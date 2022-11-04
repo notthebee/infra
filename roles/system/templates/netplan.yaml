@@ -1,0 +1,10 @@
+network:
+  version: 2
+  ethernets:
+    {{ networks.lan.interface }}:
+      dhcp4: true
+  vlans:
+    app:
+      id: 4
+      link: {{ networks.lan.interface }}
+      addresses: [ '{{ networks.app.base }}.228/24' ]

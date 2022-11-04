@@ -1,8 +1,0 @@
----
-container_name: jellyfin
-
-url: "jellyfin.{{ host_local }}"
-
-homer_category: media
-
-ip_address: "{{ swag_base }}.5"

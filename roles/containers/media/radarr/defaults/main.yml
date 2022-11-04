@@ -1,8 +1,0 @@
----
-container_name: radarr
-
-url: "radarr.{{ host_local }}"
-
-homer_category: media
-
-ip_address: "{{ swag_base }}.15"

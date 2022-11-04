@@ -1,43 +1,9 @@
 ---
-- name: Ubuntu specific tasks
-  become: yes
-  when: ansible_facts['distribution'] == 'Ubuntu'
-  block:
-  - name: Remove cloud-config to avoid boot delay
-    apt:
-      name: cloud-config
-      state: absent
-
-  - name: Make sure iSCSId and Open-iSCSId services are disabled
-    service:
-      name: "{{ item }}"
-      state: stopped
-      enabled: no
-    with_items:
-      - iscsid
-      - open-iscsi
-
-  - name: Install the apt mirror list
-    template:
-      src: sources.list.j2
-      dest: /etc/apt/sources.list
-      owner: root
-      group: root
-      mode: 0644
-    tags: mirrors
-
-- name: Generate the locale (Debian and Ubuntu)
-  when: ansible_os_family == 'Debian'
-  locale_gen:
-    name: "{{ locale }}"
-    state: present
-
-- name: Update and upgrade apt packages (Debian and Ubuntu)
-  when: ansible_os_family == 'Debian'
+- name: Update and upgrade packages 
   apt:
+    update_cache: yes
     upgrade: yes
     autoremove: yes
-    update_cache: yes
 
 - name: Check if reboot required
   stat:

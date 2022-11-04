@@ -1,9 +1,0 @@
----
-container_name: booksonic
-
-url: "booksonic.{{ host_local }}"
-
-ip_address: "{{ swag_base }}.14"
-
-homer_category: media
-

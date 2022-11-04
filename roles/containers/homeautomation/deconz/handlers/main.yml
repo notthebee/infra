@@ -1,4 +1,0 @@
----
-- name: Reboot pi
-  reboot:
-    msg: Rebooting due to a kernel update

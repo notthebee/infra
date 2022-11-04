@@ -2,6 +2,14 @@
 - name: Set the name of a sudo group
   set_fact:
     sudo_group: sudo
+
+- name: Ensure the necessary groupsexists
+  group:
+    name: "{{ item }}"
+    state: present
+  loop:
+      - "{{ username }}"
+      - docker
    
 - name: Create a login user
   user:
@@ -9,27 +17,9 @@
     password: "{{ password | password_hash('sha512') }}"
     groups: 
       - "{{ sudo_group }}"
+      - docker
       - users
     state: present
-    append: true
-
-- name: Ensure group "{{ username }}" exists
-  group:
-    name: "{{ username }}"
-    state: present
-
-- name: Ensure group "sambashare" exists
-  when: enable_samba | default(False) 
-  group:
-    name: "sambashare"
-    state: present
- 
-- name: Append the samba group
-  when: enable_samba | default(False) 
-  user:
-    name: "{{ username }}"
-    groups: 
-      - sambashare
     append: true
 
 - name: Chmod the user home directory
@@ -41,7 +31,7 @@
     group: "{{ username }}"
     recurse: yes
 
-- name: Allow 'sudo' group to have passwordless sudo
+- name: Allow '{{ sudo_group }}' group to have passwordless sudo
   lineinfile:
     path: /etc/sudoers
     state: present
@@ -54,8 +44,6 @@
     user: "{{ username }}"
     state: present
     key: "{{ ssh_public_key }}"
-  notify:
-    - remove default user
 
 - name: Set the default shell
   user: 
@@ -90,17 +78,3 @@
     user: "{{ username }}"
     env: yes
     job: ""
-
-
-- name: Create additional users (no login)
-  user:
-    name: "{{ item.name }}"
-    groups: "{{ item.groups }}"
-    password: "{{ item.password | password_hash('sha512') }}"
-    update_password: on_create
-    state: present
-    append: true
-    shell: /sbin/nologin
-  with_items: "{{ additional_users }}"
-  when: additional_users is defined
-  no_log: true

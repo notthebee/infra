@@ -14,8 +14,6 @@
       dest: '/home/{{ username }}/dotfiles'
       recursive: no
       force: yes
-  notify:
-      - install and update nvim plugins
 
 - name: Stow the dotfiles
   become_user: '{{ username }}'
@@ -23,6 +21,4 @@
       cmd: stow -v */
       chdir: '/home/{{ username }}/dotfiles'
   register: stow_result
-  notify:
-      - install and update nvim plugins
   changed_when: stow_result.stdout != ""

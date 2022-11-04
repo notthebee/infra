@@ -1,8 +1,0 @@
----
-container_name: grafana
-
-url: "grafana.{{ host_local }}"
-
-homer_category: system
-
-ip_address: "{{ swag_base }}.26"

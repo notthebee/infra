@@ -1,0 +1,57 @@
+networks:
+  app:
+    driver: macvlan
+    driver_opts: 
+      parent: app
+    ipam:
+      config:
+        - subnet: {{ networks.app.cidr }}
+
+services:
+  nginxproxymanager:
+    container_name: nginxproxymanager
+    image: jc21/nginx-proxy-manager:latest
+    networks:
+      app:
+        ipv4_address: {{ networks.app.base }}.24
+    restart: always
+    volumes:
+      - "{{ docker_dir }}/nginxproxymanager/data:/data"
+      - "{{ docker_dir }}/nginxproxymanager/letsencrypt:/etc/letsencrypt"
+
+  homeassistant:
+    container_name: homeassistant
+    image: homeassistant/home-assistant:stable
+    networks:
+      app:
+        ipv4_address: {{ networks.app.base }}.18
+    volumes:
+      - "{{ docker_dir }}/homeassistant:/config"
+    environment:
+      - TZ={{ timezone }}
+    restart: always
+
+  mqtt:
+    container_name: mqtt
+    image: eclipse-mosquitto
+    networks:
+      app:
+        ipv4_address: {{ networks.app.base }}.13
+    volumes:
+      - "{{ docker_dir }}/mosquitto:/mosquitto"
+    restart: always
+
+  deconz:
+    container_name: deconz
+    image: deconzcommunity/deconz
+    restart: always
+    networks:
+      app:
+        ipv4_address: {{ networks.app.base }}.25
+    volumes:
+      - "{{ docker_dir }}/deconz:/opt/deCONZ"
+    devices:
+      - /dev/ttyACM0
+    environment:
+      - DECONZ_VNC_MODE=1
+      - TZ={{ timezone }}

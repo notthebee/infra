@@ -1,3 +1,0 @@
-{{ hostvars['emily']['lan_address'] }} emily.local
-{{ hostvars['mona']['lan_address'] }} mona.local
-{{ hostvars['maya']['lan_address'] }} maya.local

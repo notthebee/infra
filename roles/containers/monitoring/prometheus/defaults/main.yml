@@ -1,8 +1,0 @@
----
-container_name: prometheus
-
-url: "prometheus.{{ host_local }}"
-
-homer_category: system
-
-ip_address: "{{ swag_base }}.27"
