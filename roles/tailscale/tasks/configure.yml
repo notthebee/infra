@@ -1,0 +1,25 @@
+
+- name: Set a list of exposed networks
+  set_fact:
+    tailscale_subnets: "{{ networks | selectattr('tailscale') | map(attribute='cidr') | join(',') }}"
+
+- name: Get current tailscale status
+  changed_when: false
+  register: tailscale_status_before
+  ansible.builtin.command:
+    cmd: tailscale status
+
+- name: Log in, enable tailscale and set up an exit node
+  changed_when: false
+  ansible.builtin.command:
+    cmd: >-
+      tailscale up 
+      --advertise-exit-node={{ tailscale_exit_node | default(false) | bool | lower }}
+      --auth-key {{ tailscale_token }}
+      --advertise-routes "{{ tailscale_subnets }}"
+
+- name: Get tailscale status after the command
+  changed_when: tailscale_status_before.stdout != tailscale_status_after.stdout
+  register: tailscale_status_after
+  ansible.builtin.command:
+    cmd: tailscale status

@@ -15,40 +15,67 @@ username: notthebee
 
 shell: /usr/bin/fish
 
+dotfiles_repo: https://github.com/notthebee/dotfiles
+
+guid: 1000
+
+#
+# Networking
+# 
+tailscale_enabled: yes 
+
+tailscale_exit_node: no
+
+networks:
+  - name: lan
+    cidr: 192.168.2.0/24
+    base: 192.168.2
+    interface: ens18
+    tailscale: yes # whether the subnet should be exposed to other Tailscale nodes
+  - name: app
+    cidr: 10.0.0.0/24
+    base: 10.0.0
+    tailscale: yes
+  - name: iot
+    cidr: 192.168.32.0/24
+    base: 192.168.32
+    tailscale: yes
+
+#
+# Docker apps
+#
+#
 docker_dir: /opt/docker/data
 
 docker_compose_dir: /opt/docker/compose
 
-dotfiles_repo: https://github.com/notthebee/dotfiles
-
-networks:
-  lan:
-    cidr: 192.168.2.0/24
-    base: 192.168.2
-    interface: ens18
-  app:
-    cidr: 10.0.0.0/24
-    base: 10.0.0
+services:
+  - homeassistant
+  - mqtt
+  - nginxproxymanager
+  - deconz
+  - photoprism
+  - syncthing
 
 #
 # Packages
 #
 extra_packages:
-    - fish
-    - iperf3
-    - speedtest-cli
-    - htop
-    - stow
-    - exa
-    - git
-    - neofetch
-    - neovim
-    - tmux
-    - mosh
-    - rsync
-    - lm-sensors
-    - iotop
-    - ncdu
+  - fish
+  - iperf3
+  - speedtest-cli
+  - htop
+  - stow
+  - exa
+  - git
+  - neofetch
+  - neovim
+  - tmux
+  - mosh
+  - rsync
+  - lm-sensors
+  - iotop
+  - ncdu
 
 #
 # Email credentials (for notifications)
@@ -92,9 +119,3 @@ security_autoupdate_mail_to: '{{ email }}'
 security_autoupdate_reboot_time: '23:00'
 
 security_autoupdate_mail_on_error: false
-
-update_utility: dnf-automatic
-
-update_service: dnf-automatic-install.timer
-
-update_conf_path: /etc/dnf/automatic.conf

@@ -2,7 +2,7 @@
 #
 # Tasks and roles for all hosts
 #
-- hosts: fleet
+- hosts: mona
   gather_facts: no
 
   pre_tasks:
@@ -41,3 +41,8 @@
       - name: containers
         tags:
           - containers
+
+      - role: tailscale
+        when: tailscale_enabled | default(false)
+        tags:
+            - tailscale

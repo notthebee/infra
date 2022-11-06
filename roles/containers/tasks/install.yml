@@ -26,6 +26,9 @@
   template: 
     src: templates/compose.yaml
     dest: "{{ docker_compose_dir }}/compose.yaml"
+  vars:
+    app_cidr: "{{ (networks | selectattr('name', '==', 'app') | map(attribute='cidr') | first) | default('') }}"
+    app_base: "{{ (networks | selectattr('name', '==', 'app') | map(attribute='base') | first) | default('') }}"
 
 - name: Docker-compose up
   community.docker.docker_compose:
