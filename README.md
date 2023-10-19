@@ -1,5 +1,9 @@
 # notthebee/infra
 
+Superseded by [nix-config](https://github.com/notthebee/nix-config)
+
+Original README:
+```
 An Ansible playbook that sets up an Ubuntu-based server with reasonable security, auto-updates, e-mail notifications for S.M.A.R.T. and Snapraid errors. Currently being completely rewritten
 
 It assumes a fresh Ubuntu Server 20.04 install, access to a non-root user with sudo privileges and a public SSH key. This can be configured during the installation process.
@@ -18,4 +22,4 @@ The playbook is mostly being developed for personal use, so stuff is going to be
 * [Home Assistant](https://hub.docker.com/r/homeassistant/home-assistant) 
 * [Phoscon-GW](https://hub.docker.com/r/marthoc/deconz) 
 * [nginx-proxy-manager](https://nginxproxymanager.com/) 
-
+```
